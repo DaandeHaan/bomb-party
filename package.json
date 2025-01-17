@@ -1,0 +1,22 @@
+{
+  "name": "bomb-party",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaandeHaan/bomb-party.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaandeHaan/bomb-party/issues"
+  },
+  "homepage": "https://github.com/DaandeHaan/bomb-party#readme",
+  "dependencies": {
+    "chalk": "^5.4.1"
+  }
+}
