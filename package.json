@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "start:backend": "npm start --prefix backend",
-    "start:frontend": "npm run dev --prefix frontend",
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+    "dev:backend": "npm start --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
