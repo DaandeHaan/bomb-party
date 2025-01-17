@@ -18,3 +18,5 @@ router.post('/create', (req, res) => {
 router.get('/game', (req, res) => {
   res.json({success: true, games: games});
 });
+
+module.exports = router;
