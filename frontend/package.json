@@ -1,0 +1,17 @@
+{
+    "main": "src/main.js",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "serve": "vite preview"
+    },
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "vue": "^3.3.4"
+    },
+    "devDependencies": {
+      "vite": "^4.5.0"
+    }
+  }
+  
