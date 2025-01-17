@@ -1,5 +1,6 @@
 class Game {
   constructor(gameOwner) {
+    this.gameID = Math.random().toString(36).substr(2, 9); // Random game
     this.players = [gameOwner]; // Object: {id: string, name: string}
     this.gameOwner = gameOwner;
   }

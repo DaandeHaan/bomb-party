@@ -6,17 +6,17 @@ const router = express.Router();
 
 const games = [];
 
+router.get('/', (req, res) => {
+  res.json({success: true, games: games});
+});
+
 router.post('/create', (req, res) => {
 
   const game = new Game({id: '1', name: 'Daan'});
 
   games.push(game)
 
-  res.json({success: true, message: "Game created"});
-});
-
-router.get('/game', (req, res) => {
-  res.json({success: true, games: games});
+  res.json({success: true, gameID: game.gameID});
 });
 
 module.exports = router;
