@@ -25,6 +25,12 @@ router.get('/:gameID?', (req, res) => {
   }
 });
 
+/*
+{
+  success: boolean,
+  gameID: gameID
+}
+*/
 router.post('/create', (req, res) => {
 
   const game = new Game({id: '1', name: 'Daan'});
