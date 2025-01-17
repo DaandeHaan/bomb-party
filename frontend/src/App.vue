@@ -1,6 +1,13 @@
 <template>
-  <h1 class="text-blue-300">test</h1>
+  <div id="app" class="min-h-screen flex flex-col bg-gray-100">
+    <router-view />
+  </div>
 </template>
 
 <script setup>
+
 </script>
+
+<style>
+
+</style>
