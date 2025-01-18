@@ -10,6 +10,8 @@ class Game {
     this.gameState = 'lobby';
     this.currentPlayer = null;
     this.currentWord = "";
+    this.currentHint = "";	
+    this.guessedWords = [];
     this.timer = 10;
     this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = 'dutch';
