@@ -11,7 +11,7 @@ class SocketService {
     this.wss = wss;
 
     this.wss.on('connection', (ws) => {
-      const sessionID = uuidv4(); // Generate a unique ID for the session
+      const sessionID = req.url.split('?sessionID=')[1];
       this.clients.set(sessionID, ws);
 
       console.log(`Client connected: ${sessionID}`);
