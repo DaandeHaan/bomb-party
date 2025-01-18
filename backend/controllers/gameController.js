@@ -38,18 +38,23 @@ router.post('/join/:gameID', (req, res) => {
   if (!game)
     return res.statusCode(404).json({success: false, message: 'Game not found'});
 
-  game.addPlayer(req.body.user);
+  const user = {
+    sessionID: req.user.sessionID,
+    name: req.body.username
+  }
 
-  // Start webSocket
+  if (!game.addPlayer(user))
+    return res.json({success: false, message: 'User already in game'});
+
+  socketService.connect(req.user.sessionID);
 
   res.json({success: true});
 });
 
 router.post('/create', (req, res) => {
 
-
   const user = {
-    id: req.user.sessionID,
+    sessionID: req.user.sessionID,
     name: req.body.username
   }
 

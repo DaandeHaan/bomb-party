@@ -16,7 +16,13 @@ class Game {
   }
 
   addPlayer(player) {
-    this.players.push(player);
+
+    // Check if player is already in the game
+    if (this.players.find(p => p.id === player.id))
+      return false;
+
+    this.lobby.push(player);
+    return true;
   }
 
   removePlayer(player) {
