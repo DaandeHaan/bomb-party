@@ -20,34 +20,48 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
-  import LobbyInput from "../components/LobbyInput.vue";
-  import CreateLobby from "../components/CreateLobby.vue";
-  const userName = new ref('');
-  
-  const router = useRouter();
-  
-  const joinLobby = (code) => {
-    router.push(`/game/${code}`);
-  };
-  
-  const createLobby = () => {
-    const newLobbyId = Math.random().toString(36).substring(7);
-    router.push(`/game/${newLobbyId}`);
-  };
-
-  import { onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import LobbyInput from "../components/LobbyInput.vue";
+import CreateLobby from "../components/CreateLobby.vue";
+
+const userName = ref("");
 
 const toast = useToast();
+const router = useRouter();
 
+watch(userName, (newValue) => {
+  if (newValue) {
+    localStorage.setItem("userName", newValue);
+  }
+});
 
 onMounted(() => {
-  toast.success("My toast content", {
-        timeout: 2000
-      });
-      console.log("test");
+  const savedName = localStorage.getItem("userName");
+  if (savedName) {
+    userName.value = savedName;
+    toast.success(`Welcome back, ${savedName}!`, { timeout: 2000 });
+  } else {
+    toast.success("Welcome to Bomb Party!", { timeout: 2000 });
+  }
 });
+
+const joinLobby = (code) => {
+  if (!userName.value.trim()) {
+    toast.error("Please enter your name before joining a lobby!");
+    return;
+  }
+  router.push(`/game/${code}`);
+};
+
+
+const createLobby = () => {
+  if (!userName.value.trim()) {
+    toast.error("Please enter your name before creating a lobby!");
+    return;
+  }
+  const newLobbyId = Math.random().toString(36).substring(7);
+  router.push(`/game/${newLobbyId}`);
+};
 </script>
-  
