@@ -1,15 +1,15 @@
 const express = require('express');
-const userService = require('../services/userService');
+const sessionService = require('../services/sessionService');
 
 const router = express.Router();
 
-router.get('/session', (req, res) => {
+router.get('/', (req, res) => {
 
   // Extract session from cookies
   let sessionID = req.cookies.session;
 
   // Check if the session is valid
-  sessionID = userService.validSession(sessionID);
+  sessionID = sessionService.validSession(sessionID);
 
   // Set the session cookie
   res.cookie('session', sessionID);

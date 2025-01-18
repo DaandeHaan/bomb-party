@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 
-class userService {
+class sessionService {
  
   validSession(sessionID) {
     // Check if the session is valid
@@ -14,4 +14,4 @@ class userService {
 
 }
 
-module.exports = new userService();
+module.exports = new sessionService();
