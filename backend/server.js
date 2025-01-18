@@ -18,8 +18,9 @@ const wss = new WebSocket.Server({ server });
 
 socketService.init(wss);
 
+app.use(require("./middleware/sessionMiddleware.js"));
+
 app.use('/game', require("./controllers/gameController.js"))
-app.use('/session', require("./controllers/sessionController.js"))
 
 // Start the server
 server.listen(port, () => {
