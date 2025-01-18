@@ -59,14 +59,10 @@ const joinLobby = (code) => {
 
 const createLobby = async () => {
   const userName = localStorage.getItem('userName');
-  console.log("test");
-
   const response = await axios.post(`http://localhost:3000/api/game/create`, {
           params: { userName }
         });
 
-  console.log(response);
-
-  // router.push(`/game/${newLobbyId}`);
+  router.push(`/game/${response.data.gameID}`);
 };
 </script>
