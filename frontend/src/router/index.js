@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Lobby from '../views/Lobby.vue';
 import GamePage from '../views/GamePage.vue';
 import axios from 'axios';
+import { io } from "socket.io-client";
 
 const routes = [
   { path: '/', name: 'lobby', component: Lobby },
@@ -14,9 +15,11 @@ const routes = [
         const userName = localStorage.getItem('userName');
         console.log(to.params);
 
-        const response = await axios.get(`http://localhost:3000/api/game/${to.params.gameID}`, {
+        const response = await axios.post(`http://localhost:3000/api/game/${to.params.gameID}/join`, {
           params: { userName }
         });
+        
+        console.log(response);
         
 
         if (response.data.exists) {

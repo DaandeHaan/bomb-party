@@ -26,7 +26,7 @@ router.get('/:gameID?', (req, res) => {
   }
 });
 
-router.post('/:gameID/join/', (req, res) => {
+router.post('/:gameID/join', (req, res) => {
   
   const gameID = req.params.gameID;
 
