@@ -10,32 +10,31 @@ class socketService {
     this.wss = wss;
   }
 
-  connect() {
+  connect(sessionID) {
     wss.on('connection', (ws) => {
-      const clientId = uuidv4(); // Generate a unique ID
-      this.clients.set(clientId, ws); // Store the client in the map
+      this.clients.set(sessionID, ws); // Store the client in the map
   
-      console.log(`Client connected: ${clientId}`);
+      console.log(`Client connected: ${sessionID}`);
   
       // Handle disconnection
       ws.on('close', () => {
-        this.clients.delete(clientId); // Remove the client from the map
-        console.log(`Client disconnected: ${clientId}`);
+        this.clients.delete(sessionID); // Remove the client from the map
+        console.log(`Client disconnected: ${sessionID}`);
       });
   
       // Handle incoming messages (optional)
       ws.on('message', (message) => {
-          console.log(`Message from ${clientId}:`, message);
+          console.log(`Message from ${sessionID}:`, message);
       });
   
       // Send a welcome message to the client
-      ws.send(JSON.stringify({ message: 'Welcome!', clientId }));
+      ws.send(JSON.stringify({ message: 'Welcome!', sessionID }));
     });
   }
 
   sendMessage(recivers = [], message = "") {
-    recivers.forEach((clientId) => {
-      const ws = this.clients.get(clientId); // Retrieve the WebSocket connection by clientId
+    recivers.forEach((sessionID) => {
+      const ws = this.clients.get(sessionID); // Retrieve the WebSocket connection by sessionID
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message)); // Send the message if the connection is open
       }

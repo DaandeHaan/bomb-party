@@ -47,15 +47,15 @@ router.post('/join/:gameID', (req, res) => {
 
 router.post('/create', (req, res) => {
 
-  // Change to const
-  let body = req.body;
 
-  body.user = {
-    id: "1",
-    name: "Test"
+  const user = {
+    id: req.user.sessionID,
+    name: req.body.username
   }
 
-  const game = new Game(body.user);
+  console.log(user)
+
+  const game = new Game({ gameOwner: user });
 
   games.push(game)
 
