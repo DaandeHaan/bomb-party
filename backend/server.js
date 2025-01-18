@@ -1,31 +1,20 @@
 const express = require('express');
 const WebSocket = require('ws');
 const http = require('http');
+const bodyParser = require('body-parser');
+const socketService = require('./services/socketService.js');
 
 const app = express();
 const port = 3000;
 
 // Serve static files (optional)
 app.use(express.static('public'));
-app.use(express.json());
+app.use(bodyParser.json());
 
-// Create an HTTP server
 const server = http.createServer(app);
-
-// Attach WebSocket server
 const wss = new WebSocket.Server({ server });
 
-// Handle WebSocket connections
-wss.on('connection', (ws) => {
-    console.log('New WebSocket connection');
-
-    ws.on('message', (message) => {
-        console.log(`Received: ${message}`);
-        ws.send(`Echo: ${message}`);
-    });
-
-    ws.on('close', () => console.log('WebSocket connection closed'));
-});
+socketService.init(wss);
 
 app.use('/game', require("./controllers/gameController.js"))
 
