@@ -30,8 +30,7 @@ class socketService {
   
       // Send a welcome message to the client
       ws.send(JSON.stringify({ message: 'Welcome!', clientId }));
-  });
-  
+    });
   }
 
   sendMessage(recivers = [], message = "") {
