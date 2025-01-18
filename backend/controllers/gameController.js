@@ -46,9 +46,7 @@ router.post('/:gameID/join/', (req, res) => {
   if (!game.addPlayer(user))
     return res.json({success: false, message: 'User already in game'});
 
-  socketService.connect(req.user.sessionID);
-
-  res.json({success: true});
+  res.json({success: true, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
 router.post('/create', (req, res) => {
@@ -58,13 +56,11 @@ router.post('/create', (req, res) => {
     name: req.body.username
   }
 
-  console.log(user)
-
   const game = new Game({ gameOwner: user });
 
   games.push(game)
 
-  res.json({success: true, gameID: game.gameID});
+  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
 router.post('/message', (req, res) => {

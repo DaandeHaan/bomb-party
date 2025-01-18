@@ -1,6 +1,7 @@
-const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
+const { v4: uuidv4 } = require('uuid');
+const WebSocket = require('ws'); // Make sure to install this if it's not already installed
 
-class socketService {
+class SocketService {
   constructor() {
     this.wss = null;
     this.clients = new Map();
@@ -8,38 +9,61 @@ class socketService {
 
   init(wss) {
     this.wss = wss;
-  }
 
-  connect(sessionID) {
-    wss.on('connection', (ws) => {
-      this.clients.set(sessionID, ws); // Store the client in the map
-  
+    this.wss.on('connection', (ws) => {
+      const sessionID = uuidv4(); // Generate a unique ID for the session
+      this.clients.set(sessionID, ws);
+
       console.log(`Client connected: ${sessionID}`);
-  
+
       // Handle disconnection
       ws.on('close', () => {
-        this.clients.delete(sessionID); // Remove the client from the map
+        this.clients.delete(sessionID);
         console.log(`Client disconnected: ${sessionID}`);
       });
-  
-      // Handle incoming messages (optional)
+
+      // Handle incoming messages
       ws.on('message', (message) => {
+        try {
           console.log(`Message from ${sessionID}:`, message);
+          const parsedMessage = JSON.parse(message);
+          // You can handle parsedMessage here, e.g., route actions or responses
+        } catch (error) {
+          console.error(`Failed to parse message from ${sessionID}:`, error);
+        }
       });
-  
+
       // Send a welcome message to the client
       ws.send(JSON.stringify({ message: 'Welcome!', sessionID }));
     });
   }
 
-  sendMessage(recivers = [], message = "") {
-    recivers.forEach((sessionID) => {
-      const ws = this.clients.get(sessionID); // Retrieve the WebSocket connection by sessionID
+  sendMessage(receivers = [], message = '') {
+    receivers.forEach((sessionID) => {
+      const ws = this.clients.get(sessionID);
       if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify(message)); // Send the message if the connection is open
+        try {
+          ws.send(JSON.stringify(message));
+        } catch (error) {
+          console.error(`Failed to send message to ${sessionID}:`, error);
+        }
+      } else {
+        console.warn(`Connection not open for ${sessionID}`);
+      }
+    });
+  }
+
+  broadcast(message = '') {
+    this.clients.forEach((ws, sessionID) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        try {
+          ws.send(JSON.stringify(message));
+        } catch (error) {
+          console.error(`Failed to broadcast message to ${sessionID}:`, error);
+        }
       }
     });
   }
 }
 
-module.exports = new socketService();
+module.exports = new SocketService();

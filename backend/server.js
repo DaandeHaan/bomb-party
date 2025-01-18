@@ -20,9 +20,15 @@ socketService.init(wss);
 
 app.use(require("./middleware/sessionMiddleware.js"));
 
-app.use('/game', require("./controllers/gameController.js"))
+app.use('/api/game', require("./controllers/gameController.js"))
+
+server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
+    });
+});
 
 // Start the server
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
