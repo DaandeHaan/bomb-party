@@ -25,6 +25,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import LobbyInput from "../components/LobbyInput.vue";
 import CreateLobby from "../components/CreateLobby.vue";
+import axios from "axios";
 
 const userName = ref("");
 
@@ -56,12 +57,16 @@ const joinLobby = (code) => {
 };
 
 
-const createLobby = () => {
-  if (!userName.value.trim()) {
-    toast.error("Please enter your name before creating a lobby!");
-    return;
-  }
-  const newLobbyId = Math.random().toString(36).substring(7);
-  router.push(`/game/${newLobbyId}`);
+const createLobby = async () => {
+  const userName = localStorage.getItem('userName');
+  console.log("test");
+
+  const response = await axios.post(`http://localhost:3000/game/create`, {
+          params: { userName }
+        });
+
+  console.log(response);
+
+  // router.push(`/game/${newLobbyId}`);
 };
 </script>
