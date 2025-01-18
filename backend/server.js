@@ -19,11 +19,11 @@ const wss = new WebSocket.Server({ server });
 socketService.init(wss);
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow specific origin
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Include OPTIONS
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
-});
+  });
 
 app.use(require("./middleware/sessionMiddleware.js"));
 

@@ -61,7 +61,7 @@ const createLobby = async () => {
   const userName = localStorage.getItem('userName');
   console.log("test");
 
-  const response = await axios.post(`http://localhost:3000/game/create`, {
+  const response = await axios.post(`http://localhost:3000/api/game/create`, {
           params: { userName }
         });
 
