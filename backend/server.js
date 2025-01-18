@@ -3,6 +3,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const bodyParser = require('body-parser');
 const socketService = require('./services/socketService.js');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 3000;
@@ -10,6 +11,7 @@ const port = 3000;
 // Serve static files (optional)
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -17,6 +19,7 @@ const wss = new WebSocket.Server({ server });
 socketService.init(wss);
 
 app.use('/game', require("./controllers/gameController.js"))
+app.use('/user', require("./controllers/userController.js"))
 
 // Start the server
 server.listen(port, () => {

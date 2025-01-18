@@ -30,14 +30,14 @@ class socketService {
   
       // Send a welcome message to the client
       ws.send(JSON.stringify({ message: 'Welcome!', clientId }));
-  });
-  
+    });
   }
 
   sendMessage(recivers = [], message = "") {
-    recivers.forEach((ws, clientId) => {
-      if (recivers.includes(ws.group) && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(message));
+    recivers.forEach((clientId) => {
+      const ws = this.clients.get(clientId); // Retrieve the WebSocket connection by clientId
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(message)); // Send the message if the connection is open
       }
     });
   }
