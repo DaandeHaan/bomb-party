@@ -15,7 +15,7 @@ router.get('/:gameID?', (req, res) => {
     const game = games.find(game => game.gameID === gameID);
 
     if (!game)
-      return res.json({success: false, message: 'Game not found'});
+      return res.statusCode(404).json({success: false, message: 'Game not found'});
 
     res.json(games.find(game => game.gameID === gameID));
 
@@ -26,12 +26,25 @@ router.get('/:gameID?', (req, res) => {
   }
 });
 
-/*
-{
-  success: boolean,
-  gameID: gameID
-}
-*/
+router.post('/join/:gameID', (req, res) => {
+  
+  const gameID = req.params.gameID;
+
+  if (!gameID)
+    return res.statusCode(400).json({success: false, message: 'No gameID provided'});
+
+  const game = games.find(game => game.gameID === gameID);
+
+  if (!game)
+    return res.statusCode(404).json({success: false, message: 'Game not found'});
+
+  game.addPlayer(req.body.user);
+
+  // Start webSocket
+
+  res.json({success: true});
+});
+
 router.post('/create', (req, res) => {
 
   // Change to const
