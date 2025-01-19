@@ -1,5 +1,5 @@
 const socketService = require("./socketService");
-
+const wordService = require("./wordService");
 class Game {
   constructor({ gameOwner }) {
     this.gameID = Array.from({ length: 4 }, () => 
@@ -77,18 +77,31 @@ class Game {
 
   guessWord(word) {
     // Check if word is not already guessed
+    if (this.guessedWords.includes(word))
+      return;
 
     // Check if hint is in the word
+    if (!word.includes(this.currentHint))
+      return;
     
     // Check if word exists wordService.checkWord
+    if (!wordService.checkWord(this.language, word))
+      return;
 
     // Switch to next player
+    const nextPlayerIndex = this.players.findIndex(p => p.id === this.currentPlayer.id) + 1;
+    this.currentPlayer = this.players[nextPlayerIndex % this.players.length];
 
     // Add word to guessed words
+    this.guessedWords.push(word);
 
-    // Decrease timer
+    // Decrease timer (This should go based on the length of the word)
+    this.timer -= 0.5;
 
     // Get a new hint
+    this.currentHint = wordService.getHint(this.language, this.diffuculty);
+
+    socketService.sendMessage(this.players, this.gameID, {...this.getGame()});
   }
 
   // TODO: Remove sessionID from user's
