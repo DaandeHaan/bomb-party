@@ -4,7 +4,7 @@ const path = require('path');
 class wordService {
 
   getHint(language, difficulty) {
-    const hints = this.readFile(language, difficulty);
+    const hints = this.readHintsFile(language, difficulty);
 
     // Choose random hint
     const hint = hints[Math.floor(Math.random() * hints.length)];

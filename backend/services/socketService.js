@@ -135,7 +135,7 @@ class SocketService {
     // - 'gameStart': user started a new game
     // - 'readyUp': user is ready to start the game
 
-    this.sendGameObject(this.clientToGame.get(`${sessionID}-${gameID}`));
+    this.sendGameObject(this.clientToGame.get(`${sessionID}-${gameID}`).getGame());
   }
 }
 
