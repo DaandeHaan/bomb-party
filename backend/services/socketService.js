@@ -8,7 +8,7 @@ class SocketService {
   init(wss) {
     this.wss = wss;
 
-    this.wss.on('connection', (ws) => {
+    this.wss.on('connection', (ws, request) => {
       console.log('Client connected');
       const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
       this.clients.set(sessionID, ws);
