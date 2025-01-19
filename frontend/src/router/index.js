@@ -11,12 +11,14 @@ const routes = [
     component: GamePage,
     beforeEnter: async (to, from, next) => {
       try {
-        const userName = localStorage.getItem('userName');
+        const username = localStorage.getItem('username');
         console.log(to.params);
 
         const response = await axios.post(`http://localhost:3000/api/game/${to.params.gameID}/join`, {
-          params: { userName }
+          username 
         });
+
+        console.log(response);
         
         if(response.status != 200){
             console.log('Redirecting to the home page due to unsuccessful response');
