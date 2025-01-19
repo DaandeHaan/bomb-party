@@ -166,7 +166,6 @@ const sendWord = () => {
 const onType = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "typing", currentText: inputWord.value.trim() }));
-    inputWord.value = ""; // Clear the input after sending
   } else {
     console.warn("WebSocket is not connected");
   }
