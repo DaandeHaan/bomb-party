@@ -67,7 +67,8 @@ class Game {
     this.gameState = 'playing';
 
     // Set the current player to a random player
-    this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)];
+    const randomPlayer = this.players[Math.floor(Math.random() * this.players.length)];
+    randomPlayer.currentPlayer = true;
 
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
@@ -89,8 +90,7 @@ class Game {
       return;
 
     // Switch to next player
-    const nextPlayerIndex = this.players.findIndex(p => p.id === this.currentPlayer.id) + 1;
-    this.currentPlayer = this.players[nextPlayerIndex % this.players.length];
+    getNewPlayer();
 
     // Add word to guessed words
     this.guessedWords.push(word);
@@ -102,6 +102,19 @@ class Game {
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
     socketService.sendMessage(this.players, this.gameID, {...this.getGame()});
+  }
+
+  getNewPlayer() {
+    const currentPlayer = this.players.findIndex(p => p.currentPlayer === true);
+    this.players[currentPlayer].currentPlayer = false;
+
+    // Get the next player (that is ready)
+    let nextPlayer = this.players[currentPlayer + 1];
+    while (!nextPlayer.isReady) {
+      nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
+    }
+
+    nextPlayer.currentPlayer = true;
   }
 
   // TODO: Remove sessionID from user's

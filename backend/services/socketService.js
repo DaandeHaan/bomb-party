@@ -78,6 +78,10 @@ class SocketService {
       game.joinGame(sessionID)
     }
 
+    if(message.type == 'typing') {
+      
+    }
+
     // Events:
     // - 'typing': user typed a letter
     // - 'submit' user submitted the word
