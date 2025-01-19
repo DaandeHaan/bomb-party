@@ -14,9 +14,11 @@ const routes = [
         const username = localStorage.getItem('username');
         console.log(to.params);
 
-        const response = await axios.post(`http://localhost:3000/api/game/${to.params.gameID}/join`, {
-          username 
-        });
+        const response = await axios.post(
+          `http://localhost:3000/api/game/${to.params.gameID}/join`, 
+          { username },
+          { withCredentials: true }
+        );
 
         console.log(response);
         

@@ -2,7 +2,9 @@ const sessionService = require("../services/sessionService");
 
 function checkSessionID(req, res, next) {
 
-  let sessionID = req.cookies.session;
+  let sessionID = req.cookies.sessionID;
+
+  console.log('sessionID', sessionID);
 
   sessionID = sessionService.validSession(sessionID);
 
@@ -10,7 +12,7 @@ function checkSessionID(req, res, next) {
   req.user = req.user || {};
   req.user.sessionID = sessionID;
   
-  res.cookie('session', sessionID);
+  res.cookie('sessionID', sessionID);
 
   next();
 };

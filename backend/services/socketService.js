@@ -11,21 +11,15 @@ class SocketService {
     this.wss = wss;
 
     this.wss.on('connection', (ws, request) => {
-      console.log('Client connected');
-
       const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
       const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
 
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
       this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
 
-      console.log(`Client connected: ${sessionID}`);
-
       // Handle disconnection
       ws.on('close', () => {
-        console.log(this.clients.get(sessionID));
         this.clients.delete(sessionID);
-        console.log(`Client disconnected: ${sessionID}`);
       });
 
       // Handle incoming messages
@@ -37,8 +31,6 @@ class SocketService {
           }
 
           const message = JSON.parse(data);
-
-          console.log(`Received message from ${sessionID}:`, message);
 
           this.handleRecivedMessage(sessionID, game.gameID, message);
         } catch (error) {
