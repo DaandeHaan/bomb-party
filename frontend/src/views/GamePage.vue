@@ -12,12 +12,11 @@
           player.username === 'ME' ? 'bg-green-500 text-white' : 'bg-gray-300'
         ]"
       >
+        <!-- Display lastText above the player's username -->
+        <div class="text-xs font-medium text-gray-600 mb-1">
+          {{ player.currentText }}
+        </div>
         {{ player.username }}
-      </div>
-
-      <!-- Letters in the middle -->
-      <div class="bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center">
-        {{ currentLetters }}
       </div>
     </div>
 
