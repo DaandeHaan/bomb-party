@@ -10,7 +10,7 @@ class Game {
     this.gameOwner = gameOwner;
 
     this.activePlayers = []; // Object: {id: string, name: string}
-    this.lobby = [gameOwner];
+    this.lobby = [];
 
     this.currentPlayer = null;
     this.currentHint = "";	
@@ -93,6 +93,7 @@ class Game {
     // Get a new hint
   }
 
+  // TODO: Remove sessionID from user's
   getGame() {
     return {
       gameID: this.gameID,
