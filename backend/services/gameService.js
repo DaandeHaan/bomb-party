@@ -74,7 +74,7 @@ class Game {
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    socketService.sendMessage(this.players.map(p => p.id), {...this.getGame()});
+    socketService.sendMessage([this.players.map(p => p.id), this.lobby.map(p => p.id)], {...this.getGame()});
   }
 
   guessWord(word) {
@@ -111,4 +111,25 @@ class Game {
 
 }
 
-module.exports = Game;
+class GameManager {
+  constructor() {
+    this.games = [];
+  }
+
+  createGame({ gameOwner }) {
+    const game = new Game({ gameOwner });
+    this.games.push(game);
+    return game;
+  }
+
+  getGame(gameID) {
+    return this.games.find(game => game.gameID === gameID);
+  }
+
+  getGames() {
+    return this.games;
+  }
+}
+
+const gameManagerInstance = new GameManager();
+module.exports = { Game, GameManager: gameManagerInstance };
