@@ -143,7 +143,8 @@ class Game {
     this.players[currentPlayer].currentPlayer = false;
 
     // Get the next player (that is ready and has lives)
-    let nextPlayer = this.players[currentPlayer + 1];
+    let nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
+    
     while (!nextPlayer.isReady || nextPlayer.lives === 0) {
       nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
     }
