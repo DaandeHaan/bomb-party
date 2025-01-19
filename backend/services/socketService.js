@@ -65,6 +65,9 @@ class SocketService {
   }
 
   handleRecivedMessage(sessionID, message) {
+    if(parsedMessage.type == 'ready'){
+
+    }
     // Events:
     // - 'typing': user typed a letter
     // - 'submit' user submitted the word

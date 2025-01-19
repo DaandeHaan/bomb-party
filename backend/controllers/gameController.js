@@ -40,8 +40,9 @@ router.post('/:gameID/join/', (req, res) => {
 
   const user = {
     sessionID: req.user.sessionID,
-    username: req.body.username
-  }
+    username: req.body.username,
+    isReady: false
+  };
 
   if (!game.addPlayer(user))
     return res.json({success: false, message: 'User already in game'});

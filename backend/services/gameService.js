@@ -9,10 +9,7 @@ class Game {
     this.gameState = 'lobby';
     this.gameOwner = gameOwner;
 
-    this.activePlayers = []; // Object: {id: string, name: string}
-    this.lobby = [gameOwner];
-
-    this.currentPlayer = null;
+    this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = 10;
@@ -25,19 +22,19 @@ class Game {
   addPlayer(player) {
 
     // Check if player is already in the game
-    if (this.activePlayers.find(p => p.id === player.id))
+    if (this.players.find(p => p.id === player.id))
       return false;
 
-    this.lobby.push(player);
+    this.players.push(player);
     return true;
   }
 
   removePlayer(player) {
-    this.activePlayers = this.activePlayers.filter(p => p.id !== player.id);
+    this.players = this.players.filter(p => p.id !== player.id);
   }
 
   getPlayers() {
-    return this.activePlayers;
+    return this.players;
   }
 
   // This function will be executed when a player joins the game from the lobby
@@ -48,13 +45,10 @@ class Game {
       return false;
 
     // Check if player is already in the game
-    if (this.activePlayers.find(p => p.id === player.id))
+    if (foundPlayer = this.players.find(p => p.id === player.id && p.isReady))
       return false;
 
-    // Add player to the game, remove from lobby
-    this.activePlayers.push(player);
-    this.lobby.removePlayer(player);
-
+    foundPlayer.isReady = true;
     return true;
   }
 
@@ -98,9 +92,7 @@ class Game {
       gameID: this.gameID,
       gameState: this.gameState,
       gameOwner: this.gameOwner,
-      activePlayers: this.activePlayers,
-      lobby: this.lobby,
-      currentPlayer: this.currentPlayer,
+      players: this.players,
       currentHint: this.currentHint,
       guessedWords: this.guessedWords,
       timer: this.timer,

@@ -33,6 +33,13 @@
       <div class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
         Me
       </div>
+      <!-- Ready Up Button -->
+      <button
+        class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow mt-4 hover:bg-blue-700"
+        @click="readyUp"
+      >
+        Ready Up
+      </button>
     </div>
   </div>
 </template>
@@ -98,6 +105,16 @@ const sendWord = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "submit", word: inputWord.value }));
     inputWord.value = "";
+  } else {
+    console.warn("WebSocket is not connected");
+  }
+};
+
+// Notify server that user is ready
+const readyUp = () => {
+  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+    ws.value.send(JSON.stringify({ type: "ready" }));
+    console.log("Ready status sent to the server");
   } else {
     console.warn("WebSocket is not connected");
   }
