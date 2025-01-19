@@ -29,7 +29,7 @@ class Game {
   }
 
   removePlayer(player) {
-    this.players = this.players.filter(p => p.sessionID !== player.sessionID);
+    this.players = this.players.filter(p => p.sessionID !== sessionID);
   }
 
   getPlayers() {
