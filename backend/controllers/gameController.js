@@ -48,7 +48,7 @@ router.post('/:gameID/join/', (req, res) => {
   };
 
   if (!game.addPlayer(user))
-    return res.status(400).json({success: false, message: 'User already in game'});
+    return res.status(409).json({success: false, message: 'User already in game'});
 
   res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
 });
