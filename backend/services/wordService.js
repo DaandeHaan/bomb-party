@@ -17,14 +17,21 @@ class wordService {
   }
 
   checkWord(hint, language, difficulty, word) {
-    const hints = this.readFile(language, difficulty);
-
-    // Check if word is in hints
-    return hints.includes(word);
+    const words = this.readWordsFile(language);
+    
+    // Check if word contains hint
+    if (!word.includes(hint))
+      return false
+    
+    // Check if word exists
+    if (!words.includes(word))
+      return false;
+    
+    return true;
   }
 
   // This function returns a array of hints in the file
-  readFile(language, difficulty) {
+  readHintsFile(language, difficulty) {
     
     const hintsFile = path.join(__dirname, '../languages', language, "hints", difficulty + ".txt");
 
@@ -36,6 +43,20 @@ class wordService {
 
     const hints = fs.readFileSync(hintsFile, 'utf8');
     return hints.split('\n');
+  }
+
+  readWordsFile(language) {
+    
+    const wordsFile = path.join(__dirname, '../languages', language, "words.txt");
+
+    // Check if file exists
+    if (!fs.existsSync(wordsFile)) {
+      console.error(`File ${wordsFile} does not exist`);
+      return [];
+    }
+
+    const words = fs.readFileSync(wordsFile, 'utf8');
+    return words.split('\n');
   }
 
 }

@@ -1,3 +1,5 @@
+const socketService = require("./socketService");
+
 class Game {
   constructor({ gameOwner }) {
     this.gameID = Array.from({ length: 4 }, () => 
@@ -38,14 +40,21 @@ class Game {
     return this.players;
   }
 
+  // This function will be executed when a player joins the game from the lobby
   joinGame(player) {
+
+    // Check if game state is lobby
+    if (this.gameState !== 'lobby')
+      return false;
+
     // Check if player is already in the game
     if (this.players.find(p => p.id === player.id))
       return false;
 
+    // Add player to the game, remove from lobby
     this.players.push(player);
     this.lobby.removePlayer(player);
-    
+
     return true;
   }
 
@@ -65,7 +74,23 @@ class Game {
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
+    socketService.sendMessage(this.players.map(p => p.id), { action: 'startGame', game: this });
+  }
 
+  guessWord(word) {
+    // Check if word is not already guessed
+
+    // Check if hint is in the word
+    
+    // Check if word exists wordService.checkWord
+
+    // Switch to next player
+
+    // Add word to guessed words
+
+    // Decrease timer
+
+    // Get a new hint
   }
 
 }
