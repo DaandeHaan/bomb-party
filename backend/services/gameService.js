@@ -87,7 +87,7 @@ class Game {
     randomPlayer.currentPlayer = true;
 
     // Get a random hint
-    this.currentHint = wordService.getHint(this.language, this.diffuculty);
+    this.currentHint = wordService.getHint(this.language, this.diffuculty).toLowerCase().trim();
 
     // Start Timer
     this.startTimer();
