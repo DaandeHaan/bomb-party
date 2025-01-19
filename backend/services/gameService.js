@@ -60,6 +60,9 @@ class Game {
   }
 
   startGame() {
+    if (this.gameState !== 'lobby')
+      return;
+
     // Reset values
     this.guessedWords = [];
 
@@ -81,6 +84,10 @@ class Game {
   }
 
   setText(sessionID, text) {
+
+    if (this.gameState !== 'playing')
+      return;
+
     const player = this.players.find(p => p.sessionID === sessionID);
 
     if (!player)
@@ -90,6 +97,10 @@ class Game {
   }
 
   guessWord(word) {
+
+    if (this.gameState !== 'playing')
+      return;
+
     // Check if word is not already guessed
     if (this.guessedWords.includes(word))
       return this.players.find(p => p.currentPlayer === true).currentText = "";
