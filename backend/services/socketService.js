@@ -19,6 +19,9 @@ class SocketService {
 
       // Handle disconnection
       ws.on('close', () => {
+        game.removePlayer(sessionID);
+
+        this.clientToGame.delete(`${sessionID}-${game.gameID}`);
         this.clients.delete(sessionID);
       });
 
@@ -79,7 +82,7 @@ class SocketService {
     }
 
     if(message.type == 'typing') {
-      
+
     }
 
     // Events:

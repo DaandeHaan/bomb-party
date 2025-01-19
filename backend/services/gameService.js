@@ -21,7 +21,7 @@ class Game {
   addPlayer(player) {
 
     // Check if player is already in the game
-    if (this.players.find(p => p.id === player.id))
+    if (this.players.find(p => p.sessionID === player.sessionID))
       return false;
 
     this.players.push(player);
@@ -29,7 +29,7 @@ class Game {
   }
 
   removePlayer(player) {
-    this.players = this.players.filter(p => p.id !== player.id);
+    this.players = this.players.filter(p => p.sessionID !== player.sessionID);
   }
 
   getPlayers() {
