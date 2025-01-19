@@ -8,7 +8,7 @@ class Game {
     
     this.gameState = 'lobby';
     this.gameOwner = gameOwner;
-
+    
     this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];
@@ -87,6 +87,7 @@ class Game {
     // Get a new hint
   }
 
+  // TODO: Remove sessionID from user's
   getGame() {
     return {
       gameID: this.gameID,
