@@ -144,9 +144,9 @@ class Game {
     const currentPlayer = this.players.findIndex(p => p.currentPlayer === true);
     this.players[currentPlayer].currentPlayer = false;
 
-    // Get the next player (that is ready)
+    // Get the next player (that is ready and has lives)
     let nextPlayer = this.players[currentPlayer + 1];
-    while (!nextPlayer.isReady) {
+    while (!nextPlayer.isReady || nextPlayer.lives === 0) {
       nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
     }
 
@@ -155,14 +155,25 @@ class Game {
   }
 
   NotInTime() {
-    // Switch to next player
-    getNewPlayer();
+
 
     // Get a new hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
     // Reset Timer
     this.timer = 10;
+
+    // Remove Live
+    this.players.find(p => p.currentPlayer === true).lives--;
+
+    // Check if all players are out of lives, except one
+    if (this.players.filter(p => p.isReady).length === 1) {
+      this.gameState = 'lobby';
+      return;
+    }
+
+    // Switch to next player
+    this.getNewPlayer();
 
     this.players.find(p => p.currentPlayer === true).currentText = "";
   }
