@@ -4,8 +4,6 @@ function checkSessionID(req, res, next) {
 
   let sessionID = req.cookies.sessionID;
 
-  console.log('sessionID', sessionID);
-
   sessionID = sessionService.validSession(sessionID);
 
   // Initialize the user object
