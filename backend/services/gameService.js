@@ -1,5 +1,3 @@
-// const socketService = require("./socketService");
-const socketService = require("./socketService");
 const wordService = require("./wordService");
 
 class Game {
@@ -155,7 +153,7 @@ class Game {
   }
 
   NotInTime() {
-
+    const socketService = require("./socketService");
 
     // Get a new hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
@@ -169,13 +167,15 @@ class Game {
     // Check if all players are out of lives, except one
     if (this.players.filter(p => p.isReady).length === 1) {
       this.gameState = 'lobby';
-      return;
-    }
+      return socketService.sendGameObject(this.getGame());
+  }
 
     // Switch to next player
     this.getNewPlayer();
 
     this.players.find(p => p.currentPlayer === true).currentText = "";
+
+    socketService.sendGameObject(this.getGame());
   }
 
   resetTimer() {
@@ -196,7 +196,7 @@ class Game {
     }
 
     this.timerInterval = setTimeout(() => {
-      console.log("Timer ended");
+      this.NotInTime();
     }, this.timer * 1000); // Convert to milliseconds
   }
 
