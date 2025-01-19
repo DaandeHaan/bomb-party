@@ -2,31 +2,44 @@
 const express = require('express');
 const Game = require('../services/gameService');
 const socketService = require('../services/socketService');
+const wordService = require('../services/wordService');
 
 const router = express.Router();
 
 const games = [];
 
-router.get('/:gameID?', (req, res) => {
-  const gameID = req.params.gameID;
 
-  if (gameID) {
 
-    const game = games.find(game => game.gameID === gameID);
 
-    if (!game)
-      return res.status(404).json({success: false, message: 'Game not found'});
 
-    res.json(games.find(game => game.gameID === gameID));
+router.post('/create', (req, res) => {
 
-  } else {
-
-    res.json({ success: true, games: games });
-
+  const user = {
+    sessionID: req.user.sessionID,
+    name: req.body.username
   }
+
+  const game = new Game({ gameOwner: user });
+
+  games.push(game)
+
+  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
+<<<<<<< HEAD
 router.post('/:gameID/join', (req, res) => {
+=======
+router.post('/message', (req, res) => {
+
+  socketService.sendMessage([socketService.clients[0]], "Hello!");
+
+  res.json({success: true});
+});
+
+
+
+router.post('/:gameID/join/', (req, res) => {
+>>>>>>> e1ddc84ff39779394e13f94baee01f11017dfdba
   
   const gameID = req.params.gameID;
 
@@ -49,25 +62,33 @@ router.post('/:gameID/join', (req, res) => {
   res.json({success: true, game: game, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
-router.post('/create', (req, res) => {
+router.get('/:gameID?', (req, res) => {
+  const gameID = req.params.gameID;
 
-  const user = {
-    sessionID: req.user.sessionID,
-    name: req.body.username
+  if (gameID) {
+
+    const game = games.find(game => game.gameID === gameID);
+
+    if (!game)
+      return res.status(404).json({success: false, message: 'Game not found'});
+
+    res.json(games.find(game => game.gameID === gameID));
+
+  } else {
+
+    res.json({ success: true, games: games });
+
   }
-
-  const game = new Game({ gameOwner: user });
-
-  games.push(game)
-
-  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
-router.post('/message', (req, res) => {
+router.post('/debug', (req, res) => {
+  const hint = wordService.getHint('dutch', 'beginner');
+  res.json({success: true, hint: hint});
+});
 
-  socketService.sendMessage([socketService.clients[0]], "Hello!");
-
-  res.json({success: true});
+router.post('/debug2', (req, res) => {
+  const hint = wordService.getHint('dutch', 'beginner');
+  res.json({success: true, hint: hint});
 });
 
 module.exports = router;

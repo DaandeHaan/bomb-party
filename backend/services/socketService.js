@@ -1,6 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
 const WebSocket = require('ws'); // Make sure to install this if it's not already installed
-
 class SocketService {
   constructor() {
     this.wss = null;
