@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex items-center justify-center h-screen bg-gray-100">
     <!-- Circle for players -->
-    <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-gray-300">
+    <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-gray-300 bg-white shadow-lg">
       <!-- Ready Players -->
       <div
         v-for="(player, index) in readyPlayers"
@@ -12,33 +12,40 @@
           player.username === 'ME' ? 'bg-green-500 text-white' : 'bg-gray-300'
         ]"
       >
-        <!-- Display lastText above the player's username -->
+        <!-- Display currentText above the player's username -->
         <div class="text-xs font-medium text-gray-600 mb-1">
           {{ player.currentText }}
         </div>
         {{ player.username }}
       </div>
+
+      <!-- Letters in the middle -->
+      <div class="relative flex flex-col items-center bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center">
+        {{ currentHint }}
+      </div>
     </div>
 
     <!-- Input Field -->
-    <div class="absolute bottom-10 w-full flex flex-col items-center">
+    <div class="absolute bottom-10 w-full flex flex-col items-center space-y-4">
       <input
         type="text"
         v-model="inputWord"
         placeholder="Enter your word..."
-        class="p-3 w-3/4 max-w-md border rounded-lg text-center"
+        class="p-3 w-3/4 max-w-md border rounded-lg text-center shadow focus:outline-none focus:ring focus:ring-blue-400"
         @keydown.enter="sendWord"
         @input="onType"
       />
-      <button 
-        v-if="isYouAndOwner" 
-        class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4"
-        @click="gameStart">
-        Fuck you
+      <!-- Game Start Button -->
+      <button
+        v-if="isYouAndOwner"
+        class="bg-green-600 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow hover:bg-green-700 transition"
+        @click="gameStart"
+      >
+        Start Game
       </button>
       <!-- Ready Up Button -->
       <button
-        class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow mt-4 hover:bg-blue-700"
+        class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow hover:bg-blue-700 transition"
         @click="sendReadyUp"
       >
         Ready Up
@@ -46,19 +53,14 @@
     </div>
 
     <!-- Game State and Timer -->
-    <div v-if="gameState === 'in-progress'" class="text-center text-lg text-gray-500 mt-4">
+    <div v-if="gameState === 'in-progress'" class="absolute top-5 text-center text-lg text-gray-500">
       Game in progress! Timer: {{ timer }} seconds left.
-    </div>
-
-    <!-- Hint -->
-    <div v-if="currentHint" class="bg-yellow-500 text-white py-2 px-4 rounded-md shadow mt-4">
-      Hint: {{ currentHint }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, render } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 
 // State Variables
@@ -82,7 +84,7 @@ const readyPlayers = computed(() => {
 // Calculate Player Positions in Circular Layout
 const getPlayerPosition = (index, totalPlayers) => {
   const angle = (index / totalPlayers) * 360;
-  const radius = 300;
+  const radius = 300; // Adjusted to center players better
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
@@ -92,36 +94,30 @@ const getPlayerPosition = (index, totalPlayers) => {
 };
 
 const renderGameObject = (game) => {
-// Update Players List
-if (game.players) {
-      players.value = game.players;
-    }
+  if (game.players) {
+    players.value = game.players;
+  }
 
-    // Update Letters
-    if (game.letters) {
-      currentLetters.value = game.letters;
-    }
+  if (game.letters) {
+    currentLetters.value = game.letters;
+  }
 
-    // Handle Guessed Words
-    if (game.guessedWords) {
-      console.log("Guessed words:", game.guessedWords);
-    }
+  if (game.guessedWords) {
+    console.log("Guessed words:", game.guessedWords);
+  }
 
-    // Update Game State
-    if (game.gameState) {
-      gameState.value = game.gameState;
-    }
+  if (game.gameState) {
+    gameState.value = game.gameState;
+  }
 
-    // Update Timer
-    if (game.timer !== undefined) {
-      timer.value = game.timer;
-    }
+  if (game.timer !== undefined) {
+    timer.value = game.timer;
+  }
 
-    // Update Hint
-    if (game.currentHint) {
-      currentHint.value = game.currentHint;
-    }
-}
+  if (game.currentHint) {
+    currentHint.value = game.currentHint;
+  }
+};
 
 // Establish WebSocket Connection
 const connectWebSocket = () => {
@@ -172,9 +168,12 @@ const onType = () => {
   } else {
     console.warn("WebSocket is not connected");
   }
-}
+};
 
-// Send Ready Up Message
+const isYouAndOwner = computed(() => {
+  return players.value.some((player) => player.isYou && player.isOwner);
+});
+
 const sendReadyUp = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "readyUp" }));
@@ -184,15 +183,10 @@ const sendReadyUp = () => {
   }
 };
 
-const isYouAndOwner = computed(() => {
-  const currentPlayer = players.value.find(player => player.isYou && player.isOwner);
-  return currentPlayer;
-});
-
 const gameStart = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "gameStart" }));
-    console.log("Ready up message sent.");
+    console.log("Game start message sent.");
   } else {
     console.warn("WebSocket is not connected");
   }
@@ -211,5 +205,5 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* Add any additional styles if necessary */
+/* Add additional global styles if needed */
 </style>
