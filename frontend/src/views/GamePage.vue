@@ -183,7 +183,6 @@ const sendReadyUp = () => {
 
 const isYouAndOwner = computed(() => {
   const currentPlayer = players.value.find(player => player.isYou && player.isOwner);
-  console.log(currentPlayer);
   return currentPlayer;
 });
 
