@@ -118,13 +118,13 @@ class Game {
     // Check if hint is in the word
     if (!word.includes(this.currentHint))
       return this.players.find(p => p.currentPlayer === true).currentText = "";
-    
+
     // Check if word exists wordService.checkWord
     if (!wordService.checkWord(this.currentHint, this.language, word)) 
       return this.players.find(p => p.currentPlayer === true).currentText = "";
 
     // Switch to next player
-    getNewPlayer();
+    this.getNewPlayer();
 
     // Add word to guessed words
     this.guessedWords.push(word);
@@ -144,7 +144,7 @@ class Game {
 
     // Get the next player (that is ready and has lives)
     let nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
-    
+
     while (!nextPlayer.isReady || nextPlayer.lives === 0) {
       nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
     }
@@ -182,7 +182,6 @@ class Game {
   resetTimer() {
     // Clear existing timer if there is one
     if (this.timerInterval) {
-      console.log("Timer Re-Started...")
       clearTimeout(this.timerInterval);
     }
     
@@ -192,7 +191,6 @@ class Game {
 
   startTimer() {
     if (this.timerInterval) {
-      console.log("Timer Started...")
       clearTimeout(this.timerInterval);
     }
 
