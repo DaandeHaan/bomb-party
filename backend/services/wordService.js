@@ -19,8 +19,8 @@ class wordService {
     if (!word.includes(hint))
       return false
     
-    // Check if word exists
-    if (!words.includes(word))
+    // Check if word is in the list of words
+    if (!words.some(w => w.toLowerCase() === word.toLowerCase()))
       return false;
     
     return true;
