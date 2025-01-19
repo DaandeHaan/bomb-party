@@ -32,14 +32,34 @@ class Game {
   }
 
   // Add checks to switch to next player and get a new hint if he was the active player
-  removePlayer(player) {
-    this.players = this.players.filter(p => p.sessionID !== player);
+  removePlayer(sessionID) {
+    // Check if the player was the current player
+    const player = this.players.find(p => p.sessionID === sessionID);
+
+    console.log(player)
+
+    if (player.currentPlayer) {
+      console.log("Player was current player");
+      this.currentHint = wordService.getHint(this.language, this.diffuculty);
+      this.getNewPlayer();
+    }
+
+    this.players = this.players.filter(p => p.sessionID !== sessionID);
 
     if (this.players.length === 0) {
       return gameManagerInstance.deleteGame(this.gameID);
     }
 
+    if (this.players.length === 1) {
+      
+      this.gameState = 'lobby';
+
+    }
+
     this.players[0].isOwner = true;
+
+    const socketService = require("./socketService");
+    socketService.sendGameObject(this.getGame());
   }
 
   getPlayers() {
@@ -118,21 +138,16 @@ class Game {
     if (this.guessedWords.map(w => w.toLowerCase()).includes(word)) {
       return this.players.find(p => p.currentPlayer === true).currentText = "";
     }
-    console.log("test");
     
     // Check if hint is in the word (case-insensitive)
-    console.log(this.currentHint)
     if (!word.includes(this.currentHint.toLowerCase().trim())) {
       return this.players.find(p => p.currentPlayer === true).currentText = "";
     }
-    console.log("test");
     
     // Check if word exists using wordService.checkWord (case-insensitive)
     if (!wordService.checkWord(this.currentHint, this.language, word)) {
       return this.players.find(p => p.currentPlayer === true).currentText = "";
     }
-
-    console.log("test");
 
     // Switch to next player
     this.getNewPlayer();
