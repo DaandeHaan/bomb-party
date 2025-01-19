@@ -30,8 +30,8 @@
         @keydown.enter="sendWord"
         @input="onType"
       />
-      <div class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
-        Me
+      <div v-if="isYouAndOwner" class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
+        Fuck you
       </div>
       <!-- Ready Up Button -->
       <button
@@ -180,6 +180,11 @@ const sendReadyUp = () => {
     console.warn("WebSocket is not connected");
   }
 };
+
+const isYouAndOwner = computed(() => {
+  const currentPlayer = players.value.find(player => player.isYou && player.isOwner);
+  return currentPlayer;
+});
 
 // Lifecycle Hooks
 onMounted(() => {
