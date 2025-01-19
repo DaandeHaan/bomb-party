@@ -74,16 +74,19 @@ class SocketService {
 
       const ws = this.clients.get(`${player.sessionID}-${gameObject.gameID}`);
 
-      let gameObjectForUserInLoop;
+      let gameObjectForUserInLoop = gameObject;
 
-      gameObjectForUserInLoop = gameObject.players.map(gamePlayer => {
-        if (gamePlayer.sessionID === player.sessionID) {
-          return { ...gamePlayer, isYou: true };
-        } else {
-          return { ...gamePlayer, isYou: false };
-        }
-      });
-      
+      gameObjectForUserInLoop = {
+        ...gameObject, // Spread the rest of the gameObject properties
+        players: gameObject.players.map(gamePlayer => {
+          if (gamePlayer.sessionID === player.sessionID) {
+            return { ...gamePlayer, isYou: true }; // Add isYou: true for the matching player
+          } else {
+            return { ...gamePlayer, isYou: false }; // Add isYou: false for others
+          }
+        })
+      };
+
       if (ws && ws.readyState === WebSocket.OPEN) {
         try {
           console.log(gameObjectForUserInLoop)
