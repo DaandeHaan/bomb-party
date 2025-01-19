@@ -81,8 +81,16 @@ class SocketService {
       game.joinGame(sessionID)
     }
 
-    if(message.type == 'typing') {
+    if (message.type == 'submit') {
+      game.guessWord(message.word);
+    }
 
+    if(message.type == 'typing') {
+      game.setText(message.text);
+    }
+
+    if(message.type == 'gameStart') {
+      game.startGame();
     }
 
     // Events:

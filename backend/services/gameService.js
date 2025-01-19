@@ -12,6 +12,7 @@ class Game {
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = 10;
+    this.text = "";
 
 
     this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
@@ -28,6 +29,7 @@ class Game {
     return true;
   }
 
+  // Add checks to switch to next player and get a new hint if he was the active player
   removePlayer(player) {
     this.players = this.players.filter(p => p.sessionID !== player);
   }
@@ -63,6 +65,9 @@ class Game {
     // Set the timer to 10 seconds
     this.timer = 10;
 
+    // Clear text
+    this.text = "";
+
     // Set the game state to playing
     this.gameState = 'playing';
 
@@ -79,15 +84,15 @@ class Game {
   guessWord(word) {
     // Check if word is not already guessed
     if (this.guessedWords.includes(word))
-      return;
+      return this.text = "";
 
     // Check if hint is in the word
     if (!word.includes(this.currentHint))
-      return;
+      return this.text = "";
     
     // Check if word exists wordService.checkWord
-    if (!wordService.checkWord(this.language, word))
-      return;
+    if (!wordService.checkWord(this.language, word)) 
+      return this.text = "";
 
     // Switch to next player
     getNewPlayer();
@@ -100,6 +105,8 @@ class Game {
 
     // Get a new hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
+
+    this.text = "";
 
     socketService.sendMessage(this.players, this.gameID, {...this.getGame()});
   }
