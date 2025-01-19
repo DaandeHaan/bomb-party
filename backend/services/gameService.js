@@ -74,7 +74,7 @@ class Game {
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    socketService.sendMessage(this.players.map(p => p.id), {...this.getGame()});
+    socketService.sendMessage([this.players.map(p => p.id), this.lobby.map(p => p.id)], {...this.getGame()});
   }
 
   guessWord(word) {

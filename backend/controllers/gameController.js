@@ -9,7 +9,7 @@ router.post('/create', (req, res) => {
 
   const user = {
     sessionID: req.user.sessionID,
-    name: req.body.username
+    username: req.body.username
   }
 
   const game = GameManager.createGame({ gameOwner: user });
@@ -40,7 +40,7 @@ router.post('/:gameID/join/', (req, res) => {
 
   const user = {
     sessionID: req.user.sessionID,
-    name: req.body.username
+    username: req.body.username
   }
 
   if (!game.addPlayer(user))
