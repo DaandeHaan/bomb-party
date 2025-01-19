@@ -34,7 +34,7 @@ const router = useRouter();
 
 watch(username, (newValue) => {
   if (newValue) {
-    localStorage.setItem("userName", newValue);
+    localStorage.setItem("username", newValue);
   }
 });
 
