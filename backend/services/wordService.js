@@ -12,7 +12,7 @@ class wordService {
     return hint;    
   }
 
-  checkWord(hint, language, difficulty, word) {
+  checkWord(hint, language, word) {
     const words = this.readWordsFile(language);
     
     // Check if word contains hint
