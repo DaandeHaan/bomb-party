@@ -18,7 +18,7 @@ router.post('/create', (req, res) => {
 
   games.push(game)
 
-  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
+  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
 });
 
 router.post('/message', (req, res) => {
@@ -50,7 +50,7 @@ router.post('/:gameID/join/', (req, res) => {
   if (!game.addPlayer(user))
     return res.json({success: false, message: 'User already in game'});
 
-  res.json({success: true, game: game, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
+  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
 });
 
 router.get('/:gameID?', (req, res) => {
