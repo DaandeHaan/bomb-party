@@ -13,7 +13,10 @@
           player.isYou ? 'border-2 border-red-600' : ''
         ]"
       >
-        <!-- Display currentText above the player's username -->
+        <!-- Display lives and currentText above the player's username -->
+        <div class="text-xs font-medium text-gray-600 mb-1">
+          Lives: {{ player.lives }}
+        </div>
         <div class="text-xs font-medium text-gray-600 mb-1">
           {{ player.currentText }}
         </div>
@@ -35,10 +38,11 @@
         class="p-3 w-3/4 max-w-md border rounded-lg text-center shadow focus:outline-none focus:ring focus:ring-blue-400"
         @keydown.enter="sendWord"
         @input="onType"
+        :disabled="!isCurrentPlayer && gameHasStarted"
       />
       <!-- Game Start Button -->
       <button
-        v-if="isYouAndOwner"
+        v-if="!gameHasStarted && isYouAndOwner"
         class="bg-green-600 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow hover:bg-green-700 transition"
         @click="gameStart"
       >
@@ -46,6 +50,7 @@
       </button>
       <!-- Ready Up Button -->
       <button
+        v-if="!gameHasStarted"
         class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow hover:bg-blue-700 transition"
         @click="sendReadyUp"
       >
@@ -94,6 +99,22 @@ const getPlayerPosition = (index, totalPlayers) => {
   };
 };
 
+// Computed property to check if the game has started
+const gameHasStarted = computed(() => {
+  return gameState.value === "playing";
+});
+
+// Computed property to check if the current user is the current player
+const isCurrentPlayer = computed(() => {
+  return players.value.some((player) => player.isYou && player.currentPlayer);
+});
+
+// Computed property to check if the user is both `isYou` and the owner
+const isYouAndOwner = computed(() => {
+  return players.value.some((player) => player.isYou && player.isOwner);
+});
+
+// Update the game object based on server messages
 const renderGameObject = (game) => {
   if (game.players) {
     players.value = game.players;
@@ -163,6 +184,7 @@ const sendWord = () => {
   }
 };
 
+// Handle typing updates
 const onType = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "typing", currentText: inputWord.value.trim() }));
@@ -171,10 +193,7 @@ const onType = () => {
   }
 };
 
-const isYouAndOwner = computed(() => {
-  return players.value.some((player) => player.isYou && player.isOwner);
-});
-
+// Send Ready Up Message
 const sendReadyUp = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "readyUp" }));
@@ -184,6 +203,7 @@ const sendReadyUp = () => {
   }
 };
 
+// Start the game
 const gameStart = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "gameStart" }));
