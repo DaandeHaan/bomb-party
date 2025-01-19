@@ -16,8 +16,9 @@ class wordService {
     const words = this.readWordsFile(language);
     
     // Check if word contains hint
-    if (!word.includes(hint))
+    if (!word.toLowerCase().includes(hint.toLowerCase()))
       return false
+
     
     // Check if word is in the list of words
     if (!words.some(w => w.toLowerCase() === word.toLowerCase()))
@@ -42,17 +43,20 @@ class wordService {
   }
 
   readWordsFile(language) {
-    
     const wordsFile = path.join(__dirname, '../languages', language, "words.txt");
-
+  
     // Check if file exists
     if (!fs.existsSync(wordsFile)) {
       console.error(`File ${wordsFile} does not exist`);
       return [];
     }
-
+  
     const words = fs.readFileSync(wordsFile, 'utf8');
-    return words.split('\n');
+  
+    // Split the words by newline and remove any unwanted whitespace or carriage return characters
+    const cleanWords = words.split('\n').map(w => w.trim().replace(/\r/g, '').toLowerCase());
+  
+    return cleanWords;
   }
 
 }
