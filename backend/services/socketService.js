@@ -34,7 +34,7 @@ class SocketService {
         isReady: false,
         currentPlayer: false,
         isOwner: false,
-        text: "",
+        currentText: "",
       });
 
       this.sendGameObject({...game.getGame()});
@@ -86,7 +86,6 @@ class SocketService {
 
       if (ws && ws.readyState === WebSocket.OPEN) {
         try {
-          console.log(gameObjectForUserInLoop)
           ws.send(JSON.stringify(gameObjectForUserInLoop));
         } catch (error) {
           console.error(`Failed to send message to ${player.sessionID}:`, error);
@@ -122,7 +121,7 @@ class SocketService {
     }
 
     if(message.type == 'typing') {
-      game.setText(sessionID, message.text);
+      game.setText(sessionID, message.currentText);
     }
 
     if(message.type == 'gameStart') {
