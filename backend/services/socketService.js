@@ -1,4 +1,5 @@
 const WebSocket = require('ws'); // Make sure to install this if it's not already installed
+const { GameManager } = require('./gameService');
 class SocketService {
   constructor() {
     this.wss = null;
@@ -11,12 +12,16 @@ class SocketService {
     this.wss.on('connection', (ws, request) => {
       console.log('Client connected');
       const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
-      this.clients.set(sessionID, ws);
+
+      const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
+
+      this.clients.set(`${sessionID}-${game.gameID}`, ws);
 
       console.log(`Client connected: ${sessionID}`);
 
       // Handle disconnection
       ws.on('close', () => {
+        console.log(this.clients.get(sessionID));
         this.clients.delete(sessionID);
         console.log(`Client disconnected: ${sessionID}`);
       });
@@ -37,9 +42,9 @@ class SocketService {
     });
   }
 
-  sendMessage(receivers = [], message = '') {
+  sendMessage(receivers = [], gameID, message = '') {
     receivers.forEach((sessionID) => {
-      const ws = this.clients.get(sessionID);
+      const ws = this.clients.get(`${sessionID}-${gameID}`);
       if (ws && ws.readyState === WebSocket.OPEN) {
         try {
           ws.send(JSON.stringify(message));
@@ -72,6 +77,7 @@ class SocketService {
     // - 'typing': user typed a letter
     // - 'submit' user submitted the word
     // - 'gameStart': user started a new game
+    // - 'readyUp': user is ready to start the game
     console.log(message);
   }
 }
