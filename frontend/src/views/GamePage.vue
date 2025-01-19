@@ -113,7 +113,7 @@ const sendWord = () => {
 // Notify server that user is ready
 const readyUp = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "ready" }));
+    ws.value.send(JSON.stringify({ type: "readyUp" }));
     console.log("Ready status sent to the server");
   } else {
     console.warn("WebSocket is not connected");

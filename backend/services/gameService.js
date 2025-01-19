@@ -39,12 +39,16 @@ class Game {
   // This function will be executed when a player joins the game from the lobby
   joinGame(player) {
 
+    console.log(player)
+
     // Check if game state is lobby
     if (this.gameState !== 'lobby')
       return false;
 
+    console.log("Game state is lobby");
+
     // Check if player is already in the game
-    if (foundPlayer = this.players.find(p => p.sessionID === player.sessionID && p.isReady))
+    if (foundPlayer = this.players.find(p => p.sessionID === player && p.isReady))
       return false;
 
     console.log("Player joined game", player);

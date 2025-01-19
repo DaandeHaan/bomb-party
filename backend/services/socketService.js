@@ -80,10 +80,15 @@ class SocketService {
 
   handleRecivedMessage(sessionID, gameID, message) {
 
-    const game = this.clientToGame.get(`${sessionID}-${gameID}`);
+    // const game = this.clientToGame.get(`${sessionID}-${gameID}`);
+
+    const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
+
+    console.log(game);
 
     if(message.type == 'readyUp'){
       game.joinGame(sessionID)
+      console.log(game.joinGame(sessionID))
     }
 
     // Events:
