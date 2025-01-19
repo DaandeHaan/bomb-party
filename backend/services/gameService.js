@@ -8,7 +8,6 @@ class Game {
     
     this.gameState = 'lobby';
     this.gameOwner = gameOwner;
-    
     this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];

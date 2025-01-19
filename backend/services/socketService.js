@@ -70,7 +70,7 @@ class SocketService {
   }
 
   handleRecivedMessage(sessionID, message) {
-    if(parsedMessage.type == 'ready'){
+    if(parsedMessage.type == 'readyUp'){
 
     }
     // Events:
