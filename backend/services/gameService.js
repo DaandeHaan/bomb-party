@@ -13,7 +13,7 @@ class Game {
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = 10;
-
+    this.timerInterval = null;
 
     this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = 'dutch';
@@ -36,6 +36,10 @@ class Game {
   // Add checks to switch to next player and get a new hint if he was the active player
   removePlayer(player) {
     this.players = this.players.filter(p => p.sessionID !== player);
+
+    if (this.players.length === 0) {
+      return gameManagerInstance.deleteGame(this.gameID);
+    }
 
     this.players[0].isOwner = true;
   }
@@ -86,6 +90,9 @@ class Game {
 
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
+
+    // Start Timer
+    this.startTimer();
   }
 
   setText(sessionID, text) {
@@ -144,6 +151,42 @@ class Game {
     }
 
     nextPlayer.currentPlayer = true;
+    this.resetTimer(); // Reset the timer when the new player starts their turn
+  }
+
+  NotInTime() {
+    // Switch to next player
+    getNewPlayer();
+
+    // Get a new hint
+    this.currentHint = wordService.getHint(this.language, this.diffuculty);
+
+    // Reset Timer
+    this.timer = 10;
+
+    this.players.find(p => p.currentPlayer === true).currentText = "";
+  }
+
+  resetTimer() {
+    // Clear existing timer if there is one
+    if (this.timerInterval) {
+      console.log("Timer Re-Started...")
+      clearTimeout(this.timerInterval);
+    }
+    
+    // Start the timer again
+    this.startTimer();
+  }
+
+  startTimer() {
+    if (this.timerInterval) {
+      console.log("Timer Started...")
+      clearTimeout(this.timerInterval);
+    }
+
+    this.timerInterval = setTimeout(() => {
+      console.log("Timer ended");
+    }, this.timer * 1000); // Convert to milliseconds
   }
 
   // TODO: Remove sessionID from user's
@@ -179,6 +222,10 @@ class GameManager {
 
   getGames() {
     return this.games;
+  }
+
+  deleteGame(gameID) {
+    this.games = this.games.filter(game => game.gameID !== gameID);
   }
 }
 

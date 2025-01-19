@@ -35,6 +35,7 @@ class SocketService {
         currentPlayer: false,
         isOwner: false,
         currentText: "",
+        lives: 2,
       });
 
       this.sendGameObject({...game.getGame()});
