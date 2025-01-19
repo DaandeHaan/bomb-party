@@ -12,12 +12,11 @@
           player.username === 'ME' ? 'bg-green-500 text-white' : 'bg-gray-300'
         ]"
       >
+        <!-- Display lastText above the player's username -->
+        <div class="text-xs font-medium text-gray-600 mb-1">
+          {{ player.currentText }}
+        </div>
         {{ player.username }}
-      </div>
-
-      <!-- Letters in the middle -->
-      <div class="bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center">
-        {{ currentLetters }}
       </div>
     </div>
 
@@ -29,6 +28,7 @@
         placeholder="Enter your word..."
         class="p-3 w-3/4 max-w-md border rounded-lg text-center"
         @keydown.enter="sendWord"
+        @input="onType"
       />
       <div class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
         Me
@@ -162,6 +162,15 @@ const sendWord = () => {
     console.warn("WebSocket is not connected");
   }
 };
+
+const onType = () => {
+  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+    ws.value.send(JSON.stringify({ type: "typing", word: inputWord.value.trim() }));
+    inputWord.value = ""; // Clear the input after sending
+  } else {
+    console.warn("WebSocket is not connected");
+  }
+}
 
 // Send Ready Up Message
 const sendReadyUp = () => {
