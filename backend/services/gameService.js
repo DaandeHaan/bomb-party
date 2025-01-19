@@ -74,7 +74,7 @@ class Game {
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    socketService.sendMessage(this.players.map(p => p.id), { action: 'startGame', game: this });
+    socketService.sendMessage(this.players.map(p => p.id), {...this.getGame()});
   }
 
   guessWord(word) {
@@ -91,6 +91,22 @@ class Game {
     // Decrease timer
 
     // Get a new hint
+  }
+
+  getGame() {
+    return {
+      gameID: this.gameID,
+      gameState: this.gameState,
+      gameOwner: this.gameOwner,
+      players: this.players,
+      lobby: this.lobby,
+      currentPlayer: this.currentPlayer,
+      currentHint: this.currentHint,
+      guessedWords: this.guessedWords,
+      timer: this.timer,
+      language: this.language,
+      diffuculty: this.diffuculty,
+    }
   }
 
 }
