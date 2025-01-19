@@ -15,7 +15,9 @@
       >
         <!-- Display lives and currentText above the player's username -->
         <div class="text-xs font-medium text-gray-600 mb-1">
-          Lives: {{ player.lives }}
+          <span v-for="i in player.lives" :key="i" class="text-red-500">
+            ❤️
+          </span>
         </div>
         <div class="text-xs font-medium text-gray-600 mb-1">
           {{ player.currentText }}

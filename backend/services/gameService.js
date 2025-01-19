@@ -106,6 +106,7 @@ class Game {
     player.currentText = text;
   }
 
+  
   guessWord(word) {
 
     if (this.gameState !== 'playing')
