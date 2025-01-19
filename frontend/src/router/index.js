@@ -20,13 +20,33 @@ const routes = [
         });
         
         console.log(response);
-        
 
-        if (response.data.exists) {
-          next();
-        } else {
-          next({ name: 'lobby', query: { message: 'Lobby does not exist' } });
-        }
+        const ws = new WebSocket(response.data.webSocket);
+
+        // Handle WebSocket events
+        ws.onopen = () => {
+          console.log('WebSocket connection established.');
+          // You can store the WebSocket connection in a global state or Vuex store
+          // if needed to share it across your app.
+        };
+
+        ws.onmessage = (event) => {
+          console.log('Message from server:', event.data);
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+          console.log('WebSocket connection closed.');
+        };
+
+        // Pass the WebSocket connection to the GamePage component (if necessary)
+        to.params.ws = ws;
+
+        next();
+
       } catch (error) {
         if (error.response && error.response.status === 404) {
           next({ name: 'lobby', query: { message: 'Lobby does not exist' } });
