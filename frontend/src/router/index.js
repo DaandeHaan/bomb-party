@@ -15,7 +15,7 @@ const routes = [
         console.log(to.params);
 
         const response = await axios.post(
-          `http://localhost:3000/api/game/${to.params.gameID}/join`, 
+          `http://localhost:3000/api/game/${to.params.gameID}/connect`, 
           { username },
           { withCredentials: true }
         );

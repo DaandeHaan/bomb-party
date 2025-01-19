@@ -7,28 +7,12 @@ const router = express.Router();
 
 router.post('/create', (req, res) => {
 
-  const user = {
-    sessionID: req.user.sessionID,
-    username: req.body.username,
-    isReady: false,
-    currentPlayer: false
-  }
+  const game = GameManager.createGame();
 
-  const game = GameManager.createGame({ gameOwner: user });
-
-  res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
+  res.json({success: true, gameID: game.gameID});
 });
 
-router.post('/message', (req, res) => {
-
-  socketService.sendMessage([socketService.clients[0]], "Hello!");
-
-  res.json({success: true});
-});
-
-
-
-router.post('/:gameID/join/', (req, res) => {
+router.post('/:gameID/connect/', (req, res) => {
   
   const gameID = req.params.gameID;
 
@@ -40,17 +24,7 @@ router.post('/:gameID/join/', (req, res) => {
   if (!game)
     return res.status(404).json({success: false, message: 'Game not found'});
 
-  const user = {
-    sessionID: req.user.sessionID,
-    username: req.body.username,
-    isReady: false,
-    currentPlayer: false
-  };
-
-  if (!game.addPlayer(user))
-    return res.status(409).json({success: false, message: 'User already in game'});
-
-  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
+  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + req.body.username});
 });
 
 router.get('/:gameID?', (req, res) => {

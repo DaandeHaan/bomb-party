@@ -12,10 +12,35 @@ class SocketService {
 
     this.wss.on('connection', (ws, request) => {
       const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
-      const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
+      const gameID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('gameID');
+      const username = new URL(request.url, `http://${request.headers.host}`).searchParams.get('username');
+
+      const game = GameManager.getGame(gameID);
+
+      // If the game doesn't exist, close the connection
+      if (!game)
+        return ws.close();
+
+      // If player is already in the game, close the connection
+      if (game.players.find(player => player.sessionID === sessionID))
+        return ws.close();
 
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
       this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
+
+      game.addPlayer({
+        sessionID: sessionID,
+        username: username,
+        isReady: false,
+        currentPlayer: false,
+        isOwner: false,
+      });
+
+      console.log(game.players)
+      console.log(game.gameID)
+      console.log(game.getGame())
+
+      this.sendGameObject({...game.getGame()});
 
       // Handle disconnection
       ws.on('close', () => {
@@ -46,17 +71,30 @@ class SocketService {
     });
   }
 
-  sendMessage(receivers = [], gameID, message = '') {
-    receivers.forEach((sessionID) => {
-      const ws = this.clients.get(`${sessionID}-${gameID}`);
+  sendGameObject(gameObject) {
+
+    gameObject.players.forEach(player => {
+
+      const ws = this.clients.get(`${player.sessionID}-${gameObject.gameID}`);
+
+      let gameObjectForUserInLoop;
+
+      gameObjectForUserInLoop = gameObject.players.forEach(gamePlayer => {
+        if (gamePlayer.sessionID === player.sessionID) {
+          gamePlayer.isYou = true;
+        } else {
+          gamePlayer.isYou = false;
+        }
+      });
+
       if (ws && ws.readyState === WebSocket.OPEN) {
         try {
-          ws.send(JSON.stringify(message));
+          ws.send(JSON.stringify(gameObjectForUserInLoop));
         } catch (error) {
-          console.error(`Failed to send message to ${sessionID}:`, error);
+          console.error(`Failed to send message to ${player.sessionID}:`, error);
         }
       } else {
-        console.warn(`Connection not open for ${sessionID}`);
+        console.warn(`Connection not open for ${player.sessionID}`);
       }
     });
   }
@@ -99,7 +137,7 @@ class SocketService {
     // - 'gameStart': user started a new game
     // - 'readyUp': user is ready to start the game
 
-    this.sendMessage([sessionID], gameID, this.clientToGame.get(`${sessionID}-${gameID}`));
+    this.sendGameObject(this.clientToGame.get(`${sessionID}-${gameID}`));
   }
 }
 

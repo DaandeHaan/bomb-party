@@ -1,13 +1,14 @@
+// const socketService = require("./socketService");
 const socketService = require("./socketService");
 const wordService = require("./wordService");
+
 class Game {
-  constructor({ gameOwner }) {
+  constructor() {
     this.gameID = Array.from({ length: 4 }, () => 
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
     this.gameState = 'lobby';
-    this.gameOwner = gameOwner;
     this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];
@@ -26,6 +27,7 @@ class Game {
       return false;
 
     this.players.push(player);
+
     return true;
   }
 
@@ -78,7 +80,7 @@ class Game {
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    socketService.sendMessage(this.players, this.gameID, {...this.getGame()});
+    socketService.sendGameObject({...this.getGame()});
   }
 
   guessWord(word) {
@@ -108,7 +110,7 @@ class Game {
 
     this.text = "";
 
-    socketService.sendMessage(this.players, this.gameID, {...this.getGame()});
+    socketService.sendGameObject({...this.getGame()});
   }
 
   getNewPlayer() {
@@ -129,7 +131,6 @@ class Game {
     return {
       gameID: this.gameID,
       gameState: this.gameState,
-      gameOwner: this.gameOwner,
       players: this.players,
       currentHint: this.currentHint,
       guessedWords: this.guessedWords,
@@ -146,8 +147,8 @@ class GameManager {
     this.games = [];
   }
 
-  createGame({ gameOwner }) {
-    const game = new Game({ gameOwner });
+  createGame() {
+    const game = new Game();
     this.games.push(game);
     return game;
   }
