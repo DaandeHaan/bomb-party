@@ -1,11 +1,9 @@
 const express = require('express');
-const Game = require('../services/gameService');
+const { Game, GameManager}= require('../services/gameService');
 const socketService = require('../services/socketService');
 const wordService = require('../services/wordService');
 
 const router = express.Router();
-
-const games = [];
 
 router.post('/create', (req, res) => {
 
@@ -14,9 +12,7 @@ router.post('/create', (req, res) => {
     name: req.body.username
   }
 
-  const game = new Game({ gameOwner: user });
-
-  games.push(game)
+  const game = GameManager.createGame({ gameOwner: user });
 
   res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID});
 });
@@ -37,7 +33,7 @@ router.post('/:gameID/join/', (req, res) => {
   if (!gameID)
     return res.status(400).json({success: false, message: 'No gameID provided'});
 
-  const game = games.find(game => game.gameID === gameID);
+  const game = GameManager.getGame(gameID)
 
   if (!game)
     return res.status(404).json({success: false, message: 'Game not found'});
@@ -58,16 +54,16 @@ router.get('/:gameID?', (req, res) => {
 
   if (gameID) {
 
-    const game = games.find(game => game.gameID === gameID);
+    const game = GameManager.getGame(gameID)
 
     if (!game)
       return res.status(404).json({success: false, message: 'Game not found'});
 
-    res.json(games.find(game => game.gameID === gameID));
+    res.json(game);
 
   } else {
 
-    res.json({ success: true, games: games });
+    res.json({ success: true, games: GameManager.getGames() });
 
   }
 });

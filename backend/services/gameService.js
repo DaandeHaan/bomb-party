@@ -111,4 +111,25 @@ class Game {
 
 }
 
-module.exports = Game;
+class GameManager {
+  constructor() {
+    this.games = [];
+  }
+
+  createGame({ gameOwner }) {
+    const game = new Game({ gameOwner });
+    this.games.push(game);
+    return game;
+  }
+
+  getGame(gameID) {
+    return this.games.find(game => game.gameID === gameID);
+  }
+
+  getGames() {
+    return this.games;
+  }
+}
+
+const gameManagerInstance = new GameManager();
+module.exports = { Game, GameManager: gameManagerInstance };
