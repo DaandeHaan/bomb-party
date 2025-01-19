@@ -29,6 +29,7 @@
         placeholder="Enter your word..."
         class="p-3 w-3/4 max-w-md border rounded-lg text-center"
         @keydown.enter="sendWord"
+        @input="onType"
       />
       <div class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
         Me
@@ -162,6 +163,15 @@ const sendWord = () => {
     console.warn("WebSocket is not connected");
   }
 };
+
+const onType = () => {
+  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+    ws.value.send(JSON.stringify({ type: "typing", word: inputWord.value.trim() }));
+    inputWord.value = ""; // Clear the input after sending
+  } else {
+    console.warn("WebSocket is not connected");
+  }
+}
 
 // Send Ready Up Message
 const sendReadyUp = () => {

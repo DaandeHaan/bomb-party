@@ -36,10 +36,6 @@ class SocketService {
         isOwner: false,
       });
 
-      console.log(game.players)
-      console.log(game.gameID)
-      console.log(game.getGame())
-
       this.sendGameObject({...game.getGame()});
 
       // Handle disconnection
