@@ -27,12 +27,17 @@ class Game {
 
     this.players.push(player);
 
+    // Get the first player as owner
+    this.players[0].isOwner = true;
+
     return true;
   }
 
   // Add checks to switch to next player and get a new hint if he was the active player
   removePlayer(player) {
     this.players = this.players.filter(p => p.sessionID !== player);
+
+    this.players[0].isOwner = true;
   }
 
   getPlayers() {
