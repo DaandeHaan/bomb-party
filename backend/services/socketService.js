@@ -25,7 +25,7 @@ class SocketService {
         try {
           console.log(`Message from ${sessionID}:`, message);
           const parsedMessage = JSON.parse(message);
-          // You can handle parsedMessage here, e.g., route actions or responses
+          this.handleRecivedMessage(sessionID, parsedMessage);
         } catch (error) {
           console.error(`Failed to parse message from ${sessionID}:`, error);
         }
@@ -61,6 +61,14 @@ class SocketService {
         }
       }
     });
+  }
+
+  handleRecivedMessage(sessionID, message) {
+    // Events:
+    // - 'typing': user typed a letter
+    // - 'submit' user submitted the word
+    // - 'gameStart': user started a new game
+    console.log(message);
   }
 }
 
