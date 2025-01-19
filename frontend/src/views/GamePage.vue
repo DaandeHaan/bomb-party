@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, render } from "vue";
 import { useRoute } from "vue-router";
 
 // State Variables
@@ -88,6 +88,38 @@ const getPlayerPosition = (index, totalPlayers) => {
   };
 };
 
+const renderGameObject = (game) => {
+// Update Players List
+if (game.players) {
+      players.value = game.players;
+    }
+
+    // Update Letters
+    if (game.letters) {
+      currentLetters.value = game.letters;
+    }
+
+    // Handle Guessed Words
+    if (game.guessedWords) {
+      console.log("Guessed words:", game.guessedWords);
+    }
+
+    // Update Game State
+    if (game.gameState) {
+      gameState.value = game.gameState;
+    }
+
+    // Update Timer
+    if (game.timer !== undefined) {
+      timer.value = game.timer;
+    }
+
+    // Update Hint
+    if (game.currentHint) {
+      currentHint.value = game.currentHint;
+    }
+}
+
 // Establish WebSocket Connection
 const connectWebSocket = () => {
   if (!webSocketUrl) {
@@ -104,36 +136,7 @@ const connectWebSocket = () => {
   ws.value.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log("Message from server:", data);
-
-    // Update Players List
-    if (data.players) {
-      players.value = data.players;
-    }
-
-    // Update Letters
-    if (data.letters) {
-      currentLetters.value = data.letters;
-    }
-
-    // Handle Guessed Words
-    if (data.guessedWords) {
-      console.log("Guessed words:", data.guessedWords);
-    }
-
-    // Update Game State
-    if (data.gameState) {
-      gameState.value = data.gameState;
-    }
-
-    // Update Timer
-    if (data.timer !== undefined) {
-      timer.value = data.timer;
-    }
-
-    // Update Hint
-    if (data.currentHint) {
-      currentHint.value = data.currentHint;
-    }
+    renderGameObject(data);
   };
 
   ws.value.onerror = (error) => {
