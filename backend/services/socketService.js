@@ -76,16 +76,17 @@ class SocketService {
 
       let gameObjectForUserInLoop;
 
-      gameObjectForUserInLoop = gameObject.players.forEach(gamePlayer => {
+      gameObjectForUserInLoop = gameObject.players.map(gamePlayer => {
         if (gamePlayer.sessionID === player.sessionID) {
-          gamePlayer.isYou = true;
+          return { ...gamePlayer, isYou: true };
         } else {
-          gamePlayer.isYou = false;
+          return { ...gamePlayer, isYou: false };
         }
       });
-
+      
       if (ws && ws.readyState === WebSocket.OPEN) {
         try {
+          console.log(gameObjectForUserInLoop)
           ws.send(JSON.stringify(gameObjectForUserInLoop));
         } catch (error) {
           console.error(`Failed to send message to ${player.sessionID}:`, error);
