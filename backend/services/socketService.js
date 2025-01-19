@@ -9,7 +9,8 @@ class SocketService {
     this.wss = wss;
 
     this.wss.on('connection', (ws) => {
-      const sessionID = req.url.split('?sessionID=')[1];
+      console.log('Client connected');
+      const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
       this.clients.set(sessionID, ws);
 
       console.log(`Client connected: ${sessionID}`);

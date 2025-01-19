@@ -35,6 +35,11 @@ server.on('upgrade', (request, socket, head) => {
     });
 });
 
+// Start the WebSocket server
+server.listen(8080, () => {
+  console.log(`WS-Server running at http://localhost:8080/`);
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
