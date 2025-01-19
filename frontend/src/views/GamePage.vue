@@ -30,9 +30,12 @@
         @keydown.enter="sendWord"
         @input="onType"
       />
-      <div v-if="isYouAndOwner" class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4">
+      <button 
+        v-if="isYouAndOwner" 
+        class="bg-green-500 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow mt-4"
+        @click="gameStart">
         Fuck you
-      </div>
+      </button>
       <!-- Ready Up Button -->
       <button
         class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow mt-4 hover:bg-blue-700"
@@ -185,6 +188,15 @@ const isYouAndOwner = computed(() => {
   const currentPlayer = players.value.find(player => player.isYou && player.isOwner);
   return currentPlayer;
 });
+
+const gameStart = () => {
+  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+    ws.value.send(JSON.stringify({ type: "gameStart" }));
+    console.log("Ready up message sent.");
+  } else {
+    console.warn("WebSocket is not connected");
+  }
+};
 
 // Lifecycle Hooks
 onMounted(() => {
