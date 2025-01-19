@@ -44,8 +44,10 @@ class Game {
       return false;
 
     // Check if player is already in the game
-    if (foundPlayer = this.players.find(p => p.id === player.id && p.isReady))
+    if (foundPlayer = this.players.find(p => p.sessionID === player.sessionID && p.isReady))
       return false;
+
+    console.log("Player joined game", player);
 
     foundPlayer.isReady = true;
     return true;

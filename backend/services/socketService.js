@@ -12,8 +12,8 @@ class SocketService {
 
     this.wss.on('connection', (ws, request) => {
       console.log('Client connected');
-      const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
 
+      const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
       const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
 
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
@@ -29,11 +29,18 @@ class SocketService {
       });
 
       // Handle incoming messages
-      ws.on('message', (message) => {
+      ws.on('message', (data) => {
         try {
-          console.log(`Message from ${sessionID}:`, message);
-          const parsedMessage = JSON.parse(message);
-          this.handleRecivedMessage(sessionID, game.gameID, parsedMessage);
+
+          if (Buffer.isBuffer(data)) {
+            data = data.toString(); // Convert buffer to string
+          }
+
+          const message = JSON.parse(data);
+
+          console.log(`Received message from ${sessionID}:`, message);
+
+          this.handleRecivedMessage(sessionID, game.gameID, message);
         } catch (error) {
           console.error(`Failed to parse message from ${sessionID}:`, error);
         }
@@ -75,7 +82,7 @@ class SocketService {
 
     const game = this.clientToGame.get(`${sessionID}-${gameID}`);
 
-    if(parsedMessage.type == 'readyUp'){
+    if(message.type == 'readyUp'){
       game.joinGame(sessionID)
     }
 
