@@ -65,9 +65,6 @@ class SocketService {
           console.error(`Failed to parse message from ${sessionID}:`, error);
         }
       });
-
-      // Send a welcome message to the client
-      ws.send(JSON.stringify({ message: 'Welcome!', sessionID }));
     });
   }
 
