@@ -93,7 +93,7 @@ class Game {
       return this.text = "";
     
     // Check if word exists wordService.checkWord
-    if (!wordService.checkWord(this.language, word)) 
+    if (!wordService.checkWord(this.currentHint, this.language, word)) 
       return this.text = "";
 
     // Switch to next player
