@@ -4,6 +4,7 @@ class SocketService {
   constructor() {
     this.wss = null;
     this.clients = new Map();
+    this.clientToGame = new Map();
   }
 
   init(wss) {
@@ -16,6 +17,7 @@ class SocketService {
       const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
 
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
+      this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
 
       console.log(`Client connected: ${sessionID}`);
 
@@ -31,7 +33,7 @@ class SocketService {
         try {
           console.log(`Message from ${sessionID}:`, message);
           const parsedMessage = JSON.parse(message);
-          this.handleRecivedMessage(sessionID, parsedMessage);
+          this.handleRecivedMessage(sessionID, game.gameID, parsedMessage);
         } catch (error) {
           console.error(`Failed to parse message from ${sessionID}:`, error);
         }
@@ -69,16 +71,22 @@ class SocketService {
     });
   }
 
-  handleRecivedMessage(sessionID, message) {
-    if(parsedMessage.type == 'readyUp'){
+  handleRecivedMessage(sessionID, gameID, message) {
 
+    const game = this.clientToGame.get(`${sessionID}-${gameID}`);
+
+    if(parsedMessage.type == 'readyUp'){
+      game.joinGame(sessionID)
     }
+
     // Events:
     // - 'typing': user typed a letter
     // - 'submit' user submitted the word
     // - 'gameStart': user started a new game
     // - 'readyUp': user is ready to start the game
     console.log(message);
+
+    this.sendMessage([sessionID], gameID, this.clientToGame.get(`${sessionID}-${gameID}`));
   }
 }
 
