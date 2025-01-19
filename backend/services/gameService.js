@@ -13,7 +13,6 @@ class Game {
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = 10;
-    this.text = "";
 
 
     this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
@@ -67,8 +66,8 @@ class Game {
     // Set the timer to 10 seconds
     this.timer = 10;
 
-    // Clear text
-    this.text = "";
+    // Clear text for all users
+    
 
     // Set the game state to playing
     this.gameState = 'playing';
@@ -79,22 +78,29 @@ class Game {
 
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
+  }
 
-    socketService.sendGameObject({...this.getGame()});
+  setText(sessionID, text) {
+    const player = this.players.find(p => p.sessionID === sessionID);
+
+    if (!player)
+      return;
+
+    player.currentText = text;
   }
 
   guessWord(word) {
     // Check if word is not already guessed
     if (this.guessedWords.includes(word))
-      return this.text = "";
+      return this.players.find(p => p.currentPlayer === true).currentText = "";
 
     // Check if hint is in the word
     if (!word.includes(this.currentHint))
-      return this.text = "";
+      return this.players.find(p => p.currentPlayer === true).currentText = "";
     
     // Check if word exists wordService.checkWord
     if (!wordService.checkWord(this.currentHint, this.language, word)) 
-      return this.text = "";
+      return this.players.find(p => p.currentPlayer === true).currentText = "";
 
     // Switch to next player
     getNewPlayer();
@@ -108,9 +114,7 @@ class Game {
     // Get a new hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    this.text = "";
-
-    socketService.sendGameObject({...this.getGame()});
+    this.players.find(p => p.currentPlayer === true).currentText = "";
   }
 
   getNewPlayer() {

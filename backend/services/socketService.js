@@ -34,6 +34,7 @@ class SocketService {
         isReady: false,
         currentPlayer: false,
         isOwner: false,
+        text: "",
       });
 
       console.log(game.players)
@@ -125,7 +126,7 @@ class SocketService {
     }
 
     if(message.type == 'typing') {
-      game.setText(message.text);
+      game.setText(sessionID, message.text);
     }
 
     if(message.type == 'gameStart') {
