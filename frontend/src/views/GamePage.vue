@@ -99,22 +99,18 @@ const getPlayerPosition = (index, totalPlayers) => {
   };
 };
 
-// Computed property to check if the game has started
 const gameHasStarted = computed(() => {
   return gameState.value === "playing";
 });
 
-// Computed property to check if the current user is the current player
 const isCurrentPlayer = computed(() => {
   return players.value.some((player) => player.isYou && player.currentPlayer);
 });
 
-// Computed property to check if the user is both `isYou` and the owner
 const isYouAndOwner = computed(() => {
   return players.value.some((player) => player.isYou && player.isOwner);
 });
 
-// Update the game object based on server messages
 const renderGameObject = (game) => {
   if (game.players) {
     players.value = game.players;
@@ -141,7 +137,6 @@ const renderGameObject = (game) => {
   }
 };
 
-// Establish WebSocket Connection
 const connectWebSocket = () => {
   if (!webSocketUrl) {
     console.error("WebSocket URL is missing.");
@@ -169,7 +164,6 @@ const connectWebSocket = () => {
   };
 };
 
-// Send the User's Word to the Server
 const sendWord = () => {
   if (inputWord.value.trim() === "") {
     console.warn("No word entered.");
@@ -193,7 +187,6 @@ const onType = () => {
   }
 };
 
-// Send Ready Up Message
 const sendReadyUp = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "readyUp" }));
