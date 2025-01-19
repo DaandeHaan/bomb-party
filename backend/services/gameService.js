@@ -9,7 +9,7 @@ class Game {
     this.gameState = 'lobby';
     this.gameOwner = gameOwner;
 
-    this.players = []; // Object: {id: string, name: string}
+    this.activePlayers = []; // Object: {id: string, name: string}
     this.lobby = [gameOwner];
 
     this.currentPlayer = null;
@@ -25,7 +25,7 @@ class Game {
   addPlayer(player) {
 
     // Check if player is already in the game
-    if (this.players.find(p => p.id === player.id))
+    if (this.activePlayers.find(p => p.id === player.id))
       return false;
 
     this.lobby.push(player);
@@ -33,11 +33,11 @@ class Game {
   }
 
   removePlayer(player) {
-    this.players = this.players.filter(p => p.id !== player.id);
+    this.activePlayers = this.activePlayers.filter(p => p.id !== player.id);
   }
 
   getPlayers() {
-    return this.players;
+    return this.activePlayers;
   }
 
   // This function will be executed when a player joins the game from the lobby
@@ -48,11 +48,11 @@ class Game {
       return false;
 
     // Check if player is already in the game
-    if (this.players.find(p => p.id === player.id))
+    if (this.activePlayers.find(p => p.id === player.id))
       return false;
 
     // Add player to the game, remove from lobby
-    this.players.push(player);
+    this.activePlayers.push(player);
     this.lobby.removePlayer(player);
 
     return true;
@@ -69,12 +69,12 @@ class Game {
     this.gameState = 'playing';
 
     // Set the current player to a random player
-    this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)];
+    this.currentPlayer = this.activePlayers[Math.floor(Math.random() * this.activePlayers.length)];
 
     // Get a random hint
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    socketService.sendMessage([this.players.map(p => p.id), this.lobby.map(p => p.id)], {...this.getGame()});
+    socketService.sendMessage([this.activePlayers.map(p => p.id), this.lobby.map(p => p.id)], {...this.getGame()});
   }
 
   guessWord(word) {
@@ -98,7 +98,7 @@ class Game {
       gameID: this.gameID,
       gameState: this.gameState,
       gameOwner: this.gameOwner,
-      players: this.players,
+      activePlayers: this.activePlayers,
       lobby: this.lobby,
       currentPlayer: this.currentPlayer,
       currentHint: this.currentHint,
