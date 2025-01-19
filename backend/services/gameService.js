@@ -10,7 +10,7 @@ class Game {
     this.gameOwner = gameOwner;
 
     this.activePlayers = []; // Object: {id: string, name: string}
-    this.lobby = [gameOwner];
+    this.lobby = [];
 
     this.currentPlayer = null;
     this.currentHint = "";	
