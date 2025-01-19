@@ -84,7 +84,7 @@ const readyPlayers = computed(() => {
 // Calculate Player Positions in Circular Layout
 const getPlayerPosition = (index, totalPlayers) => {
   const angle = (index / totalPlayers) * 360;
-  const radius = 250; // Adjusted to center players better
+  const radius = 300; // Adjusted to center players better
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
