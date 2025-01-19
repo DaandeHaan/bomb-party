@@ -2,17 +2,17 @@
   <div class="relative flex items-center justify-center h-screen bg-gray-100">
     <!-- Circle for players -->
     <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-gray-300">
-      <!-- Players -->
+      <!-- Ready Players -->
       <div
-        v-for="(player, index) in players"
-        :key="player.id"
-        :style="getPlayerPosition(index, players.length)"
+        v-for="(player, index) in readyPlayers"
+        :key="player.sessionID"
+        :style="getPlayerPosition(index, readyPlayers.length)"
         :class="[ 
           'absolute text-sm font-semibold py-2 px-4 rounded-lg shadow text-center',
-          player.name === 'ME' ? 'bg-green-500 text-white' : 'bg-gray-300'
+          player.username === 'ME' ? 'bg-green-500 text-white' : 'bg-gray-300'
         ]"
       >
-        {{ player.name }}
+        {{ player.username }}
       </div>
 
       <!-- Letters in the middle -->
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <!-- Input Field and "Me" -->
+    <!-- Input Field -->
     <div class="absolute bottom-10 w-full flex flex-col items-center">
       <input
         type="text"
@@ -36,31 +36,50 @@
       <!-- Ready Up Button -->
       <button
         class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow mt-4 hover:bg-blue-700"
-        @click="readyUp"
+        @click="sendReadyUp"
       >
         Ready Up
       </button>
+    </div>
+
+    <!-- Game State and Timer -->
+    <div v-if="gameState === 'in-progress'" class="text-center text-lg text-gray-500 mt-4">
+      Game in progress! Timer: {{ timer }} seconds left.
+    </div>
+
+    <!-- Hint -->
+    <div v-if="currentHint" class="bg-yellow-500 text-white py-2 px-4 rounded-md shadow mt-4">
+      Hint: {{ currentHint }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router"; // Import useRoute
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 
+// State Variables
 const players = ref([]);
 const currentLetters = ref("Letters");
 const inputWord = ref("");
+const gameState = ref("lobby");
+const timer = ref(10);
+const currentHint = ref("");
 const ws = ref(null);
 
-// Retrieve the WebSocket URL from route parameters
+// Route Parameters
 const route = useRoute();
 const webSocketUrl = route.params.webSocketUrl;
 
-// Calculate player position in a circular layout
+// Filter Players Who Are Ready
+const readyPlayers = computed(() => {
+  return players.value.filter((player) => player.isReady);
+});
+
+// Calculate Player Positions in Circular Layout
 const getPlayerPosition = (index, totalPlayers) => {
-  const angle = (index / totalPlayers) * 360; // Calculate angle for each player
-  const radius = 300; // Radius of the circle
+  const angle = (index / totalPlayers) * 360;
+  const radius = 300;
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
@@ -69,7 +88,7 @@ const getPlayerPosition = (index, totalPlayers) => {
   };
 };
 
-// Establish WebSocket connection
+// Establish WebSocket Connection
 const connectWebSocket = () => {
   if (!webSocketUrl) {
     console.error("WebSocket URL is missing.");
@@ -86,9 +105,35 @@ const connectWebSocket = () => {
     const data = JSON.parse(event.data);
     console.log("Message from server:", data);
 
-    // Update players or letters based on server message
-    if (data.players) players.value = data.players;
-    if (data.letters) currentLetters.value = data.letters;
+    // Update Players List
+    if (data.players) {
+      players.value = data.players;
+    }
+
+    // Update Letters
+    if (data.letters) {
+      currentLetters.value = data.letters;
+    }
+
+    // Handle Guessed Words
+    if (data.guessedWords) {
+      console.log("Guessed words:", data.guessedWords);
+    }
+
+    // Update Game State
+    if (data.gameState) {
+      gameState.value = data.gameState;
+    }
+
+    // Update Timer
+    if (data.timer !== undefined) {
+      timer.value = data.timer;
+    }
+
+    // Update Hint
+    if (data.currentHint) {
+      currentHint.value = data.currentHint;
+    }
   };
 
   ws.value.onerror = (error) => {
@@ -100,27 +145,32 @@ const connectWebSocket = () => {
   };
 };
 
-// Send the user's word to the server
+// Send the User's Word to the Server
 const sendWord = () => {
+  if (inputWord.value.trim() === "") {
+    console.warn("No word entered.");
+    return;
+  }
+
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "submit", word: inputWord.value }));
-    inputWord.value = "";
+    ws.value.send(JSON.stringify({ type: "submit", word: inputWord.value.trim() }));
+    inputWord.value = ""; // Clear the input after sending
   } else {
     console.warn("WebSocket is not connected");
   }
 };
 
-// Notify server that user is ready
-const readyUp = () => {
+// Send Ready Up Message
+const sendReadyUp = () => {
   if (ws.value && ws.value.readyState === WebSocket.OPEN) {
     ws.value.send(JSON.stringify({ type: "readyUp" }));
-    console.log("Ready status sent to the server");
+    console.log("Ready up message sent.");
   } else {
     console.warn("WebSocket is not connected");
   }
 };
 
-// Lifecycle hooks
+// Lifecycle Hooks
 onMounted(() => {
   connectWebSocket();
 });
@@ -131,3 +181,7 @@ onUnmounted(() => {
   }
 });
 </script>
+
+<style>
+/* Add any additional styles if necessary */
+</style>
