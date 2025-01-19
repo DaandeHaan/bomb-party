@@ -7,7 +7,7 @@
         <label for="username" class="text-lg font-medium">Enter Your Name:</label>
         <input
           id="username"
-          v-model="userName"
+          v-model="username"
           type="text"
           placeholder="Your name"
           class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
@@ -27,21 +27,21 @@ import LobbyInput from "../components/LobbyInput.vue";
 import CreateLobby from "../components/CreateLobby.vue";
 import axios from "axios";
 
-const userName = ref("");
+const username = ref("");
 
 const toast = useToast();
 const router = useRouter();
 
-watch(userName, (newValue) => {
+watch(username, (newValue) => {
   if (newValue) {
     localStorage.setItem("userName", newValue);
   }
 });
 
 onMounted(() => {
-  const savedName = localStorage.getItem("userName");
+  const savedName = localStorage.getItem("username");
   if (savedName) {
-    userName.value = savedName;
+    username.value = savedName;
     toast.success(`Welcome back, ${savedName}!`, { timeout: 2000 });
   } else {
     toast.success("Welcome to Bomb Party!", { timeout: 2000 });
@@ -49,7 +49,7 @@ onMounted(() => {
 });
 
 const joinLobby = (code) => {
-  if (!userName.value.trim()) {
+  if (!username.value.trim()) {
     toast.error("Please enter your name before joining a lobby!");
     return;
   }
@@ -58,9 +58,9 @@ const joinLobby = (code) => {
 
 
 const createLobby = async () => {
-  const userName = localStorage.getItem('userName');
+  const username = localStorage.getItem('username');
   const response = await axios.post(`http://localhost:3000/api/game/create`, {
-          params: { userName }
+      username
         });
 
   router.push(`/game/${response.data.gameID}`);
