@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Lobby from '../views/Lobby.vue';
 import GamePage from '../views/GamePage.vue';
 import axios from 'axios';
-import { io } from "socket.io-client";
 
 const routes = [
   { path: '/', name: 'lobby', component: Lobby },
