@@ -112,17 +112,27 @@ class Game {
     if (this.gameState !== 'playing')
       return;
 
-    // Check if word is not already guessed
-    if (this.guessedWords.includes(word))
-      return this.players.find(p => p.currentPlayer === true).currentText = "";
+    word = word.toLowerCase().trim()
+    this.currentHint = this.currentHint.toLowerCase().trim()
 
-    // Check if hint is in the word
-    if (!word.includes(this.currentHint))
+    if (this.guessedWords.map(w => w.toLowerCase()).includes(word)) {
       return this.players.find(p => p.currentPlayer === true).currentText = "";
+    }
+    console.log("test");
+    
+    // Check if hint is in the word (case-insensitive)
+    console.log(this.currentHint)
+    if (!word.includes(this.currentHint.toLowerCase().trim())) {
+      return this.players.find(p => p.currentPlayer === true).currentText = "";
+    }
+    console.log("test");
+    
+    // Check if word exists using wordService.checkWord (case-insensitive)
+    if (!wordService.checkWord(this.currentHint, this.language, word)) {
+      return this.players.find(p => p.currentPlayer === true).currentText = "";
+    }
 
-    // Check if word exists wordService.checkWord
-    if (!wordService.checkWord(this.currentHint, this.language, word)) 
-      return this.players.find(p => p.currentPlayer === true).currentText = "";
+    console.log("test");
 
     // Switch to next player
     this.getNewPlayer();
