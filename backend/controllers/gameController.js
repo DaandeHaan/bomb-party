@@ -26,6 +26,9 @@ router.post('/create', (req, res) => {
   res.json({success: true, gameID: game.gameID, webSocket: 'ws://localhost:3000/connect?sessionID=' + req.user.sessionID});
 });
 
+<<<<<<< HEAD
+router.post('/:gameID/join', (req, res) => {
+=======
 router.post('/message', (req, res) => {
 
   socketService.sendMessage([socketService.clients[0]], "Hello!");
@@ -36,6 +39,7 @@ router.post('/message', (req, res) => {
 
 
 router.post('/:gameID/join/', (req, res) => {
+>>>>>>> e1ddc84ff39779394e13f94baee01f11017dfdba
   
   const gameID = req.params.gameID;
 
