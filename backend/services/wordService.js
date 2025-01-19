@@ -6,12 +6,8 @@ class wordService {
   getHint(language, difficulty) {
     const hints = this.readFile(language, difficulty);
 
-    console.log(hints);
-
     // Choose random hint
     const hint = hints[Math.floor(Math.random() * hints.length)];
-
-    console.log("Hint: " + hint);
 
     return hint;    
   }

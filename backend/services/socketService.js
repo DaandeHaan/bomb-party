@@ -80,15 +80,10 @@ class SocketService {
 
   handleRecivedMessage(sessionID, gameID, message) {
 
-    // const game = this.clientToGame.get(`${sessionID}-${gameID}`);
-
-    const game = GameManager.getGames().find(game => game.players.find(player => player.sessionID === sessionID));
-
-    console.log(game);
+    const game = this.clientToGame.get(`${sessionID}-${gameID}`);
 
     if(message.type == 'readyUp'){
       game.joinGame(sessionID)
-      console.log(game.joinGame(sessionID))
     }
 
     // Events:
@@ -96,7 +91,6 @@ class SocketService {
     // - 'submit' user submitted the word
     // - 'gameStart': user started a new game
     // - 'readyUp': user is ready to start the game
-    console.log(message);
 
     this.sendMessage([sessionID], gameID, this.clientToGame.get(`${sessionID}-${gameID}`));
   }
