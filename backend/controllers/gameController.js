@@ -1,6 +1,5 @@
 const express = require('express');
 const GameManager= require('../services/gameService');
-const wordService = require('../services/wordService');
 
 const router = express.Router();
 
@@ -43,16 +42,6 @@ router.get('/:gameID?', (req, res) => {
     res.json({ success: true, games: GameManager.getGames() });
 
   }
-});
-
-router.post('/debug', (req, res) => {
-  const hint = wordService.getHint('dutch', 'beginner');
-  res.json({success: true, hint: hint});
-});
-
-router.post('/debug2', (req, res) => {
-  const hint = wordService.getHint('dutch', 'beginner');
-  res.json({success: true, hint: hint});
 });
 
 module.exports = router;
