@@ -194,8 +194,17 @@ class Game {
     // Check if all players are out of lives, except one
     if (this.players.filter(p => p.isReady).length === 1) {
       this.gameState = 'lobby';
+      this.currentHint = "";
+
+      // Set all last winners to false
+      this.players.forEach(p => p.lastWinner = false);2
+
+      // Set the last player as the winner
+      const winner = this.players.find(p => p.isReady && p.lives > 0);
+      winner.lastWinner = true;
+
       return socketService.sendGameObject(this.getGame());
-  }
+    }
 
     // Switch to next player
     this.getNewPlayer();
