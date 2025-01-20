@@ -92,6 +92,7 @@ const fetchGames = async () => {
 };
 
 const joinLobby = (code) => {
+  console.log("Joining lobby with code:", code);
   if (!username.value.trim()) {
     toast.error("Please enter your name before joining a lobby!");
     return;
