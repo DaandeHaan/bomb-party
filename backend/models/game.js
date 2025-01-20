@@ -112,6 +112,9 @@ class Game {
       return false; 
 
     const winner = this.players.find(p => p.isReady && p.lives > 0);
+
+    if (!winner)
+      return false;
     
     this.players.forEach(p => {
       p.lastWinner = false;
