@@ -1,76 +1,32 @@
 <template>
   <div class="relative flex items-center justify-center h-screen bg-gray-100">
     <!-- Circle for players -->
-    <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-gray-300 bg-white shadow-lg">
-      <!-- Ready Players -->
-      <div
-        v-for="(player, index) in readyPlayers"
-        :key="player.sessionID"
-        :style="getPlayerPosition(index, readyPlayers.length)"
-        :class="[ 
-          'absolute text-sm font-semibold py-2 px-4 rounded-lg shadow text-center',
-          player.currentPlayer ? 'bg-green-500 text-white' : 'bg-gray-300',
-          player.isYou ? 'border-2 border-red-600' : '',
-          player.lives === 0 ? 'bg-gray-500 text-white' : ''
-        ]"
-      >
-        <!-- Display lives and currentText above the player's username -->
-        <div class="text-xs font-medium text-gray-600 mb-1">
-          <span v-for="i in player.lives" :key="i" class="text-red-500">
-            ❤️
-          </span>
-        </div>
-        <div class="text-xs font-medium text-gray-600 mb-1">
-          {{ player.currentText }}
-        </div>
-        {{ player.username }}
-      </div>
+    <PlayerCircle :players="players" :gameHasStarted="gameHasStarted" :lastWinner="lastWinner" :currentHint="currentHint" />
+    
+    <InputField
+      v-model="inputWord"
+      :isCurrentPlayer="isCurrentPlayer"
+      :gameHasStarted="gameHasStarted"
+      :isYouAndOwner="isYouAndOwner"
+      :currentPlayer="currentPlayer"
+      @sendWord="sendWord"
+      @onType="onType"
+      @gameStart="gameStart"
+      @toggleReadyUp="toggleReadyUp"
+    />
 
-      <!-- Letters in the middle -->
-      <div class="relative flex flex-col items-center bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center">
-        {{ currentHint }}
-      </div>
-    </div>
-
-    <!-- Input Field -->
-    <div class="absolute bottom-10 w-full flex flex-col items-center space-y-4">
-      <input
-        type="text"
-        v-model="inputWord"
-        placeholder="Enter your word..."
-        class="p-3 w-3/4 max-w-md border rounded-lg text-center shadow focus:outline-none focus:ring focus:ring-blue-400"
-        @keydown.enter="sendWord"
-        @input="onType"
-        :disabled="!isCurrentPlayer && gameHasStarted"
-      />
-      <!-- Game Start Button -->
-      <button
-        v-if="!gameHasStarted && isYouAndOwner"
-        class="bg-green-600 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow hover:bg-green-700 transition"
-        @click="gameStart"
-      >
-        Start Game
-      </button>
-      <!-- Ready Up Button -->
-      <button
-        v-if="!gameHasStarted"
-        class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-lg shadow hover:bg-blue-700 transition"
-        @click="sendReadyUp"
-      >
-        Ready Up
-      </button>
-    </div>
 
     <!-- Game State and Timer -->
-    <div v-if="gameState === 'in-progress'" class="absolute top-5 text-center text-lg text-gray-500">
-      Game in progress! Timer: {{ timer }} seconds left.
-    </div>
+    <GameStateTimer v-if="gameState === 'in-progress'" :timer="timer" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
+import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
+import InputField from '../components/gamePage/InputField.vue';
+import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
 
 // State Variables
 const players = ref([]);
@@ -85,60 +41,13 @@ const ws = ref(null);
 const route = useRoute();
 const webSocketUrl = route.params.webSocketUrl;
 
-// Filter Players Who Are Ready
-const readyPlayers = computed(() => {
-  return players.value.filter((player) => player.isReady);
-});
-
-// Calculate Player Positions in Circular Layout
-const getPlayerPosition = (index, totalPlayers) => {
-  const angle = (index / totalPlayers) * 360;
-  const radius = 300; // Adjusted to center players better
-  const x = Math.cos((angle * Math.PI) / 180) * radius;
-  const y = Math.sin((angle * Math.PI) / 180) * radius;
-
-  return {
-    transform: `translate(${x}px, ${y}px)`,
-  };
-};
-
-const gameHasStarted = computed(() => {
-  return gameState.value === "playing";
-});
-
-const isCurrentPlayer = computed(() => {
-  return players.value.some((player) => player.isYou && player.currentPlayer);
-});
-
-const isYouAndOwner = computed(() => {
-  return players.value.some((player) => player.isYou && player.isOwner);
-});
-
-const renderGameObject = (game) => {
-  if (game.players) {
-    players.value = game.players;
-  }
-
-  if (game.letters) {
-    currentLetters.value = game.letters;
-  }
-
-  if (game.guessedWords) {
-    console.log("Guessed words:", game.guessedWords);
-  }
-
-  if (game.gameState) {
-    gameState.value = game.gameState;
-  }
-
-  if (game.timer !== undefined) {
-    timer.value = game.timer;
-  }
-
-  if (game.currentHint) {
-    currentHint.value = game.currentHint;
-  }
-};
+// Computed Properties and Methods (Shared Logic)
+const readyPlayers = computed(() => players.value.filter(player => player.isReady));
+const currentPlayer = computed(() => players.value.find(player => player.isYou) || {});
+const gameHasStarted = computed(() => gameState.value === "playing");
+const isCurrentPlayer = computed(() => players.value.some(player => player.isYou && player.currentPlayer));
+const isYouAndOwner = computed(() => players.value.some(player => player.isYou && player.isOwner));
+const lastWinner = computed(() => players.value.find(player => player.lastWinner) || null);
 
 const connectWebSocket = () => {
   if (!webSocketUrl) {
@@ -148,79 +57,40 @@ const connectWebSocket = () => {
 
   ws.value = new WebSocket(webSocketUrl);
 
-  ws.value.onopen = () => {
-    console.log("WebSocket connected");
-  };
+  ws.value.onopen = () => console.log("WebSocket connected");
+  ws.value.onmessage = event => renderGameObject(JSON.parse(event.data));
+  ws.value.onerror = error => console.error("WebSocket error:", error);
+  ws.value.onclose = () => console.log("WebSocket connection closed");
+};
 
-  ws.value.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log("Message from server:", data);
-    renderGameObject(data);
-  };
-
-  ws.value.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
-
-  ws.value.onclose = () => {
-    console.log("WebSocket connection closed");
-  };
+const renderGameObject = game => {
+  players.value = game.players || players.value;
+  currentLetters.value = game.letters || currentLetters.value;
+  gameState.value = game.gameState || gameState.value;
+  timer.value = game.timer ?? timer.value;
+  currentHint.value = game.currentHint || currentHint.value;
 };
 
 const sendWord = () => {
-  if (inputWord.value.trim() === "") {
-    console.warn("No word entered.");
-    return;
-  }
-
-  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "submit", word: inputWord.value.trim() }));
-    inputWord.value = ""; // Clear the input after sending
-  } else {
-    console.warn("WebSocket is not connected");
+  if (inputWord.value.trim()) {
+    ws.value?.send(JSON.stringify({ type: "submit", word: inputWord.value.trim() }));
+    inputWord.value = "";
   }
 };
 
-// Handle typing updates
 const onType = () => {
-  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "typing", currentText: inputWord.value.trim() }));
-  } else {
-    console.warn("WebSocket is not connected");
-  }
+  ws.value?.send(JSON.stringify({ type: "typing", currentText: inputWord.value.trim() }));
 };
 
-const sendReadyUp = () => {
-  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "readyUp" }));
-    console.log("Ready up message sent.");
-  } else {
-    console.warn("WebSocket is not connected");
-  }
+const toggleReadyUp = () => {
+  ws.value?.send(JSON.stringify({ type: "readyUp" }));
 };
 
-// Start the game
 const gameStart = () => {
-  if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-    ws.value.send(JSON.stringify({ type: "gameStart" }));
-    console.log("Game start message sent.");
-  } else {
-    console.warn("WebSocket is not connected");
-  }
+  ws.value?.send(JSON.stringify({ type: "gameStart" }));
 };
 
 // Lifecycle Hooks
-onMounted(() => {
-  connectWebSocket();
-});
-
-onUnmounted(() => {
-  if (ws.value) {
-    ws.value.close();
-  }
-});
+onMounted(() => connectWebSocket());
+onUnmounted(() => ws.value?.close());
 </script>
-
-<style>
-/* Add additional global styles if needed */
-</style>
