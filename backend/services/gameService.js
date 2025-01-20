@@ -80,23 +80,11 @@ class Game {
       return false;
 
     if (foundPlayer.isReady)
-      return false;
-
-    foundPlayer.isReady = true;
-    return true;
-  }
-
-  unReady(player) {
+      foundPlayer.isReady = false;
+    else
+      foundPlayer.isReady = true;
     
-    // Check if player is already in the game
-    const foundPlayer = this.players.find(p => p.sessionID === player)
-    
-    if (!foundPlayer)
-      return false;
-
-    foundPlayer.isReady = false;
     return true;
-
   }
 
   startGame() {

@@ -118,10 +118,6 @@ class SocketService {
       game.readyUp(sessionID)
     }
 
-    if(message.type == 'unReady'){
-      game.unReady(sessionID)
-    }
-
     if (message.type == 'submit') {
       game.guessWord(message.word);
     }
