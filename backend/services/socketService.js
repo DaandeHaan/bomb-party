@@ -11,7 +11,27 @@ class SocketService {
     this.wss = wss;
 
     this.wss.on('connection', (ws, request) => {
-      this.onConnect(ws, request);
+
+      const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
+      const gameID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('gameID');
+      const username = new URL(request.url, `http://${request.headers.host}`).searchParams.get('username');
+  
+      const game = GameManager.getGame(gameID);
+  
+      // If the game doesn't exist, close the connection
+      if (!game)
+        return ws.close();
+  
+      // If player is already in the game, close the connection
+      if (game.players.find(player => player.sessionID === sessionID))
+        return ws.close();
+  
+      this.clients.set(`${sessionID}-${game.gameID}`, ws);
+      this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
+  
+      game.addPlayerToGame(sessionID, username);
+  
+      this.sendGameObject({...game});
       
       // Handle disconnection
       ws.on('close', () => {
@@ -23,29 +43,6 @@ class SocketService {
         this.handleRecivedMessage(sessionID, gameID, data);
       });
     });
-  }
-
-  onConnect(ws, request) {
-    const sessionID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('sessionID');
-    const gameID = new URL(request.url, `http://${request.headers.host}`).searchParams.get('gameID');
-    const username = new URL(request.url, `http://${request.headers.host}`).searchParams.get('username');
-
-    const game = GameManager.getGame(gameID);
-
-    // If the game doesn't exist, close the connection
-    if (!game)
-      return ws.close();
-
-    // If player is already in the game, close the connection
-    if (game.players.find(player => player.sessionID === sessionID))
-      return ws.close();
-
-    this.clients.set(`${sessionID}-${game.gameID}`, ws);
-    this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
-
-    game.addPlayerToGame(sessionID, username);
-
-    this.sendGameObject({...game});
   }
 
   onDisconnect(game, sessionID) {
@@ -63,6 +60,7 @@ class SocketService {
   
       gameObjectForUser = {
         ...Game, // Spread the rest of the gameObject properties
+        // ...GameManager.getGame(Game.gameID).getGame(), // Spread the rest of the gameObject properties
         players: Game.players.map(gamePlayer => {
           const { sessionID, ...playerWithoutSessionID } = gamePlayer; // Destructure and remove sessionID
           if (gamePlayer.sessionID === player.sessionID) {
@@ -72,6 +70,9 @@ class SocketService {
           }
         })
       };
+
+      // Remove TimeOut prop from gameObjectForUser
+      delete gameObjectForUser.timerInterval;
   
       this.send(ws, gameObjectForUser);
     });
@@ -87,7 +88,7 @@ class SocketService {
       try {
         ws.send(JSON.stringify(message));
       } catch (error) {
-        console.error(`Failed to send message to ${sessionID}:`, error);
+        console.error(`Failed to send message:`, error);
       }
     }
   }

@@ -1,3 +1,4 @@
+const GameManager = require("../services/gameService");
 const wordService = require("../services/wordService");
 
 class Game {
@@ -49,6 +50,9 @@ class Game {
 
   removePlayerFromGame(sessionID) {
 
+    console.log(sessionID);
+    console.log(this.players);
+
     // Check if the player was the current player
     if (this.players.find(p => p.sessionID === sessionID).currentPlayer)
       this.nextTurn();
@@ -56,7 +60,7 @@ class Game {
     this.players = this.players.filter(p => p.sessionID !== sessionID);
 
     if (this.players.length === 0)
-      return gameManagerInstance.deleteGame(this.gameID);
+      return GameManager.deleteGame(this.gameID);
 
     this.checkWinner();
 
@@ -89,13 +93,14 @@ class Game {
       return;
 
     if (this.players.filter(p => p.isReady).length < 2)
-      return socketService.sendMessage(this.players.find(p => p.isOwner).sessionID, {Success: false, message: 'NOT_ENOUGH_PLAYERS'});
-
-    this.resetValues();
+      return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {Success: false, message: 'NOT_ENOUGH_PLAYERS'});
 
     this.gameState = 'playing';
     this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
     this.currentHint = wordService.getHint(this.language, this.diffuculty).toLowerCase().trim();
+    this.guessedWords = [];
+    this.timer = this.defaultTimer;
+
     this.startTimer();
   }
 
@@ -169,7 +174,7 @@ class Game {
     
     this.currentHint = wordService.getHint(this.language, this.diffuculty);
 
-    setText(newPlayer.sessionID, "");
+    this.setText(newPlayer.sessionID, "");
 
     this.resetTimer();
 
@@ -240,6 +245,11 @@ class Game {
   sendGameObject() {
     const socketService = require("../services/socketService");
     socketService.sendGameObject(this);
+  }
+
+  sendMessage(user, message) {
+    const socketService = require("../services/socketService");
+    socketService.sendMessage(user, message);
   }
 
   getGame() {
