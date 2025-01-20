@@ -10,7 +10,8 @@
         :class="[ 
           'absolute text-sm font-semibold py-2 px-4 rounded-lg shadow text-center',
           player.currentPlayer ? 'bg-green-500 text-white' : 'bg-gray-300',
-          player.isYou ? 'border-2 border-red-600' : ''
+          player.isYou ? 'border-2 border-red-600' : '',
+          player.lives === 0 ? 'bg-gray-500 text-white' : ''
         ]"
       >
         <!-- Display lives and currentText above the player's username -->
