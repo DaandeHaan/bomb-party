@@ -67,7 +67,7 @@ class Game {
   }
 
   // This function will be executed when a player joins the game from the lobby
-  joinGame(player) {
+  readyUp(player) {
 
     // Check if game state is lobby
     if (this.gameState !== 'lobby')
@@ -80,9 +80,10 @@ class Game {
       return false;
 
     if (foundPlayer.isReady)
-      return false;
-
-    foundPlayer.isReady = true;
+      foundPlayer.isReady = false;
+    else
+      foundPlayer.isReady = true;
+    
     return true;
   }
 

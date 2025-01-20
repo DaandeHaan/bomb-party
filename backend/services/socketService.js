@@ -115,7 +115,7 @@ class SocketService {
     const game = this.clientToGame.get(`${sessionID}-${gameID}`);
 
     if(message.type == 'readyUp'){
-      game.joinGame(sessionID)
+      game.readyUp(sessionID)
     }
 
     if (message.type == 'submit') {
