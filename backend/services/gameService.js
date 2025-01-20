@@ -67,7 +67,7 @@ class Game {
   }
 
   // This function will be executed when a player joins the game from the lobby
-  joinGame(player) {
+  readyUp(player) {
 
     // Check if game state is lobby
     if (this.gameState !== 'lobby')
@@ -84,6 +84,19 @@ class Game {
 
     foundPlayer.isReady = true;
     return true;
+  }
+
+  unReady(player) {
+    
+    // Check if player is already in the game
+    const foundPlayer = this.players.find(p => p.sessionID === player)
+    
+    if (!foundPlayer)
+      return false;
+
+    foundPlayer.isReady = false;
+    return true;
+
   }
 
   startGame() {
