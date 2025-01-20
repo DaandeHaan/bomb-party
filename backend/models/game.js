@@ -177,8 +177,6 @@ class Game {
     this.setText(newPlayer.sessionID, "");
 
     this.resetTimer();
-
-    // ? Send game object
   }
 
   getNewPlayer() {
