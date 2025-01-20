@@ -9,6 +9,8 @@ const difficultyThresholds = {
   Hardcore: 100
 };
 
+const language = 'english'
+
 function generateHints() {
   console.log('Generating all 2-letter and 3-letter combinations...');
   const hints = [];
@@ -34,7 +36,7 @@ function generateHints() {
 
 function getWords() {
   // Read file and split into array of words
-  return fs.readFileSync('../languages/dutch.txt', 'utf-8').toLowerCase().split(/\s+/);
+  return fs.readFileSync(`../languages/${language}/words.txt`, 'utf-8').toLowerCase().split(/\s+/);
 }
 
 function saveToFile(file, hint) {
