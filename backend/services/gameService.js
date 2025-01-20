@@ -90,6 +90,10 @@ class Game {
     if (this.gameState !== 'lobby')
       return;
 
+    // Check if there are enough players (at least 2, isReady = true)
+    if (this.players.filter(p => p.isReady).length < 2)
+      return;
+
     // Reset values
     this.guessedWords = [];
 
