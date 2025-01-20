@@ -9,7 +9,7 @@ class wordService {
     // Choose random hint
     const hint = hints[Math.floor(Math.random() * hints.length)];
 
-    return hint;    
+    return hint.toLowerCase().trim();    
   }
 
   checkWord(hint, language, word) {
