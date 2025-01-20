@@ -26,8 +26,20 @@
         {{ player.username }}
       </div>
 
+      <!-- Last Winner in the middle if the game is not running -->
+      <div
+        v-if="!gameHasStarted && lastWinner"
+        class="absolute flex flex-col items-center bg-yellow-500 text-white text-2xl font-bold py-4 px-8 rounded-full shadow-lg text-center"
+      >
+        🏆 Last Winner 🏆
+        <div class="text-lg font-medium">{{ lastWinner.username }}</div>
+      </div>
+
       <!-- Letters in the middle -->
-      <div class="relative flex flex-col items-center bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center">
+      <div
+        v-else
+        class="relative flex flex-col items-center bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center"
+      >
         {{ currentHint }}
       </div>
     </div>
@@ -67,6 +79,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
@@ -112,6 +125,10 @@ const isCurrentPlayer = computed(() => {
 
 const isYouAndOwner = computed(() => {
   return players.value.some((player) => player.isYou && player.isOwner);
+});
+
+const lastWinner = computed(() => {
+  return players.value.find((player) => player.lastWinner) || null;
 });
 
 const renderGameObject = (game) => {
