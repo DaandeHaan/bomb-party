@@ -1,4 +1,5 @@
 const wordService = require("../services/wordService");
+const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 
 class Game {
   constructor() {
@@ -22,6 +23,7 @@ class Game {
   addPlayerToGame(sessionID, username) {
 
     const player = {
+      id: uuidv4(),
       sessionID: sessionID,
       username: username,
       isReady: false,
