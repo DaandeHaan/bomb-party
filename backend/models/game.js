@@ -1,4 +1,3 @@
-const GameManager = require("../services/gameService");
 const wordService = require("../services/wordService");
 
 class Game {
@@ -60,7 +59,7 @@ class Game {
     this.players = this.players.filter(p => p.sessionID !== sessionID);
 
     if (this.players.length === 0)
-      return GameManager.deleteGame(this.gameID);
+      return;
 
     this.checkWinner();
 
@@ -160,7 +159,9 @@ class Game {
       return this.setText(currentPlayer, "")
     
     // Check if word exists using wordService.checkWord (case-insensitive)
-    if (!wordService.checkWord(this.currentHint, this.language, word))
+    if (!wordService.checkWord(this.currentHint, this.language, word)) {
+
+    }
       return this.setText(currentPlayer, "")
 
     // Add word to guessed words

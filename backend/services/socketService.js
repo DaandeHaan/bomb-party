@@ -50,6 +50,9 @@ class SocketService {
 
     this.clientToGame.delete(`${sessionID}-${game.gameID}`);
     this.clients.delete(sessionID);
+
+    if (game.players.length === 0)
+      return GameManager.deleteGame(game.gameID);
   }
 
   sendGameObject(Game) {
