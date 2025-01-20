@@ -1,6 +1,5 @@
 const express = require('express');
-const { Game, GameManager}= require('../services/gameService');
-const socketService = require('../services/socketService');
+const GameManager= require('../services/gameService');
 const wordService = require('../services/wordService');
 
 const router = express.Router();
