@@ -92,7 +92,7 @@ class Game {
       return;
 
     if (this.players.filter(p => p.isReady).length < 2)
-      return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {Success: false, message: 'NOT_ENOUGH_PLAYERS'});
+      return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {success: false, message: 'NOT_ENOUGH_PLAYERS'});
 
     this.gameState = 'playing';
     this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
@@ -153,21 +153,21 @@ class Game {
     // Check if word has already been guessed
     if (this.guessedWords.map(w => w.toLowerCase()).includes(word)){
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {Success: false, message: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
       return 
     }
     
     // Check if hint is in the word (case-insensitive)
     if (!word.includes(this.currentHint.toLowerCase().trim())){
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {Success: false, message: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
       return 
     }
     
     // Check if word exists using wordService.checkWord (case-insensitive)
     if (!wordService.checkWord(this.currentHint, this.language, word)) {
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {Success: false, message: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
       return 
     }
 
