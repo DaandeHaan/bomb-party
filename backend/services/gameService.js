@@ -196,7 +196,7 @@ class Game {
     this.players.find(p => p.currentPlayer === true).lives--;
 
     // Check if all players are out of lives, except one
-    if (this.players.filter(p => p.isReady).length === 1) {
+    if (this.players.filter(p => p.isReady && p.lives > 0).length === 1) {
       this.gameState = 'lobby';
       this.currentHint = "";
 
