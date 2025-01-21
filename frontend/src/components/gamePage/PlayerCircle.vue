@@ -92,7 +92,7 @@ const getHighlightedSegments = (word, player) => {
   const segments = [];
   let remainingWord = word;
 
-  console.log(`Processing word: "${word}" for currentPlayer with hint: "${hint}"`);
+  // console.log(`Processing word: "${word}" for currentPlayer with hint: "${hint}"`);
 
   while (remainingWord.length > 0) {
     if (remainingWord.startsWith(hint)) {

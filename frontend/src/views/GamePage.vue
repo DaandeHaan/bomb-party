@@ -17,7 +17,7 @@
 
 
     <!-- Game State and Timer -->
-    <GameStateTimer v-if="gameState === 'in-progress'" :timer="timer" />
+    <GameStateTimer v-if="gameState === 'playing'" :timer="timer" />
   </div>
 </template>
 
