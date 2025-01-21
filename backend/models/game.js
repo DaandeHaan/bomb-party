@@ -1,5 +1,5 @@
-const GameManager = require("../services/gameService");
 const wordService = require("../services/wordService");
+const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 
 class Game {
   constructor() {
@@ -23,6 +23,7 @@ class Game {
   addPlayerToGame(sessionID, username) {
 
     const player = {
+      id: uuidv4(),
       sessionID: sessionID,
       username: username,
       isReady: false,
@@ -60,7 +61,7 @@ class Game {
     this.players = this.players.filter(p => p.sessionID !== sessionID);
 
     if (this.players.length === 0)
-      return GameManager.deleteGame(this.gameID);
+      return;
 
     this.checkWinner();
 
@@ -93,7 +94,7 @@ class Game {
       return;
 
     if (this.players.filter(p => p.isReady).length < 2)
-      return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {Success: false, message: 'NOT_ENOUGH_PLAYERS'});
+      return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {success: false, message: 'NOT_ENOUGH_PLAYERS'});
 
     this.gameState = 'playing';
     this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
@@ -152,16 +153,25 @@ class Game {
     const currentPlayer = this.players.find(p => p.currentPlayer === true);
 
     // Check if word has already been guessed
-    if (this.guessedWords.map(w => w.toLowerCase()).includes(word))
-      return this.setText(currentPlayer, "")
+    if (this.guessedWords.map(w => w.toLowerCase()).includes(word)){
+      this.setText(currentPlayer, "")
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
+      return 
+    }
     
     // Check if hint is in the word (case-insensitive)
-    if (!word.includes(this.currentHint.toLowerCase().trim()))
-      return this.setText(currentPlayer, "")
+    if (!word.includes(this.currentHint.toLowerCase().trim())){
+      this.setText(currentPlayer, "")
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
+      return 
+    }
     
     // Check if word exists using wordService.checkWord (case-insensitive)
-    if (!wordService.checkWord(this.currentHint, this.language, word))
-      return this.setText(currentPlayer, "")
+    if (!wordService.checkWord(this.currentHint, this.language, word)) {
+      this.setText(currentPlayer, "")
+      this.sendMessage(currentPlayer.sessionID, {success: false, message: 'WORD_NOT_FOUND'});
+      return 
+    }
 
     // Add word to guessed words
     this.guessedWords.push(word);
