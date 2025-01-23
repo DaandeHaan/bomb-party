@@ -7,7 +7,8 @@ class Game {
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
-    this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
+    this.diffuculty = 'baby'; // baby, beginner, easy, medium, hard, expert, hardcore
+    // this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
     this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
@@ -21,6 +22,7 @@ class Game {
     
     this.endTime = null;
     this.timerInterval = null;
+    this.lastHint = "";
   }
 
   addPlayerToGame(sessionID, username) {
@@ -106,7 +108,8 @@ class Game {
 
     this.gameState = 'playing';
     this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
-    this.currentHint = wordService.getHint(this.language, this.diffuculty).toLowerCase().trim();
+    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty).toLowerCase().trim();
+    this.lastHint = this.currentHint;
     this.guessedWords = [];
     this.timer = this.defaultTimer;
 
@@ -190,10 +193,12 @@ class Game {
     this.nextTurn();
   }
 
-  nextTurn() {
+  nextTurn(failed = false) {
     const newPlayer = this.getNewPlayer();
     
-    this.currentHint = wordService.getHint(this.language, this.diffuculty);
+    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty);
+
+    this.lastHint = this.currentHint;
 
     this.setText(newPlayer.sessionID, "");
 
@@ -226,7 +231,7 @@ class Game {
     if (this.checkWinner())
       return;
 
-    this.nextTurn();
+    this.nextTurn(true);
 
     this.sendGameObject();
   }
