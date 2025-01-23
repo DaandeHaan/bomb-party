@@ -23,6 +23,7 @@ class Game {
     this.endTime = null;
     this.timerInterval = null;
     this.lastHint = "";
+    this.failedTimes = 0;
   }
 
   addPlayerToGame(sessionID, username) {
@@ -195,10 +196,12 @@ class Game {
 
   nextTurn(failed = false) {
     const newPlayer = this.getNewPlayer();
-    
-    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty);
 
-    this.lastHint = this.currentHint;
+    if (!failed || this.failedTimes >= this.players.filter(p => p.isReady && p.lives > 0).length) {
+      this.failedTimes = 0;
+      this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty);
+      this.lastHint = this.currentHint;
+    }
 
     this.setText(newPlayer.sessionID, "");
 
@@ -224,6 +227,9 @@ class Game {
 
     // Reset Timer
     this.timer = this.defaultTimer;
+
+    // Update failed times
+    this.failedTimes++;
 
     // Remove Live
     this.players.find(p => p.currentPlayer === true).lives--;
