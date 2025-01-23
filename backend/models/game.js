@@ -7,8 +7,7 @@ class Game {
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
-    this.diffuculty = 'baby'; // baby, beginner, easy, medium, hard, expert, hardcore
-    // this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
+    this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
     this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
