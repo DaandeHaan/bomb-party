@@ -1,5 +1,6 @@
 const wordService = require("../services/wordService");
 const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
+const Player = require("./player");
 
 class Game {
   constructor(settings) {
@@ -34,17 +35,7 @@ class Game {
     if (this.players.length >= this.maxPlayers)
       return false;
 
-    const player = {
-      id: uuidv4(),
-      sessionID: sessionID,
-      username: username,
-      isReady: false,
-      currentPlayer: false,
-      isOwner: false,
-      currentText: "",
-      lives: 2,
-      lastWinner: false,
-    }
+    const player = new Player(sessionID, username);
 
     // Check if player is already in the game
     if (this.players.find(p => p.sessionID === player.sessionID))
