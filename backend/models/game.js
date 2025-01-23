@@ -1,5 +1,4 @@
 const wordService = require("../services/wordService");
-const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 const Player = require("./player");
 
 class Game {
@@ -11,9 +10,9 @@ class Game {
     // Settings
     this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
+    this.defaultTimer = settings.defaultTimer;
     this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
-    this.defaultTimer = settings.defaultTimer;
 
     // Game Variables
     this.gameState = 'lobby';
