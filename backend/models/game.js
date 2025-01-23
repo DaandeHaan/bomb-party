@@ -2,22 +2,24 @@ const wordService = require("../services/wordService");
 const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 
 class Game {
-  constructor() {
+  constructor(settings) {
     this.gameID = Array.from({ length: 4 }, () => 
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
-    this.defaultTimer = 10;
-    this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
-    this.language = 'dutch';
+    this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
+    this.language = settings.language;
+    this.privateGame = settings.privateGame;
+    this.maxPlayers = settings.maxPlayers;
+    this.defaultTimer = settings.defaultTimer;
 
     this.gameState = 'lobby';
     this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = this.defaultTimer;
-    this.endTime = null;
     
+    this.endTime = null;
     this.timerInterval = null;
   }
 
@@ -296,6 +298,7 @@ class Game {
       defaultTimer: this.timer,
       remainingTime: this.getRemainingTime(),
       diffuculty: this.diffuculty,
+      privateGame: this.privateGame,
     }
   }
 }

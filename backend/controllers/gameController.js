@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.post('/create', (req, res) => {
 
-  const game = GameManager.createGame();
+  if (!req.body.settings)
+    return res.status(400).json({success: false, message: 'No settings provided'});
+
+  const game = GameManager.createGame(req.body.settings);
 
   res.json({success: true, gameID: game.gameID});
 });

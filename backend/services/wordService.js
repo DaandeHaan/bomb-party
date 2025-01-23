@@ -4,6 +4,13 @@ const path = require('path');
 class wordService {
 
   getHint(language, difficulty) {
+    
+    if (difficulty = "baby") {
+      const alphabet = "abcdefghijklmnopqrstuvwxyz";
+      const letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+      return letter;
+    }
+
     const hints = this.readHintsFile(language, difficulty);
 
     // Choose random hint

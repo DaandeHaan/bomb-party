@@ -101,12 +101,22 @@ const joinLobby = (code) => {
 };
 
 const createLobby = async () => {
-  const username = localStorage.getItem("username");
-
   const response = await axios.post(
     `http://localhost:3000/api/game/create`,
-    { username },
-    { withCredentials: true }
+    { settings: { 
+        difficulty: 'beginner',
+        language: 'dutch',
+        privateGame: false,
+        maxPlayers: 8,
+        timer: 10,      
+      } 
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
+    }
   );
 
   router.push(`/game/${response.data.gameID}`);
