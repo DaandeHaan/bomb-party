@@ -255,17 +255,6 @@ class Game {
     }, this.timer * 1000); // Convert to milliseconds
   }
 
-  getRemainingTime() {
-    if (!this.endTime) {
-      return 0; // No timeout has been set
-    }
-  
-    const now = Date.now();
-    const remainingTime = this.endTime - now;
-  
-    return remainingTime > 0 ? remainingTime : 0; // Ensure we don't return negative values
-  }
-
   resetValues() {
     this.gameState = 'lobby';
     this.guessedWords = [];
@@ -305,8 +294,7 @@ class Game {
       players: players,
       currentHint: this.currentHint,
       guessedWords: this.guessedWords,
-      defaultTimer: this.timer,
-      remainingTime: this.getRemainingTime(),
+      timer: this.timer,
       diffuculty: this.diffuculty,
       privateGame: this.privateGame,
       maxPlayers: this.maxPlayers,
