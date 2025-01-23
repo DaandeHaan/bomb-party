@@ -29,7 +29,11 @@ class SocketService {
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
       this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
   
-      game.addPlayerToGame(sessionID, username);
+      const success = game.addPlayerToGame(sessionID, username);
+
+      if (!success) {
+        return ws.close();
+      }
   
       this.sendGameObject({...game});
       
@@ -58,31 +62,33 @@ class SocketService {
   sendGameObject(Game) {
     Game.players.forEach(player => {
       const ws = this.clients.get(`${player.sessionID}-${Game.gameID}`);
-  
-      let gameObjectForUser = Game;
-  
-      gameObjectForUser = {
-        ...Game, // Spread the rest of the gameObject properties
-        // ...GameManager.getGame(Game.gameID).getGame(), // Spread the rest of the gameObject properties
-        players: Game.players.map(gamePlayer => {
-          const { sessionID, ...playerWithoutSessionID } = gamePlayer; // Destructure and remove sessionID
-          if (gamePlayer.sessionID === player.sessionID) {
-            return { ...playerWithoutSessionID, isYou: true }; // Add isYou: true for the matching player
-          } else {
-            return { ...playerWithoutSessionID, isYou: false }; // Add isYou: false for others
-          }
-        })
-      };
 
-      // Remove TimeOut prop from gameObjectForUser
-      delete gameObjectForUser.timerInterval;
+      const parsedGame = GameManager.getGame(Game.gameID).getGame(); 
+
+      const gameObject = {
+        ...parsedGame,
+        players: Game.players.map(gamePlayer => this.getPlayerObject(player.sessionID, gamePlayer))
+      }
+
+      console.log(gameObject)
   
-      this.send(ws, gameObjectForUser);
+      this.send(ws, gameObject);
     });
   }
 
-  sendMessage(sessionID, message) {
-    const ws = this.clients.get(sessionID);
+  getPlayerObject(sessionID, gamePlayer) {
+    
+    const { sessionID: playerSessionID, ...playerWithoutSessionID } = gamePlayer;
+
+    if (gamePlayer.sessionID === sessionID)
+      return { ...playerWithoutSessionID, isYou: true };
+    else 
+      return { ...playerWithoutSessionID, isYou: false };
+
+  }
+
+  sendMessage(user, message) {
+    const ws = this.clients.get(user);
     this.send(ws, message);
   }
 

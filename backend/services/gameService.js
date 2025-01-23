@@ -5,8 +5,22 @@ class GameManager {
     this.games = [];
   }
 
-  createGame() {
-    const game = new Game();
+  createGame(config) {
+
+    let difficulty = 'beginner'
+
+    if (['baby', 'beginner', 'easy', 'medium', 'hard', 'expert', 'hardcore'].includes(config.difficulty))
+      difficulty = config.difficulty;
+
+    const settings = {
+      diffuculty: difficulty,
+      language: config.language || 'dutch',
+      privateGame: config.privateGame || false,
+      maxPlayers: config.maxPlayers || 8,
+      defaultTimer: config.timer || 10,      
+    }
+
+    const game = new Game(settings);
     this.games.push(game);
     return game;
   }
@@ -16,7 +30,12 @@ class GameManager {
   }
 
   getGames() {
-    return this.games;
+    let games = [];
+    for (const game of this.games) {
+      if (!game.privateGame)
+        games.push(game);
+    }
+    return games;
   }
 
   deleteGame(gameID) {

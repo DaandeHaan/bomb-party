@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.post('/create', (req, res) => {
 
-  const game = GameManager.createGame();
+  if (!req.body.settings)
+    return res.status(400).json({success: false, message: 'No settings provided'});
+
+  const game = GameManager.createGame(req.body.settings);
 
   res.json({success: true, gameID: game.gameID});
 });
@@ -21,6 +24,9 @@ router.post('/:gameID/connect/', (req, res) => {
 
   if (!game)
     return res.status(404).json({success: false, message: 'Game not found'});
+
+  if (game.players.length >= game.maxPlayers)
+    return res.status(400).json({success: false, message: 'Game is full'});
 
   res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + req.body.username});
 });

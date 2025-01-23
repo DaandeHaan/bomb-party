@@ -2,14 +2,17 @@ const wordService = require("../services/wordService");
 const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
 
 class Game {
-  constructor() {
+  constructor(settings) {
     this.gameID = Array.from({ length: 4 }, () => 
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
-    this.defaultTimer = 10;
-    this.diffuculty = 'beginner'; // baby, beginner, easy, medium, hard, expert, hardcore
-    this.language = 'dutch';
+    this.diffuculty = 'baby'; // baby, beginner, easy, medium, hard, expert, hardcore
+    // this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
+    this.language = settings.language;
+    this.privateGame = settings.privateGame; // Show in lobby or not
+    this.maxPlayers = settings.maxPlayers;
+    this.defaultTimer = settings.defaultTimer;
 
     this.gameState = 'lobby';
     this.players = [];
@@ -17,10 +20,17 @@ class Game {
     this.guessedWords = [];
     this.timer = this.defaultTimer;
     
+    this.endTime = null;
     this.timerInterval = null;
+    this.lastHint = "";
+    this.failedTimes = 0;
   }
 
   addPlayerToGame(sessionID, username) {
+
+    // Check if the game is full
+    if (this.players.length >= this.maxPlayers)
+      return false;
 
     const player = {
       id: uuidv4(),
@@ -92,13 +102,15 @@ class Game {
   startGame() {
     if (this.gameState !== 'lobby')
       return;
-
+    if (this.players.filter(p => p.isReady).length < 2)
+      console.log("Not enough players")
     if (this.players.filter(p => p.isReady).length < 2)
       return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {success: false, message: 'NOT_ENOUGH_PLAYERS'});
 
     this.gameState = 'playing';
     this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
-    this.currentHint = wordService.getHint(this.language, this.diffuculty).toLowerCase().trim();
+    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty).toLowerCase().trim();
+    this.lastHint = this.currentHint;
     this.guessedWords = [];
     this.timer = this.defaultTimer;
 
@@ -182,10 +194,14 @@ class Game {
     this.nextTurn();
   }
 
-  nextTurn() {
+  nextTurn(failed = false) {
     const newPlayer = this.getNewPlayer();
-    
-    this.currentHint = wordService.getHint(this.language, this.diffuculty);
+
+    if (!failed || this.failedTimes >= this.players.filter(p => p.isReady && p.lives > 0).length) {
+      this.failedTimes = 0;
+      this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty);
+      this.lastHint = this.currentHint;
+    }
 
     this.setText(newPlayer.sessionID, "");
 
@@ -212,13 +228,16 @@ class Game {
     // Reset Timer
     this.timer = this.defaultTimer;
 
+    // Update failed times
+    this.failedTimes++;
+
     // Remove Live
     this.players.find(p => p.currentPlayer === true).lives--;
 
     if (this.checkWinner())
       return;
 
-    this.nextTurn();
+    this.nextTurn(true);
 
     this.sendGameObject();
   }
@@ -234,9 +253,22 @@ class Game {
     if (this.timerInterval)
       clearTimeout(this.timerInterval);
 
+    this.endTime = Date.now() + (this.timer * 1000);
+
     this.timerInterval = setTimeout(() => {
       this.NotInTime();
     }, this.timer * 1000); // Convert to milliseconds
+  }
+
+  getRemainingTime() {
+    if (!this.endTime) {
+      return 0; // No timeout has been set
+    }
+  
+    const now = Date.now();
+    const remainingTime = this.endTime - now;
+  
+    return remainingTime > 0 ? remainingTime : 0; // Ensure we don't return negative values
   }
 
   resetValues() {
@@ -244,6 +276,7 @@ class Game {
     this.guessedWords = [];
     this.currentHint = "";
     this.timer = this.defaultTimer;
+    this.endTime = null;
 
     this.players.forEach(p => {
       p.isReady = false;
@@ -257,10 +290,10 @@ class Game {
     const socketService = require("../services/socketService");
     socketService.sendGameObject(this);
   }
-
+  
   sendMessage(user, message) {
     const socketService = require("../services/socketService");
-    socketService.sendMessage(user, message);
+    socketService.sendMessage(`${user}-${this.gameID}`, message);
   }
 
   getGame() {
@@ -277,8 +310,11 @@ class Game {
       players: players,
       currentHint: this.currentHint,
       guessedWords: this.guessedWords,
-      timer: this.timer,
+      defaultTimer: this.timer,
+      remainingTime: this.getRemainingTime(),
       diffuculty: this.diffuculty,
+      privateGame: this.privateGame,
+      maxPlayers: this.maxPlayers,
     }
   }
 }

@@ -3,13 +3,28 @@ const path = require('path');
 
 class wordService {
 
-  getHint(language, difficulty) {
+  getHint(lastHint, language, difficulty) {
+    
+    if (difficulty === "baby") {
+      const alphabet = "abcdefghijklmnopqrstuvwxyz";
+      let letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+  
+      while (letter === lastHint) {
+        letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+      }
+      
+      return letter;
+    }
+  
     const hints = this.readHintsFile(language, difficulty);
-
-    // Choose random hint
-    const hint = hints[Math.floor(Math.random() * hints.length)];
-
-    return hint.toLowerCase().trim();    
+  
+    let hint = hints[Math.floor(Math.random() * hints.length)];
+  
+    while (hint.toLowerCase().trim() === lastHint.toLowerCase().trim()) {
+      hint = hints[Math.floor(Math.random() * hints.length)];
+    }
+  
+    return hint.toLowerCase().trim();
   }
 
   checkWord(hint, language, word) {
