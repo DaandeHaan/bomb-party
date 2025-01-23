@@ -60,9 +60,6 @@ class Game {
 
   removePlayerFromGame(sessionID) {
 
-    console.log(sessionID);
-    console.log(this.players);
-
     // Check if the player was the current player
     if (this.players.find(p => p.sessionID === sessionID).currentPlayer)
       this.nextTurn();
@@ -101,8 +98,7 @@ class Game {
   startGame() {
     if (this.gameState !== 'lobby')
       return;
-    if (this.players.filter(p => p.isReady).length < 2)
-      console.log("Not enough players")
+
     if (this.players.filter(p => p.isReady).length < 2)
       return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {success: false, message: 'NOT_ENOUGH_PLAYERS'});
 

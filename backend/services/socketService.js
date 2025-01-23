@@ -70,8 +70,6 @@ class SocketService {
         players: Game.players.map(gamePlayer => this.getPlayerObject(player.sessionID, gamePlayer))
       }
 
-      console.log(gameObject)
-  
       this.send(ws, gameObject);
     });
   }
