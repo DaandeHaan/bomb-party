@@ -7,18 +7,21 @@ class Game {
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
     
+    // Settings
     this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
     this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
     this.defaultTimer = settings.defaultTimer;
 
+    // Game Variables
     this.gameState = 'lobby';
     this.players = [];
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = this.defaultTimer;
     
+    // Helper Variables
     this.endTime = null;
     this.timerInterval = null;
     this.lastHint = "";
