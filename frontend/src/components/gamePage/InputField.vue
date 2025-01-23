@@ -40,7 +40,7 @@
         @click="$emit('toggleReadyUp')"
         class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
       >
-        Ready Up
+      {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
       </button>
     </div>
   </div>
