@@ -108,7 +108,7 @@ const getHighlightedSegments = (word, player) => {
   // Update the player's staticSegments after processing
   player.staticSegments = segments;
 
-  console.log(`Segments for "${word}":`, segments);
+  // console.log(`Segments for "${word}":`, segments);
   return segments;
 };
 </script>
