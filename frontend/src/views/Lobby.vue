@@ -1,7 +1,8 @@
 <template>
-  <div class="flex justify-between items-center">
-
-    <div class="w-full">Settings</div>
+  <div class="flex justify-between items-center p-4">
+    <div class="w-full">
+      <Settings :config="config" @update-settings="updateSettings" />
+    </div>
 
     <div class="w-full flex flex-col items-center justify-center h-screen bg-gray-100">
       <h1 class="text-4xl font-bold mb-8">Welcome to Bomb Party!</h1>
@@ -30,35 +31,37 @@
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
         <div
           v-for="game in games"
           :key="game.id"
           class="p-4 bg-white shadow rounded flex flex-col justify-between"
         >
-
           <GameCard @join-lobby="joinLobby" :game="game" />
-        
         </div>
-      
       </div>
-
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import LobbyInput from "../components/LobbyInput.vue";
 import CreateLobby from "../components/CreateLobby.vue";
 import axios from "axios";
 import GameCard from "../components/gameCard.vue";
+import Settings from "../components/lobby/Settings.vue";
 
 const username = ref("");
 const games = ref([]); // Store available games
+const config = reactive({
+  difficulty: "easy",
+  language: "dutch",
+  privateGame: false,
+  maxPlayers: 8,
+  timer: 10,
+});
 
 const toast = useToast();
 const router = useRouter();
@@ -103,22 +106,27 @@ const joinLobby = (code) => {
 const createLobby = async () => {
   const response = await axios.post(
     `http://localhost:3000/api/game/create`,
-    { settings: { 
-        difficulty: 'beginner',
-        language: 'dutch',
-        privateGame: false,
-        maxPlayers: 8,
-        timer: 10,      
-      } 
+    {
+      settings: {
+        difficulty: config.difficulty,
+        language: config.language,
+        privateGame: config.privateGame,
+        maxPlayers: config.maxPlayers,
+        timer: config.timer,
+      },
     },
     {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      withCredentials: true
+      withCredentials: true,
     }
   );
 
   router.push(`/game/${response.data.gameID}`);
+};
+
+const updateSettings = (newSettings) => {
+  Object.assign(config, newSettings); // Update config with new settings from the child component
 };
 </script>

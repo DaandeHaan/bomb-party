@@ -7,14 +7,18 @@ class GameManager {
 
   createGame(config) {
 
-    let difficulty = 'beginner'
+    let difficulty = 'easy'
+    let language = 'dutch'
 
     if (['baby', 'beginner', 'easy', 'medium', 'hard', 'expert', 'hardcore'].includes(config.difficulty))
       difficulty = config.difficulty;
 
+    if (['dutch', 'english'].includes(config.language))
+      language = config.language;
+
     const settings = {
       diffuculty: difficulty,
-      language: config.language || 'dutch',
+      language: language,
       privateGame: config.privateGame || false,
       maxPlayers: config.maxPlayers || 8,
       defaultTimer: config.timer || 10,      
