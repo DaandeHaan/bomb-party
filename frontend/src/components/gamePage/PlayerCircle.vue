@@ -14,7 +14,7 @@
       <!-- Display the segmented word above the player -->
       <div class="mb-2">
         <span
-          v-for="(segment, idx) in getHighlightedSegments(player.currentText)"
+          v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
           :key="idx"
           :class="segment.isHint ? 'text-orange-500 font-bold' : 'text-black'"
         >
@@ -79,15 +79,20 @@ const getPlayerPosition = (index, totalPlayers) => {
   };
 };
 
-// Function to highlight segments of the word based on the current hint
-const getHighlightedSegments = (word) => {
+const getHighlightedSegments = (word, player) => {
+  // For non-current players, return their stored staticSegments
+  if (!player.currentPlayer) {
+    return player.staticSegments || [{ text: word, isHint: false }];
+  }
+
+  // If currentPlayer, process the word dynamically
   if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
   const hint = props.currentHint.trim(); // Remove any extra spaces or newline characters
   const segments = [];
   let remainingWord = word;
 
-  console.log(`Processing word: "${word}" with sanitized hint: "${hint}"`);
+  console.log(`Processing word: "${word}" for currentPlayer with hint: "${hint}"`);
 
   while (remainingWord.length > 0) {
     if (remainingWord.startsWith(hint)) {
@@ -100,8 +105,10 @@ const getHighlightedSegments = (word) => {
     }
   }
 
+  // Update the player's staticSegments after processing
+  player.staticSegments = segments;
+
   console.log(`Segments for "${word}":`, segments);
   return segments;
 };
-
 </script>
