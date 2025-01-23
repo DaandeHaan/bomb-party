@@ -16,6 +16,7 @@ class Game {
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = this.defaultTimer;
+    this.endTime = null;
     
     this.timerInterval = null;
   }
@@ -92,7 +93,8 @@ class Game {
   startGame() {
     if (this.gameState !== 'lobby')
       return;
-
+    if (this.players.filter(p => p.isReady).length < 2)
+      console.log("Not enough players")
     if (this.players.filter(p => p.isReady).length < 2)
       return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {success: false, message: 'NOT_ENOUGH_PLAYERS'});
 
@@ -234,9 +236,22 @@ class Game {
     if (this.timerInterval)
       clearTimeout(this.timerInterval);
 
+    this.endTime = Date.now() + (this.timer * 1000);
+
     this.timerInterval = setTimeout(() => {
       this.NotInTime();
     }, this.timer * 1000); // Convert to milliseconds
+  }
+
+  getRemainingTime() {
+    if (!this.endTime) {
+      return 0; // No timeout has been set
+    }
+  
+    const now = Date.now();
+    const remainingTime = this.endTime - now;
+  
+    return remainingTime > 0 ? remainingTime : 0; // Ensure we don't return negative values
   }
 
   resetValues() {
@@ -244,6 +259,7 @@ class Game {
     this.guessedWords = [];
     this.currentHint = "";
     this.timer = this.defaultTimer;
+    this.endTime = null;
 
     this.players.forEach(p => {
       p.isReady = false;
@@ -257,10 +273,10 @@ class Game {
     const socketService = require("../services/socketService");
     socketService.sendGameObject(this);
   }
-
+  
   sendMessage(user, message) {
     const socketService = require("../services/socketService");
-    socketService.sendMessage(user, message);
+    socketService.sendMessage(`${user}-${this.gameID}`, message);
   }
 
   getGame() {
@@ -277,7 +293,8 @@ class Game {
       players: players,
       currentHint: this.currentHint,
       guessedWords: this.guessedWords,
-      timer: this.timer,
+      defaultTimer: this.timer,
+      remainingTime: this.getRemainingTime(),
       diffuculty: this.diffuculty,
     }
   }
