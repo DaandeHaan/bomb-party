@@ -1,8 +1,14 @@
 <template>
-  <div class="relative flex items-center justify-center h-screen bg-gray-100">
-    <!-- Circle for players -->
-    <PlayerCircle :players="players" :gameHasStarted="gameHasStarted" :lastWinner="lastWinner" :currentHint="currentHint" />
-    
+  <div class="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
+    <!-- Player Circle -->
+    <PlayerCircle
+      :players="players"
+      :gameHasStarted="gameHasStarted"
+      :lastWinner="lastWinner"
+      :currentHint="currentHint"
+    />
+
+    <!-- Input Field -->
     <InputField
       v-model="inputWord"
       :isCurrentPlayer="isCurrentPlayer"
@@ -15,20 +21,22 @@
       @toggleReadyUp="toggleReadyUp"
     />
 
-
-    <!-- Game State and Timer -->
-    <GameStateTimer v-if="gameState === 'playing'" :timer="timer" />
+    <!-- Game State Timer -->
+    <GameStateTimer
+    :class="[!gameHasStarted ? 'hidden' : '']"
+    ref="gameStateTimer" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, render } from "vue";
 import { useRoute } from "vue-router";
 import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
 import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
 
 // State Variables
+const gameStateTimer = ref(null);
 const players = ref([]);
 const currentLetters = ref("Letters");
 const inputWord = ref("");
@@ -58,17 +66,36 @@ const connectWebSocket = () => {
   ws.value = new WebSocket(webSocketUrl);
 
   ws.value.onopen = () => console.log("WebSocket connected");
-  ws.value.onmessage = event => renderGameObject(JSON.parse(event.data));
+  ws.value.onmessage = event => checkMessageType(JSON.parse(event.data));
   ws.value.onerror = error => console.error("WebSocket error:", error);
   ws.value.onclose = () => console.log("WebSocket connection closed");
 };
 
+const checkMessageType = message =>{
+  if(message.type === 'gameObj'){
+    renderGameObject(message.data)
+  }
+};
+
 const renderGameObject = game => {
+  console.log(game)
+  checkForNextTurn(game);
   players.value = game.players || players.value;
   currentLetters.value = game.letters || currentLetters.value;
   gameState.value = game.gameState || gameState.value;
   timer.value = game.timer ?? timer.value;
   currentHint.value = game.currentHint || currentHint.value;
+};
+
+const checkForNextTurn = (game) => {
+  const incomingCurrentPlayer = game.players?.find(player => player.currentPlayer);
+
+  const localCurrentPlayer = players.value.find(player => player.currentPlayer);
+
+  if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
+    gameStateTimer.value.startTimer(game.timer);
+  } else {
+  }
 };
 
 const sendWord = () => {
