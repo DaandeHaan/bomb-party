@@ -1,30 +1,51 @@
 <template>
-  <div class="absolute bottom-10 w-full flex flex-col items-center space-y-4">
-    <input
-      type="text"
-      :value="modelValue"
-      @input="handleInput"
-      placeholder="Enter your word..."
-      class="p-3 w-3/4 max-w-md border rounded-lg text-center shadow focus:outline-none focus:ring focus:ring-blue-400"
-      @keydown.enter="emit('sendWord')"
-      :disabled="!isCurrentPlayer && gameHasStarted"
-    />
-    <button
-      v-if="!gameHasStarted && isYouAndOwner"
-      class="bg-green-600 text-white text-lg font-semibold py-2 px-6 rounded-lg shadow hover:bg-green-700 transition"
-      @click="emit('gameStart')"
-    >
-      Start Game
-    </button>
-    <button
-      v-if="!gameHasStarted"
-      :class="[currentPlayer?.isReady ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700', 'text-white font-semibold py-2 px-8 rounded-lg shadow transition']"
-      @click="emit('toggleReadyUp')"
-    >
-      {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
-    </button>
+  <div class="absolute bottom-10 w-full px-6">
+    <!-- Input Field and Action Buttons -->
+    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+      <!-- Input Field -->
+      <input
+        :value="modelValue"
+        @input="handleInput"
+        @keydown.enter="emit('sendWord')"
+        :disabled="!isCurrentPlayer || !gameHasStarted"
+        type="text"
+        placeholder="Type your word here..."
+        class="max-w-lg flex-1 py-3 px-4 rounded-lg bg-[#2A2A40] text-[#D9E0EE] placeholder-[#7AA2F7] border border-[#7AA2F7] focus:outline-none focus:ring-2 focus:ring-[#A28DEB] focus:border-transparent transition-all duration-300"
+      />
+
+      <!-- Send Word Button -->
+      <button
+        @click="$emit('sendWord')"
+        :disabled="!modelValue.trim() || !isCurrentPlayer || !gameHasStarted"
+        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 disabled:opacity-50 transition-all duration-300"
+      >
+        Send Word
+      </button>
+    </div>
+
+    <!-- Game Actions -->
+    <div class="mt-6 flex justify-center gap-4">
+      <!-- Start Game Button -->
+      <button
+        v-if="isYouAndOwner && !gameHasStarted"
+        @click="$emit('gameStart')"
+        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+      >
+        Start Game
+      </button>
+
+      <!-- Ready Up Button -->
+      <button
+        v-if="!gameHasStarted"
+        @click="$emit('toggleReadyUp')"
+        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+      >
+        Ready Up
+      </button>
+    </div>
   </div>
 </template>
+
 
 <script setup>
 const props = defineProps({

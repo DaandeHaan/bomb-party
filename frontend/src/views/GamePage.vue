@@ -1,8 +1,14 @@
 <template>
-  <div class="relative flex items-center justify-center h-screen bg-gray-100">
-    <!-- Circle for players -->
-    <PlayerCircle :players="players" :gameHasStarted="gameHasStarted" :lastWinner="lastWinner" :currentHint="currentHint" />
-    
+  <div class="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
+    <!-- Player Circle -->
+    <PlayerCircle
+      :players="players"
+      :gameHasStarted="gameHasStarted"
+      :lastWinner="lastWinner"
+      :currentHint="currentHint"
+    />
+
+    <!-- Input Field -->
     <InputField
       v-model="inputWord"
       :isCurrentPlayer="isCurrentPlayer"
@@ -15,8 +21,8 @@
       @toggleReadyUp="toggleReadyUp"
     />
 
-
-    <GameStateTimer 
+    <!-- Game State Timer -->
+    <GameStateTimer
     :class="[!gameHasStarted ? 'hidden' : '']"
     ref="gameStateTimer" />
   </div>

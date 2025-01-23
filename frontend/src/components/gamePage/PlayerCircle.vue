@@ -1,51 +1,52 @@
 <template>
-  <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-gray-300 bg-white shadow-lg">
-    <!-- Ready Players -->
+  <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-[#2A2A40] bg-[#1E1E2E] shadow-xl">
+    <!-- Players -->
     <div
       v-for="(player, index) in readyPlayers"
+      :key="index"
       :style="getPlayerPosition(index, players.length)"
-      :class="[ 
-        'absolute text-sm font-semibold py-2 px-4 rounded-lg shadow text-center',
-        player.currentPlayer ? 'bg-green-500 text-white' : 'bg-gray-300',
-        player.isYou ? 'border-2 border-red-600' : '',
-        player.lives === 0 ? 'bg-gray-500 text-white' : ''
+      class="absolute flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-[#2A2A40] text-[#C8D1E0]"
+      :class="[
+        player.currentPlayer ? 'ring-2 ring-[#F7768E]' : '',
+        player.lives === 0 ? 'bg-[#2A2A40] text-gray-400 opacity-50' : ''
       ]"
     >
-      <!-- Display the segmented word above the player -->
-      <div class="mb-2">
+      <!-- Word Segments -->
+      <div class="mb-2 flex flex-wrap">
         <span
           v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
           :key="idx"
-          :class="segment.isHint ? 'text-orange-500 font-bold' : 'text-black'"
+          class="text-sm"
+          :class="segment.isHint ? 'text-[#FFD700] font-bold' : 'text-[#C8D1E0]'"
         >
           {{ segment.text }}
         </span>
       </div>
 
-      <!-- Display player's lives -->
-      <div class="text-xs font-medium text-gray-600 mb-1">
-        <span v-for="i in player.lives" :key="i" class="text-red-500">❤️</span>
+      <!-- Player Lives -->
+      <div class="text-xs font-medium mb-1">
+        <span v-for="i in player.lives" :key="i" class="text-[#F7768E]">❤️</span>
       </div>
-      
-      <!-- Display player's username -->
-      <div class="text-xs font-medium text-gray-600">
-        {{ player.username }}
-      </div>
+
+      <!-- Player Name -->
+      <div class="text-xs font-medium"
+          :class="player.isYou ? 'text-red-500' : ''">
+        {{ player.username }}</div>
     </div>
 
     <!-- Last Winner -->
     <div
       v-if="!gameHasStarted && lastWinner"
-      class="absolute flex flex-col items-center bg-yellow-500 text-white text-2xl font-bold py-4 px-8 rounded-full shadow-lg text-center"
+      class="absolute flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xl font-bold py-4 px-6 rounded-full shadow-lg"
     >
       🏆 Last Winner 🏆
       <div class="text-lg font-medium">{{ lastWinner.username }}</div>
     </div>
 
-    <!-- Letters in the middle -->
+    <!-- Current Hint -->
     <div
       v-else
-      class="relative flex flex-col items-center bg-blue-500 text-white text-4xl font-bold py-6 px-12 rounded-full shadow-lg text-center"
+      class="absolute flex items-center justify-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
     >
       {{ currentHint }}
     </div>
@@ -53,24 +54,25 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive } from "vue";
 
 const props = defineProps({
-  players: Array, // List of players
-  gameHasStarted: Boolean, // Whether the game has started
-  lastWinner: Object, // Last winner's information
-  currentHint: String, // Current hint string
+  players: Array,
+  gameHasStarted: Boolean,
+  lastWinner: Object,
+  currentHint: String,
 });
+
+const playerSegments = reactive({});
 
 // Filter players who are ready
-const readyPlayers = computed(() => {
-  return props.players.filter((player) => player.isReady);
-});
+const readyPlayers = computed(() =>
+  props.players.filter((player) => player.isReady)
+);
 
-// Calculate positions for players in a circular layout
 const getPlayerPosition = (index, totalPlayers) => {
   const angle = (index / totalPlayers) * 360;
-  const radius = 300; // Circle radius
+  const radius = 300;
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
@@ -80,35 +82,34 @@ const getPlayerPosition = (index, totalPlayers) => {
 };
 
 const getHighlightedSegments = (word, player) => {
-  // For non-current players, return their stored staticSegments
-  if (!player.currentPlayer) {
-    return player.staticSegments || [{ text: word, isHint: false }];
-  }
-
-  // If currentPlayer, process the word dynamically
   if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
-  const hint = props.currentHint.trim(); // Remove any extra spaces or newline characters
+  const hint = props.currentHint.trim();
+
+  if (!playerSegments[player.id]) {
+    playerSegments[player.id] = [{ text: word, isHint: false }];
+  }
+
+  if (!player.currentPlayer) {
+    return playerSegments[player.id];
+  }
+
   const segments = [];
   let remainingWord = word;
-
-  // console.log(`Processing word: "${word}" for currentPlayer with hint: "${hint}"`);
 
   while (remainingWord.length > 0) {
     if (remainingWord.startsWith(hint)) {
       segments.push({ text: hint, isHint: true });
       remainingWord = remainingWord.slice(hint.length);
     } else {
-      const nextNonHintSegment = remainingWord.split(hint, 1)[0]; // Take up to the first hint match
+      const nextNonHintSegment = remainingWord.split(hint, 1)[0];
       segments.push({ text: nextNonHintSegment, isHint: false });
       remainingWord = remainingWord.slice(nextNonHintSegment.length);
     }
   }
 
-  // Update the player's staticSegments after processing
-  player.staticSegments = segments;
+  playerSegments[player.id] = segments;
 
-  // console.log(`Segments for "${word}":`, segments);
   return segments;
 };
 </script>
