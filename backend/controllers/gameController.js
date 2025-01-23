@@ -25,6 +25,9 @@ router.post('/:gameID/connect/', (req, res) => {
   if (!game)
     return res.status(404).json({success: false, message: 'Game not found'});
 
+  if (game.players.length >= game.maxPlayers)
+    return res.status(400).json({success: false, message: 'Game is full'});
+
   res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + req.body.username});
 });
 

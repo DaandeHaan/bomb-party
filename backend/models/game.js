@@ -9,7 +9,7 @@ class Game {
     
     this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
-    this.privateGame = settings.privateGame;
+    this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
     this.defaultTimer = settings.defaultTimer;
 
@@ -24,6 +24,10 @@ class Game {
   }
 
   addPlayerToGame(sessionID, username) {
+
+    // Check if the game is full
+    if (this.players.length >= this.maxPlayers)
+      return false;
 
     const player = {
       id: uuidv4(),
@@ -299,6 +303,7 @@ class Game {
       remainingTime: this.getRemainingTime(),
       diffuculty: this.diffuculty,
       privateGame: this.privateGame,
+      maxPlayers: this.maxPlayers,
     }
   }
 }

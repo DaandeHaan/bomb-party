@@ -30,7 +30,12 @@ class GameManager {
   }
 
   getGames() {
-    return this.games;
+    let games = [];
+    for (const game of this.games) {
+      if (!game.privateGame)
+        games.push(game);
+    }
+    return games;
   }
 
   deleteGame(gameID) {

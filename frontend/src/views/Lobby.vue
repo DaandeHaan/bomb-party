@@ -105,9 +105,9 @@ const createLobby = async () => {
     `http://localhost:3000/api/game/create`,
     { settings: { 
         difficulty: 'beginner',
-        language: 'dutch',
+        language: 'english',
         privateGame: false,
-        maxPlayers: 8,
+        maxPlayers: 1,
         timer: 10,      
       } 
     },

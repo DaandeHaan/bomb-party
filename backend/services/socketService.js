@@ -29,7 +29,11 @@ class SocketService {
       this.clients.set(`${sessionID}-${game.gameID}`, ws);
       this.clientToGame.set(`${sessionID}-${game.gameID}`, game);
   
-      game.addPlayerToGame(sessionID, username);
+      const success = game.addPlayerToGame(sessionID, username);
+
+      if (!success) {
+        return ws.close();
+      }
   
       this.sendGameObject({...game});
       
