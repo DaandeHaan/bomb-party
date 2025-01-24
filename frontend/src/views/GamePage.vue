@@ -1,5 +1,5 @@
 <template>
-  <div id="shake" class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
+  <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
     <!-- Player Circle -->
 
     <PlayerList :players="players" />
@@ -43,7 +43,7 @@ import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
 import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
 import { useToast } from "vue-toastification";
-import PlayerList from "../components/gamePage/playerList.vue";
+import PlayerList from "../components/gamePage/PlayerList.vue";
 
 // State Variables
 const gameStateTimer = ref(null);
@@ -81,7 +81,7 @@ const connectWebSocket = () => {
   ws.value.onopen = () => console.log("WebSocket connected");
   ws.value.onmessage = event => checkMessageType(JSON.parse(event.data));
   ws.value.onerror = error => console.error("WebSocket error:", error);
-  ws.value.onclose = () => route.push('/');
+  ws.value.onclose = () => route.push('lobby');
 };
 
 const checkMessageType = message =>{
@@ -101,6 +101,8 @@ const checkMessageType = message =>{
 
 const shakeScreen = () => {
   const element = document.getElementById('shake');
+
+  if (!element) return;
 
   element.classList.add('animate-shake');
 
@@ -136,10 +138,11 @@ const checkNextTurn = (game) => {
   const localCurrentPlayer = players.value.find(player => player.currentPlayer);
 
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
-    playSound("success");
     gameStateTimer.value.startTimer(game.timer);
-  } else {
-    // console.log("No turn change detected");
+  }
+
+  if (localCurrentPlayer?.lives != game.players?.find(player => player.id === localCurrentPlayer?.id)?.lives) {
+    playSound("error");
   }
 };
 

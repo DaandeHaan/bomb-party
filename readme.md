@@ -11,4 +11,3 @@ TODO:
 - Screen Effects
 - Responsive
 - Other player's typing is not cleared when word is wrong
-- Add list of players
