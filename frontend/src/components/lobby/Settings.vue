@@ -9,7 +9,7 @@
       <div>
         <label for="difficulty" class="text-text opacity-80 text-md font-normal">Difficulty</label>
         <select v-model="settings.difficulty" id="difficulty" class="w-full p-2 pl-0 text-text bg-transparent border-b border-primary-accent outline-none">
-          <option v-for="option in difficultyOptions" :value="option" :key="option">{{ option }}</option>
+          <option v-for="option in difficultyOptions" :value="option" :key="option" class="bg-background text-text">{{ option }}</option>
         </select>
       </div>
 
@@ -17,7 +17,7 @@
       <div>
         <label for="language" class="text-text opacity-80 text-md font-normal">Language</label>
         <select v-model="settings.language" id="language" class="w-full p-2 pl-0 text-text bg-transparent border-b border-primary-accent outline-none">
-          <option v-for="option in languageOptions" :value="option" :key="option">{{ option }}</option>
+          <option v-for="option in languageOptions" :value="option" :key="option" class="bg-background text-text">{{ option }}</option>
         </select>
       </div>
 
