@@ -174,6 +174,12 @@ class Game {
       return 
     }
 
+    if (word.length >= 6) {
+      this.sendMessage(this.players.map(player => player.userID), {type: 'EXCELENT_WORD_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID, word: word});
+    } else {
+      this.sendMessage(this.players.map(player => player.userID), {type: 'WORD_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID, word: word});
+    }
+
     // Add word to guessed words
     this.guessedWords.push(word);
 
