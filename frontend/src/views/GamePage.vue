@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
+  <div id="shake" class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
     <!-- Player Circle -->
     <PlayerCircle
       :players="players"
@@ -39,6 +39,7 @@ import { useRoute } from "vue-router";
 import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
 import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
+import { useToast } from "vue-toastification";
 
 // State Variables
 const gameStateTimer = ref(null);
@@ -55,6 +56,7 @@ const inputFieldRef = ref(null);
 // Route Parameters
 const route = useRoute();
 const webSocketUrl = route.params.webSocketUrl;
+const toast = useToast();
 
 // Computed Properties and Methods (Shared Logic)
 const readyPlayers = computed(() => players.value.filter(player => player.isReady));
@@ -75,13 +77,37 @@ const connectWebSocket = () => {
   ws.value.onopen = () => console.log("WebSocket connected");
   ws.value.onmessage = event => checkMessageType(JSON.parse(event.data));
   ws.value.onerror = error => console.error("WebSocket error:", error);
-  ws.value.onclose = () => console.log("WebSocket connection closed");
+  ws.value.onclose = () => route.push('/');
 };
 
 const checkMessageType = message =>{
   if(message.type === 'gameObj'){
     renderGameObject(message.data)
   }
+  if(message.type === 'NOT_ENOUGH_PLAYERS'){
+    shakeScreen();
+    playSound("error");
+    toast.error("Not enough players to start the game.");
+  }
+  if(message.type === "WORD_NOT_FOUND") {
+    shakeScreen();
+    playSound("error");
+  }
+};
+
+const shakeScreen = () => {
+  const element = document.getElementById('shake');
+
+  element.classList.add('animate-shake');
+
+  setTimeout(() => {
+    element.classList.remove('animate-shake');
+  }, 500);
+}
+
+const playSound = (sound) => {
+  const audio = new Audio(`/assets/${sound}.mp3`);
+  audio.play();
 };
 
 const renderGameObject = game => {
@@ -106,6 +132,7 @@ const checkNextTurn = (game) => {
   const localCurrentPlayer = players.value.find(player => player.currentPlayer);
 
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
+    playSound("success");
     gameStateTimer.value.startTimer(game.timer);
   } else {
     // console.log("No turn change detected");
