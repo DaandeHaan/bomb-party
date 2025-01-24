@@ -12,4 +12,3 @@ TODO:
 - Screen Effects
 - Responsive
 - Other player's typing is not cleared when word is wrong
-- Same hint is being selected
