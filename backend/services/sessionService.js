@@ -18,7 +18,6 @@ class sessionService {
 
     const usernames = data.split('\n');
     const userName = usernames[Math.floor(Math.random() * usernames.length)];
-    console.log("un: ", userName);
     return userName;
   }
 
