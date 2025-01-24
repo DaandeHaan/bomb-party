@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import GameCard from './gameCard.vue';
+import GameCard from './GameCard.vue';
 import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import axios from 'axios';
