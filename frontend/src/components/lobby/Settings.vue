@@ -33,6 +33,13 @@
         <input type="number" v-model="settings.defaultTimer" id="timer" class="w-full p-2 pl-0 text-text bg-transparent border-b border-primary-accent outline-none"></input>
       </div>
 
+      <!-- Field Lives -->
+      <div>
+        <label for="lives" class="text-text opacity-80 text-md font-normal">Lives</label>
+        <input type="number" v-model="settings.lives" id="lives" class="w-full p-2 pl-0 text-text bg-transparent border-b border-primary-accent outline-none"></input>
+      </div>
+
+
       <!-- Buttons Private Game -->
       <div class="flex justify-between flex-col gap-2">
         <label for="timer" class="text-text opacity-80 text-md font-normal">Publicity</label>
@@ -69,7 +76,8 @@ export default {
         language,
         privateGame: this.config.privateGame || false,
         maxPlayers: this.config.maxPlayers || 8,
-        defaultTimer: this.config.timer || 10,
+        defaultTimer: this.config.defaultTimer || 10,
+        lives: this.config.lives || 2,
       },
     };
   },

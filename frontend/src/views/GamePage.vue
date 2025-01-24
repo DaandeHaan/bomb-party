@@ -7,6 +7,7 @@
       :lastWinner="lastWinner"
       :currentHint="currentHint"
       :isCurrentPlayer="isCurrentPlayer"
+      :defaultLives="defaultLives"
     />
 
     <!-- Input Field -->
@@ -45,6 +46,7 @@ const gameState = ref("lobby");
 const timer = ref(10);
 const currentHint = ref("");
 const ws = ref(null);
+const defaultLives = ref(2);
 
 // Route Parameters
 const route = useRoute();

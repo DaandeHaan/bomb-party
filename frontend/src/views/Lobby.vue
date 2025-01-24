@@ -21,6 +21,7 @@ const config = reactive({
   privateGame: false,
   maxPlayers: 8,
   timer: 10,
+  lives: 2,
 });
 
 const updateSettings = (newSettings) => {

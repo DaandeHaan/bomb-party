@@ -45,24 +45,20 @@
 </template>
 
 <script setup>    
-  defineProps({
-    game: {
-      type: Object,
-      required: true
-    }
-  });
+defineProps({
+  game: {
+    type: Object,
+    required: true
+  }
+});
 
-  import { useToast } from 'vue-toastification';
-  import { useRouter } from 'vue-router';
-  
-  const toast = useToast();
-  const router = useRouter();
+import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
 
-  const joinLobby = (code) => {
-    console.log(code)
-  if (!username.value.trim())
-    return toast.error("Please enter your name before joining a lobby!");
+const toast = useToast();
+const router = useRouter();
 
+const joinLobby = (code) => {
   router.push(`/game/${code}`);
 };
 </script>

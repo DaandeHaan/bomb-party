@@ -65,9 +65,6 @@ const joinLobby = () => {
   if (!code.value.trim())
     return toast.error("Please enter a valid lobby code.");
 
-  if (!username.value.trim())
-    return toast.error("Please enter your name before joining a lobby!");
-
   router.push(`/game/${code.value}`);
 };
 
@@ -81,7 +78,8 @@ const createLobby = async () => {
         language: props.config.language,
         privateGame: props.config.privateGame,
         maxPlayers: props.config.maxPlayers,
-        timer: props.config.timer,
+        defaultTimer: props.config.defaultTimer,
+        lives: props.config.lives,
       },
     },
     {

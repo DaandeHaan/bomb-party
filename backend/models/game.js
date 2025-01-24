@@ -6,13 +6,14 @@ class Game {
     this.gameID = Array.from({ length: 4 }, () => 
       String.fromCharCode(97 + Math.floor(Math.random() * 26)) // Random letter from a-z
     ).join('').toUpperCase(); // Random 4-letter string
-    
+
     // Settings
     this.diffuculty = settings.diffuculty; // baby, beginner, easy, medium, hard, expert, hardcore
     this.language = settings.language;
     this.defaultTimer = settings.defaultTimer;
     this.privateGame = settings.privateGame; // Show in lobby or not
     this.maxPlayers = settings.maxPlayers;
+    this.lives = settings.lives;
 
     // Game Variables
     this.gameState = 'lobby';
@@ -291,6 +292,7 @@ class Game {
       diffuculty: this.diffuculty,
       privateGame: this.privateGame,
       maxPlayers: this.maxPlayers,
+      lives: this.lives,
     }
   }
 }

@@ -10,6 +10,8 @@ class GameManager {
     let difficulty = 'easy'
     let language = 'dutch'
     let maxPlayers = 8;
+    let timer = 10;
+    let lives = 2;
 
     if (['baby', 'beginner', 'easy', 'medium', 'hard', 'expert', 'hardcore'].includes(config.difficulty))
       difficulty = config.difficulty;
@@ -20,12 +22,20 @@ class GameManager {
     if (config.maxPlayers && config.maxPlayers > 1 && config.maxPlayers <= 8)
       maxPlayers = config.maxPlayers;
 
+    if (config.defaultTimer && !isNaN(config.defaultTimer) && config.defaultTimer > 0)
+      timer = config.defaultTimer;
+
+    if (config.lives && !isNaN(config.lives) && config.lives > 0)
+      lives = config.lives;
+
+
     const settings = {
       diffuculty: difficulty,
       language: language,
       privateGame: config.privateGame || false,
       maxPlayers: maxPlayers,
-      defaultTimer: config.timer || 10,      
+      defaultTimer: timer,      
+      lives: lives,
     }
 
     const game = new Game(settings);
