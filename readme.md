@@ -7,3 +7,5 @@ TODO:
 - Redirect user to / when there is no soccect connection
 - Random Usernames
 - Fix the message query in the lobby
+- Screen Effects
+- Responsive
