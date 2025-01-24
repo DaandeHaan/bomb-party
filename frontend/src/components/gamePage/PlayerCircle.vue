@@ -106,6 +106,10 @@ const getPlayerPosition = (index, totalPlayers) => {
 const getHighlightedSegments = (word, player) => {
   if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
+  if (!player.currentPlayer) {
+    return playerSegments[player.id] || [{ text: word, isHint: false }];
+  }
+
   const hint = props.currentHint.trim();
 
   const segments = [];
@@ -121,11 +125,7 @@ const getHighlightedSegments = (word, player) => {
       remainingWord = remainingWord.slice(nextNonHintSegment.length);
     }
   }
-
-  // Cache segments only if necessary, but do it outside of template logic
-  if (player.currentPlayer) {
-    playerSegments[player.id] = segments;
-  }
+  playerSegments[player.id] = segments;
 
   return segments;
 };
