@@ -6,6 +6,7 @@
       :gameHasStarted="gameHasStarted"
       :lastWinner="lastWinner"
       :currentHint="currentHint"
+      :isCurrentPlayer="isCurrentPlayer"
     />
 
     <!-- Input Field -->

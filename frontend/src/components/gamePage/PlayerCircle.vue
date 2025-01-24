@@ -1,6 +1,19 @@
 <template>
-  <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-[#2A2A40] bg-[#1E1E2E] shadow-xl">
-    <!-- Players -->
+  <div :class="[
+    'relative', 
+    'w-[600px]', 
+    'h-[600px]', 
+    'flex', 
+    'items-center', 
+    'justify-center', 
+    'rounded-full', 
+    'border-4', 
+    'border-[#2A2A40]', 
+    'bg-[#1E1E2E]', 
+    'shadow-xl', 
+    { 'border-success': isCurrentPlayer }
+  ]">
+  <!-- Players -->
     <div
       v-for="(player, index) in readyPlayers"
       :key="index"
@@ -61,6 +74,7 @@ const props = defineProps({
   gameHasStarted: Boolean,
   lastWinner: Object,
   currentHint: String,
+  isCurrentPlayer: Boolean, // Indicates if this is the current player's turn
 });
 
 const playerSegments = reactive({});
