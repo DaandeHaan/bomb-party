@@ -20,7 +20,7 @@
       :style="getPlayerPosition(index, players.length)"
       class="absolute flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-[#2A2A40] text-[#C8D1E0]"
       :class="[
-        player.currentPlayer ? 'ring-2 ring-[#F7768E]' : '',
+        player.currentPlayer ? 'ring-2 ring-error' : '',
         player.lives === 0 ? 'bg-[#2A2A40] text-gray-400 opacity-50' : ''
       ]"
     >
