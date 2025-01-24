@@ -88,6 +88,7 @@ class SocketService {
   }
 
   sendMessage(user, message) {
+    console.log(user, message)
     const ws = this.clients.get(user);
     this.send(ws, message);
   }
@@ -127,7 +128,7 @@ class SocketService {
       this.sendGameObject(this.clientToGame.get(`${sessionID}-${gameID}`));
 
     } catch (error) {
-      console.error(`Failed to parse message from ${sessionID}:`, error);
+      console.error(`Failed to parse message from ${sessionID}-${gameID}:`, error);
     }
   }
 }

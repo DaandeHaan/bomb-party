@@ -48,14 +48,19 @@ class Game {
     
     this.sendGameObject();
 
+    this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_JOINED', id: player.id, username: player.username});
+
     return true;
 
   }
 
   removePlayerFromGame(sessionID) {
 
+    // Get the player
+    const player = this.players.find(p => p.sessionID === sessionID);
+
     // Check if the player was the current player
-    if (this.players.find(p => p.sessionID === sessionID).currentPlayer)
+    if (player.currentPlayer)
       this.nextTurn();
 
     this.players = this.players.filter(p => p.sessionID !== sessionID);
@@ -68,6 +73,8 @@ class Game {
     this.players[0].isOwner = true;
 
     this.sendGameObject();
+
+    this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_LEFT', id: player.id, username: player.username});
   }
 
   readyUp(player) {
@@ -104,6 +111,8 @@ class Game {
     this.timer = this.defaultTimer;
 
     this.startTimer();
+
+    this.sendMessage(this.players.map(player => player.sessionID), {type: 'GAME_STARTED'});
   }
 
   checkWinner() {
@@ -128,6 +137,9 @@ class Game {
     clearTimeout(this.timerInterval);
 
     this.sendGameObject();
+
+    this.sendMessage(this.players.map(player => player.sessionID), {type: 'GAME_FINISHED', id: winner.id});
+
     return true;
   }
 
@@ -156,28 +168,28 @@ class Game {
     // Check if word has already been guessed
     if (this.guessedWords.map(w => w.toLowerCase()).includes(word)){
       this.setText(currentPlayer, "")
-      this.sendMessage(this.players.map(player => player.userID), {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
     
     // Check if hint is in the word (case-insensitive)
     if (!word.includes(this.currentHint.toLowerCase().trim())){
       this.setText(currentPlayer, "")
-      this.sendMessage(this.players.map(player => player.userID), {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
     
     // Check if word exists using wordService.checkWord (case-insensitive)
     if (!wordService.checkWord(this.currentHint, this.language, word)) {
       this.setText(currentPlayer, "")
-      this.sendMessage(this.players.map(player => player.userID), {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
 
     if (word.length >= 6) {
-      this.sendMessage(this.players.map(player => player.userID), {type: 'EXCELENT_WORD_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID, word: word});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'EXCELENT_WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
     } else {
-      this.sendMessage(this.players.map(player => player.userID), {type: 'WORD_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID, word: word});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
     }
 
     // Add word to guessed words
@@ -229,6 +241,11 @@ class Game {
     // Remove Live
     this.players.find(p => p.currentPlayer === true).lives--;
 
+    if (this.player.find(p => p.currentPlayer === true).lives === 0)
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_DIED', id: this.players.find(p => p.currentPlayer === true).id});
+    else
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'NOT_IN_TIME', id: this.players.find(p => p.currentPlayer === true).id});
+
     if (this.checkWinner())
       return;
 
@@ -276,10 +293,16 @@ class Game {
   }
   
   sendMessage(user, message) {
-    if (Array.isArray(user))
-      user.forEach(u => this.sendMessage(u, message));
-
     const socketService = require("../services/socketService");
+
+    if (Array.isArray(user)) {
+      for (const u of user) {
+        socketService.sendMessage(`${u}-${this.gameID}`, message);
+      }
+
+      return;
+    }
+
     socketService.sendMessage(`${user}-${this.gameID}`, message);
   }
 

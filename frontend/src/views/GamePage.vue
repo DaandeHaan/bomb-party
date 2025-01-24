@@ -85,6 +85,8 @@ const connectWebSocket = () => {
 };
 
 const checkMessageType = message =>{
+
+  console.log(message)
   if(message.type === 'gameObj'){
     renderGameObject(message.data)
   }
