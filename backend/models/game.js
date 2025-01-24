@@ -156,21 +156,21 @@ class Game {
     // Check if word has already been guessed
     if (this.guessedWords.map(w => w.toLowerCase()).includes(word)){
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
       return 
     }
     
     // Check if hint is in the word (case-insensitive)
     if (!word.includes(this.currentHint.toLowerCase().trim())){
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
       return 
     }
     
     // Check if word exists using wordService.checkWord (case-insensitive)
     if (!wordService.checkWord(this.currentHint, this.language, word)) {
       this.setText(currentPlayer, "")
-      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND'});
+      this.sendMessage(currentPlayer.sessionID, {type: 'WORD_NOT_FOUND', userID: this.players.find(p => p.currentPlayer === true).userID});
       return 
     }
 
