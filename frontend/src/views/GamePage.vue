@@ -144,7 +144,6 @@ const focusInputField = () => {
   }
 };
 
-// Lifecycle Hooks
 onMounted(() => {
   connectWebSocket();
 
