@@ -1,6 +1,9 @@
 <template>
   <div id="shake" class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
     <!-- Player Circle -->
+
+    <PlayerList :players="players" />
+
     <PlayerCircle
       :players="players"
       :gameHasStarted="gameHasStarted"
@@ -40,6 +43,7 @@ import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
 import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
 import { useToast } from "vue-toastification";
+import PlayerList from "../components/gamePage/playerList.vue";
 
 // State Variables
 const gameStateTimer = ref(null);
