@@ -5,10 +5,24 @@ import './style.css';
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+/* import specific icons */
+import { faUser, faGlobe, faSkull, faHeart } from '@fortawesome/free-solid-svg-icons'
+
+/* add icons to the library */
+library.add(faUser, faGlobe, faSkull, faHeart)
+
 const app = createApp(App);
 
 app.use(Toast);
 
 app.use(index);
+
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app');

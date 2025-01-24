@@ -1,37 +1,57 @@
 <template>
-  <div class="relative w-[600px] h-[600px] flex items-center justify-center rounded-full border-4 border-[#2A2A40] bg-[#1E1E2E] shadow-xl">
-    <!-- Players -->
+  <div :class="[
+    'relative', 
+    'w-[600px]', 
+    'h-[600px]', 
+    'flex', 
+    'items-center', 
+    'justify-center', 
+    'rounded-full', 
+    'border-4', 
+    'border-[#2A2A40]', 
+    'bg-[#1E1E2E]', 
+    'shadow-xl', 
+    { 'border-success': isCurrentPlayer }
+  ]">
+  <!-- Players -->
     <div
       v-for="(player, index) in readyPlayers"
       :key="index"
       :style="getPlayerPosition(index, players.length)"
-      class="absolute flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-[#2A2A40] text-[#C8D1E0]"
-      :class="[
-        player.currentPlayer ? 'ring-2 ring-[#F7768E]' : '',
-        player.lives === 0 ? 'bg-[#2A2A40] text-gray-400 opacity-50' : ''
-      ]"
+      class="absolute"
     >
-      <!-- Word Segments -->
-      <div class="mb-2 flex flex-wrap">
-        <span
-          v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
-          :key="idx"
-          class="text-sm"
-          :class="segment.isHint ? 'text-[#FFD700] font-bold' : 'text-[#C8D1E0]'"
-        >
-          {{ segment.text }}
-        </span>
-      </div>
+      <div :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" class="max-w-96 min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
 
-      <!-- Player Lives -->
-      <div class="text-xs font-medium mb-1">
-        <span v-for="i in player.lives" :key="i" class="text-[#F7768E]">❤️</span>
-      </div>
+        <!-- Player Lives -->
+        <div class="absolute -top-6 text-xs font-medium mb-1 flex gap-1 w-full items-center justify-center">
+          <span v-for="i in defaultLives" :key="i" 
+                :class="{
+                  'text-error': i <= player.lives, 
+                  'text-gray-400 opacity-70': i > player.lives
+                }">
+            <font-awesome-icon icon="heart" class="text-lg" />
+          </span>
+        </div>
 
-      <!-- Player Name -->
-      <div class="text-xs font-medium"
-          :class="player.isYou ? 'text-red-500' : ''">
-        {{ player.username }}</div>
+        <!-- Player Name -->
+        <div class="text-md font-bold"
+            :class="player.isYou ? 'text-red-500' : ''">
+          {{ player.username }}
+        </div>
+
+        <!-- Word Segments -->
+        <div class="flex max-w-96 overflow-hidden flex-nowrap">
+          <span
+            v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
+            :key="idx"
+            class="text-sm"
+            :class="segment.isHint ? 'text-warning font-semibold' : 'text-[#C8D1E0]'"
+          >
+            {{ segment.text }}
+          </span>
+        </div>
+
+      </div>
     </div>
 
     <!-- Last Winner -->
@@ -61,6 +81,8 @@ const props = defineProps({
   gameHasStarted: Boolean,
   lastWinner: Object,
   currentHint: String,
+  isCurrentPlayer: Boolean, // Indicates if this is the current player's turn
+  defaultLives: Number,
 });
 
 const playerSegments = reactive({});
@@ -86,14 +108,6 @@ const getHighlightedSegments = (word, player) => {
 
   const hint = props.currentHint.trim();
 
-  if (!playerSegments[player.id]) {
-    playerSegments[player.id] = [{ text: word, isHint: false }];
-  }
-
-  if (!player.currentPlayer) {
-    return playerSegments[player.id];
-  }
-
   const segments = [];
   let remainingWord = word;
 
@@ -108,7 +122,10 @@ const getHighlightedSegments = (word, player) => {
     }
   }
 
-  playerSegments[player.id] = segments;
+  // Cache segments only if necessary, but do it outside of template logic
+  if (player.currentPlayer) {
+    playerSegments[player.id] = segments;
+  }
 
   return segments;
 };

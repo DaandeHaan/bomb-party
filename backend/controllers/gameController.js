@@ -1,5 +1,6 @@
 const express = require('express');
 const GameManager= require('../services/gameService');
+const sessionService = require('../services/sessionService');
 
 const router = express.Router();
 
@@ -28,7 +29,17 @@ router.post('/:gameID/connect/', (req, res) => {
   if (game.players.length >= game.maxPlayers)
     return res.status(400).json({success: false, message: 'Game is full'});
 
-  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + req.body.username});
+  // Check if there is a username provided
+  username = req.body.username
+  if (!username)
+    username = sessionService.getRandomUsername();
+
+  // While the username is already taken, get a new one
+  while (game.players.find(player => player.username === username))
+    username = sessionService.getRandomUsername();
+    
+
+  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + username});
 });
 
 router.get('/:gameID?', (req, res) => {

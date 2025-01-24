@@ -1,9 +1,15 @@
 {
   "scripts": {
-    "dev:backend": "npm run dev --prefix backend",
+    "start:frontend": "npm run start --prefix frontend",
+    "start:backend": "npm run dev --prefix backend",
+
     "dev:frontend": "npm run dev --prefix frontend",
-    "install:backend": "cd ./backend && npm install",
+    "dev:backend": "npm run dev --prefix backend",
+
     "install:frontend": "cd ./frontend && npm install",
+    "install:backend": "cd ./backend && npm install",
+
+    "start": "concurrently --names \"client,server\" --prefix-colors \"bgBlue.bold,bgGreen.bold\" \"npm run start:frontend\" \"npm run start:backend\"",
     "dev": "concurrently --names \"client,server\" --prefix-colors \"bgBlue.bold,bgGreen.bold\" \"npm run dev:frontend\" \"npm run dev:backend\"",
     "install": "concurrently --names \"client,server\" --prefix-colors \"bgBlue.bold,bgGreen.bold\" \"npm run install:frontend\" \"npm run install:backend\""	
   },
