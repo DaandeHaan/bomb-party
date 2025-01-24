@@ -1,5 +1,25 @@
 <template>
-  <div class="absolute bottom-10 w-full px-6">
+  <div class="absolute bottom-10 w-full px-6 gap-4 flex justify-center flex-col">
+      <!-- Game Actions -->
+      <div class="mt-6 flex justify-center gap-4">
+       <!-- Ready Up Button -->
+      <button
+        v-if="!gameHasStarted"
+        @click="$emit('toggleReadyUp')"
+        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+      >
+      {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
+      </button>
+
+      <!-- Start Game Button -->
+      <button
+        v-if="isYouAndOwner && !gameHasStarted"
+        @click="$emit('gameStart')"
+        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+      >
+        Start Game
+      </button>
+    </div>
     <!-- Input Field and Action Buttons -->
     <div class="flex flex-col md:flex-row items-center justify-center gap-4">
       <!-- Input Field -->
@@ -22,27 +42,6 @@
       >
         Send Word
       </button> -->
-    </div>
-
-    <!-- Game Actions -->
-    <div class="mt-6 flex justify-center gap-4">
-      <!-- Start Game Button -->
-      <button
-        v-if="isYouAndOwner && !gameHasStarted"
-        @click="$emit('gameStart')"
-        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
-      >
-        Start Game
-      </button>
-
-      <!-- Ready Up Button -->
-      <button
-        v-if="!gameHasStarted"
-        @click="$emit('toggleReadyUp')"
-        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
-      >
-      {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
-      </button>
     </div>
   </div>
 </template>
