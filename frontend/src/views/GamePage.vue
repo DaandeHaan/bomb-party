@@ -12,6 +12,7 @@
 
     <!-- Input Field -->
     <InputField
+      ref="inputFieldRef"
       v-model="inputWord"
       :isCurrentPlayer="isCurrentPlayer"
       :gameHasStarted="gameHasStarted"
@@ -25,13 +26,15 @@
 
     <!-- Game State Timer -->
     <GameStateTimer
-    :class="[!gameHasStarted ? 'hidden' : '']"
-    ref="gameStateTimer" />
+      :class="[!gameHasStarted ? 'hidden' : '']"
+      ref="gameStateTimer"
+    />
   </div>
 </template>
 
+
 <script setup>
-import { ref, computed, onMounted, onUnmounted, render } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
@@ -47,6 +50,7 @@ const timer = ref(10);
 const currentHint = ref("");
 const ws = ref(null);
 const defaultLives = ref(2);
+const inputFieldRef = ref(null);
 
 // Route Parameters
 const route = useRoute();
@@ -81,7 +85,6 @@ const checkMessageType = message =>{
 };
 
 const renderGameObject = game => {
-  console.log(game)
   checkForNextTurn(game);
   players.value = game.players || players.value;
   currentLetters.value = game.letters || currentLetters.value;
@@ -98,6 +101,7 @@ const checkForNextTurn = (game) => {
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
     gameStateTimer.value.startTimer(game.timer);
   } else {
+    // console.log("No turn change detected");
   }
 };
 
@@ -120,7 +124,30 @@ const gameStart = () => {
   ws.value?.send(JSON.stringify({ type: "gameStart" }));
 };
 
+// Focus the input field
+const focusInputField = () => {
+  if (inputFieldRef.value) {
+    const inputElement = inputFieldRef.value.$el.querySelector('input');
+    if (inputElement && !inputElement.disabled) {
+      inputElement.focus();
+    }
+  }
+};
+
 // Lifecycle Hooks
-onMounted(() => connectWebSocket());
-onUnmounted(() => ws.value?.close());
+onMounted(() => {
+  connectWebSocket();
+
+  // Add event listeners to focus input on click or window focus
+  window.addEventListener("click", focusInputField);
+  window.addEventListener("focus", focusInputField);
+});
+
+onUnmounted(() => {
+  ws.value?.close();
+
+  // Remove event listeners
+  window.removeEventListener("click", focusInputField);
+  window.removeEventListener("focus", focusInputField);
+});
 </script>

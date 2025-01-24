@@ -4,6 +4,7 @@
     <div class="flex flex-col md:flex-row items-center justify-center gap-4">
       <!-- Input Field -->
       <input
+        ref="alwaysFocusedInput"
         :value="modelValue"
         @input="handleInput"
         @keydown.enter="emit('sendWord')"
