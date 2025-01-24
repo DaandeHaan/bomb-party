@@ -15,13 +15,13 @@
       />
 
       <!-- Send Word Button -->
-      <button
+      <!-- <button
         @click="$emit('sendWord')"
         :disabled="!modelValue.trim() || !isCurrentPlayer || !gameHasStarted"
         class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 disabled:opacity-50 transition-all duration-300"
       >
         Send Word
-      </button>
+      </button> -->
     </div>
 
     <!-- Game Actions -->
