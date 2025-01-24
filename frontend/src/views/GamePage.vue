@@ -34,7 +34,7 @@
 
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, nextTick  } from "vue";
 import { useRoute } from "vue-router";
 import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
@@ -85,15 +85,22 @@ const checkMessageType = message =>{
 };
 
 const renderGameObject = game => {
-  checkForNextTurn(game);
+  checkNextTurn(game);
   players.value = game.players || players.value;
   currentLetters.value = game.letters || currentLetters.value;
   gameState.value = game.gameState || gameState.value;
   timer.value = game.timer ?? timer.value;
   currentHint.value = game.currentHint || currentHint.value;
+  
+  if (isCurrentPlayer.value) {
+    // Input field still has to enable, so focus after that tick
+    nextTick(() => { 
+      focusInputField();
+    });
+  }
 };
 
-const checkForNextTurn = (game) => {
+const checkNextTurn = (game) => {
   const incomingCurrentPlayer = game.players?.find(player => player.currentPlayer);
 
   const localCurrentPlayer = players.value.find(player => player.currentPlayer);
@@ -126,6 +133,9 @@ const gameStart = () => {
 
 // Focus the input field
 const focusInputField = () => {
+  if(!gameHasStarted)
+    return;
+
   if (inputFieldRef.value) {
     const inputElement = inputFieldRef.value.$el.querySelector('input');
     if (inputElement && !inputElement.disabled) {
@@ -138,7 +148,6 @@ const focusInputField = () => {
 onMounted(() => {
   connectWebSocket();
 
-  // Add event listeners to focus input on click or window focus
   window.addEventListener("click", focusInputField);
   window.addEventListener("focus", focusInputField);
 });
@@ -146,7 +155,6 @@ onMounted(() => {
 onUnmounted(() => {
   ws.value?.close();
 
-  // Remove event listeners
   window.removeEventListener("click", focusInputField);
   window.removeEventListener("focus", focusInputField);
 });
