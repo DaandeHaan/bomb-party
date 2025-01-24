@@ -48,9 +48,7 @@ const username = ref("");
 const code = ref("");
 
 watch(username, (newValue) => {
-  if (newValue) {
-    localStorage.setItem("username", newValue);
-  }
+  localStorage.setItem("username", newValue);
 });
 
 onMounted(() => {
