@@ -4,7 +4,12 @@ import GamePage from '../views/GamePage.vue';
 import axios from 'axios';
 
 const routes = [
-  { path: '/', name: 'lobby', component: Lobby },
+  { path: '/', name: 'lobby', component: Lobby, beforeEnter: (to, from, next) => {
+    // This code only runs when the user navigates or reload's the page, if does not get triggerd when the params change
+    console.log('Message:', to.query.message);
+
+    next();
+  }},
   { 
     path: '/game/:gameID',
     name: 'Game', 
