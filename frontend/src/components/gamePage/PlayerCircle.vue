@@ -100,14 +100,6 @@ const getHighlightedSegments = (word, player) => {
 
   const hint = props.currentHint.trim();
 
-  if (!playerSegments[player.id]) {
-    playerSegments[player.id] = [{ text: word, isHint: false }];
-  }
-
-  if (!player.currentPlayer) {
-    return playerSegments[player.id];
-  }
-
   const segments = [];
   let remainingWord = word;
 
@@ -122,7 +114,10 @@ const getHighlightedSegments = (word, player) => {
     }
   }
 
-  playerSegments[player.id] = segments;
+  // Cache segments only if necessary, but do it outside of template logic
+  if (player.currentPlayer) {
+    playerSegments[player.id] = segments;
+  }
 
   return segments;
 };
