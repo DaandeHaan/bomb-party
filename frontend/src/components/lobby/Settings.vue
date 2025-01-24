@@ -3,7 +3,7 @@
     <h1 class="text-text text-5xl font-bold pt-28 text-center">Settings</h1>
 
     <!-- Panel -->
-    <div class="bg-background w-[480px] border-2 border-border drop-shadow-xl p-8 flex flex-col gap-8">
+    <div class="bg-background w-[480px] border-2 border-border drop-shadow-xl p-8 flex flex-col gap-8 rounded">
 
       <!-- Field Difficulty -->
       <div>
