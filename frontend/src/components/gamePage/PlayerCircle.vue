@@ -29,7 +29,7 @@
                   'text-error': i <= player.lives, 
                   'text-gray-400 opacity-70': i > player.lives
                 }">
-            <font-awesome-icon icon="heart" class="text-sm" />
+            <font-awesome-icon icon="heart" class="text-lg" />
           </span>
         </div>
 
