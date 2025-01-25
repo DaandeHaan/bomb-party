@@ -241,7 +241,7 @@ class Game {
     // Remove Live
     this.players.find(p => p.currentPlayer === true).lives--;
 
-    if (this.player.find(p => p.currentPlayer === true).lives === 0)
+    if (this.players.find(p => p.currentPlayer === true).lives === 0)
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_DIED', id: this.players.find(p => p.currentPlayer === true).id});
     else
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'NOT_IN_TIME', id: this.players.find(p => p.currentPlayer === true).id});
