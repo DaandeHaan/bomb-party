@@ -129,4 +129,12 @@ const getHighlightedSegments = (word, player) => {
 
   return segments;
 };
+
+const shakePlayer = playerId => {
+
+
+}
+defineExpose({
+  shakePlayer,
+});
 </script>

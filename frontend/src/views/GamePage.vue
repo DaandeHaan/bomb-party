@@ -5,6 +5,7 @@
     <PlayerList :players="players" />
 
     <PlayerCircle
+      ref="playerCircle"
       :players="players"
       :gameHasStarted="gameHasStarted"
       :lastWinner="lastWinner"
@@ -46,6 +47,7 @@ import { useToast } from "vue-toastification";
 import PlayerList from "../components/gamePage/PlayerList.vue";
 
 // State Variables
+const playerCircle = ref(null);
 const gameStateTimer = ref(null);
 const players = ref([]);
 const currentLetters = ref("Letters");
@@ -96,9 +98,27 @@ const checkMessageType = message =>{
     toast.error("Not enough players to start the game.");
   }
   if(message.type === "WORD_NOT_FOUND") {
-    shakeScreen();
+    playerCircle.value.shakePlayer(message.id);
     playSound("error");
   }
+  if(message.type === "GAME_STARTED")
+  {
+    playSound("gameStart");
+  }
+  if(message.type === "WORD_FOUND")
+  {
+    playSound("succes");
+  }
+  if(message.type === "EXCELENT_WORD_FOUND")
+  {
+    playSound("excelent");
+  }
+  if(message.type === "PLAYER_DIED")
+  {
+    playSound("playerDied");
+  }
+
+
 };
 
 const shakeScreen = () => {
