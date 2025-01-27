@@ -107,7 +107,7 @@ const checkMessageType = message =>{
   }
   if(message.type === "WORD_FOUND")
   {
-    playSound("succes");
+    playSound("success");
   }
   if(message.type === "EXCELENT_WORD_FOUND")
   {
@@ -117,8 +117,10 @@ const checkMessageType = message =>{
   {
     playSound("playerDied");
   }
-
-
+  if(message.type === "GAME_FINISHED")
+  {
+    playSound("gameWon");
+  }
 };
 
 const shakeScreen = () => {
