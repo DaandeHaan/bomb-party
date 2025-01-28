@@ -167,8 +167,9 @@ const checkMessageType = async (message) =>{
   }
 
   if(message.type === "LIVE_LOST")
-  {
+  { 
     playSound("liveLost");
+    shakeScreen(message.id); // ! THIS DOES NOT WORK...
   }
 };
 
@@ -185,9 +186,10 @@ const shakeScreen = (elementID) => {
   }, 500);
 }
 
-const playSound = async (sound) => {
+const playSound = async (sound, volume = 0.5) => {
   const audio = new Audio(`/assets/${sound}.mp3`);
   audio.play();
+  audio.volume = volume;
   await new Promise(resolve => audio.addEventListener('ended', resolve));
 };
 
