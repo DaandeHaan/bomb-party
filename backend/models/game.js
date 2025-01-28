@@ -138,7 +138,12 @@ class Game {
 
     this.sendGameObject();
 
-    this.sendMessage(this.players.map(player => player.sessionID), {type: 'GAME_FINISHED', id: winner.id});
+    this.sendMessage(winner.sessionID, {type: 'GAME_FINISHED_WON', id: winner.id});
+
+    const losers = this.players.map(player => player.sessionID).filter(sessionID => sessionID !== winner.id);
+
+    this.sendMessage(losers, { type: 'GAME_FINISHED_LOST', losers: losers }
+    );
 
     return true;
   }
@@ -186,7 +191,7 @@ class Game {
       return 
     }
 
-    if (word.length >= 6) {
+    if (word.length >= 10) {
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'EXCELENT_WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
     } else {
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
@@ -244,7 +249,7 @@ class Game {
     if (this.players.find(p => p.currentPlayer === true).lives === 0)
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_DIED', id: this.players.find(p => p.currentPlayer === true).id});
     else
-      this.sendMessage(this.players.map(player => player.sessionID), {type: 'NOT_IN_TIME', id: this.players.find(p => p.currentPlayer === true).id});
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'LIVE_LOST', id: this.players.find(p => p.currentPlayer === true).id});
 
     if (this.checkWinner())
       return;

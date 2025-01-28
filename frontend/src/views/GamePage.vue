@@ -86,47 +86,97 @@ const connectWebSocket = () => {
   ws.value.onclose = () => route.push('lobby');
 };
 
-const checkMessageType = message =>{
+const checkMessageType = async (message) =>{
 
-  console.log(message)
   if(message.type === 'gameObj'){
     renderGameObject(message.data)
   }
+
+  if(message.type === 'PLAYER_JOINED')
+  {
+    playSound("playerJoined");
+  }
+
+  if(message.type === 'PLAYER_LEFT')
+  {
+    playSound("playerLeft");
+  }
+
   if(message.type === 'NOT_ENOUGH_PLAYERS'){
-    shakeScreen();
+    shakeScreen("startGameButton");
     playSound("error");
     toast.error("Not enough players to start the game.");
   }
-  if(message.type === "WORD_NOT_FOUND") {
-    playerCircle.value.shakePlayer(message.id);
-    playSound("error");
-  }
+
   if(message.type === "GAME_STARTED")
   {
-    playSound("gameStart");
+    await playSound("countdown");
+    playSound("beep");
+
+    // Remove all scale classes
+    const winnerElements = document.querySelectorAll('.scale-115');
+    winnerElements.forEach(element => {
+      element.classList.remove('scale-115');
+    });
+
+    const loserElements = document.querySelectorAll('.scale-85');
+    loserElements.forEach(element => {
+      element.classList.remove('scale-85');
+    });
   }
+
+  if(message.type === "GAME_FINISHED_WON")
+  {
+    playSound("gameWon");
+    const element = document.getElementById(message.id);
+    if (element) {
+      element.classList.add('scale-115');
+    }
+  }
+
+  if(message.type === "GAME_FINISHED_LOST")
+  {
+    playSound("gameLost");
+    message.losers.forEach(loser => {
+      const element = document.getElementById(loser);
+      if (element) {
+        element.classList.add('scale-85');
+      }
+    });
+  }
+
+
+  if(message.type === "WORD_NOT_FOUND") {
+    playSound("error");
+    shakeScreen(message.id);
+  }
+
   if(message.type === "WORD_FOUND")
   {
     playSound("success");
   }
+
   if(message.type === "EXCELENT_WORD_FOUND")
   {
     playSound("excelent");
   }
+
   if(message.type === "PLAYER_DIED")
   {
     playSound("playerDied");
   }
-  if(message.type === "GAME_FINISHED")
+
+  if(message.type === "LIVE_LOST")
   {
-    playSound("gameWon");
+    playSound("liveLost");
   }
 };
 
-const shakeScreen = () => {
-  const element = document.getElementById('shake');
+const shakeScreen = (elementID) => {
+  const element = document.getElementById(elementID);
 
-  if (!element) return;
+  if (!element) 
+    return;
 
   element.classList.add('animate-shake');
 
@@ -135,9 +185,10 @@ const shakeScreen = () => {
   }, 500);
 }
 
-const playSound = (sound) => {
+const playSound = async (sound) => {
   const audio = new Audio(`/assets/${sound}.mp3`);
   audio.play();
+  await new Promise(resolve => audio.addEventListener('ended', resolve));
 };
 
 const renderGameObject = game => {
@@ -163,10 +214,6 @@ const checkNextTurn = (game) => {
 
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
     gameStateTimer.value.startTimer(game.timer);
-  }
-
-  if (localCurrentPlayer?.lives != game.players?.find(player => player.id === localCurrentPlayer?.id)?.lives) {
-    playSound("error");
   }
 };
 

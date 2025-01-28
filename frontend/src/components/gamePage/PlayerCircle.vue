@@ -20,7 +20,7 @@
       :style="getPlayerPosition(index, players.length)"
       class="absolute"
     >
-      <div id='shake' :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" class="max-w-96 min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
+      <div id='{{ player.id }}' :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" class="max-w-96 min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
 
         <!-- Player Lives -->
         <div class="absolute -top-6 text-xs font-medium mb-1 flex gap-1 w-full items-center justify-center">
