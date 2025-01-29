@@ -21,6 +21,7 @@ class Game {
     this.currentHint = "";	
     this.guessedWords = [];
     this.timer = this.defaultTimer;
+    this.currentText = "";
     
     // Helper Variables
     this.endTime = null;
@@ -35,7 +36,7 @@ class Game {
     if (this.players.length >= this.maxPlayers)
       return false;
 
-    const player = new Player(sessionID, username);
+    const player = new Player(sessionID, username, this.lives);
 
     // Check if player is already in the game
     if (this.players.find(p => p.sessionID === player.sessionID))
@@ -159,6 +160,7 @@ class Game {
       return;
 
     player.currentText = text;
+    this.currentText = text;
   }
 
   guessWord(word) {
@@ -173,6 +175,7 @@ class Game {
     // Check if word has already been guessed
     if (this.guessedWords.map(w => w.toLowerCase()).includes(word)){
       this.setText(currentPlayer, "")
+      this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
@@ -180,6 +183,7 @@ class Game {
     // Check if hint is in the word (case-insensitive)
     if (!word.includes(this.currentHint.toLowerCase().trim())){
       this.setText(currentPlayer, "")
+      this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
@@ -187,6 +191,7 @@ class Game {
     // Check if word exists using wordService.checkWord (case-insensitive)
     if (!wordService.checkWord(this.currentHint, this.language, word)) {
       this.setText(currentPlayer, "")
+      this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
       return 
     }
@@ -216,6 +221,7 @@ class Game {
     }
 
     this.setText(newPlayer.sessionID, "");
+    this.currentText = "";
 
     this.resetTimer();
   }
@@ -288,7 +294,7 @@ class Game {
       p.isReady = false;
       p.currentPlayer = false;
       p.currentText = "";
-      p.lives = 2;
+      p.lives = this.lives;
     });
   }
 
@@ -319,6 +325,8 @@ class Game {
       return rest;
     });
 
+    console.log("Text:", this.currentText)
+
     return {
       gameID: this.gameID,
       gameState: this.gameState,
@@ -330,6 +338,8 @@ class Game {
       privateGame: this.privateGame,
       maxPlayers: this.maxPlayers,
       lives: this.lives,
+      currentText: this.currentText,
+      defaultLives: this.lives,
     }
   }
 }

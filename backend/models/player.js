@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 
 class Player {
-  constructor(sessionID, username) {
+  constructor(sessionID, username, lives) {
     this.id = uuidv4();
     this.sessionID = sessionID;
     this.username = username;
@@ -9,7 +9,7 @@ class Player {
     this.currentPlayer = false;
     this.isOwner = false;
     this.currentText = "";
-    this.lives = 2;
+    this.lives = lives;
     this.lastWinner = false;
   }
 }

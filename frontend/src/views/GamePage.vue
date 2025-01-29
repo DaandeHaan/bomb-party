@@ -12,6 +12,7 @@
       :currentHint="currentHint"
       :isCurrentPlayer="isCurrentPlayer"
       :defaultLives="defaultLives"
+      :currentText="currentText"
     />
 
     <!-- Input Field -->
@@ -47,6 +48,7 @@ import { useToast } from "vue-toastification";
 import PlayerList from "../components/gamePage/PlayerList.vue";
 
 // State Variables
+const game = ref({});
 const playerCircle = ref(null);
 const gameStateTimer = ref(null);
 const players = ref([]);
@@ -58,7 +60,7 @@ const currentHint = ref("");
 const ws = ref(null);
 const defaultLives = ref(2);
 const inputFieldRef = ref(null);
-
+const currentText = ref("")
 // Route Parameters
 const route = useRoute();
 const webSocketUrl = route.params.webSocketUrl;
@@ -195,11 +197,14 @@ const playSound = async (sound, volume = 0.5) => {
 
 const renderGameObject = game => {
   checkNextTurn(game);
+  game.value = game || {};
   players.value = game.players || players.value;
   currentLetters.value = game.letters || currentLetters.value;
   gameState.value = game.gameState || gameState.value;
   timer.value = game.timer ?? timer.value;
   currentHint.value = game.currentHint || currentHint.value;
+  currentText.value = game.currentText || ""; // ! <-- -Error
+  defaultLives.value = game.defaultLives || defaultLives.value;
   
   if (isCurrentPlayer.value) {
     // Input field still has to enable, so focus after that tick

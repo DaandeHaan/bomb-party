@@ -70,6 +70,23 @@
     >
       {{ currentHint }}
     </div>
+
+    <!-- Current Text -->
+    <div
+      v-if="gameHasStarted"
+      class="absolute translate-y-full flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
+    >
+        <div class="flex max-w-96 overflow-hidden flex-nowrap">
+          <span
+            v-for="(segment, idx) in getWordHighlights(currentText)"
+            :key="idx"
+            class="text-5xl leading-tight"
+            :class="segment.isHint ? 'text-warning font-semibold' : 'text-[#C8D1E0]'"
+          >
+            {{ segment.text }}
+          </span>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -83,6 +100,7 @@ const props = defineProps({
   currentHint: String,
   isCurrentPlayer: Boolean, // Indicates if this is the current player's turn
   defaultLives: Number,
+  currentText: String,
 });
 
 const playerSegments = reactive({});
@@ -130,11 +148,26 @@ const getHighlightedSegments = (word, player) => {
   return segments;
 };
 
-const shakePlayer = playerId => {
+const getWordHighlights = (word) => {
+  console.log(word)
+  if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
+  const hint = props.currentHint.trim();
 
-}
-defineExpose({
-  shakePlayer,
-});
+  const segments = [];
+  let remainingWord = word;
+
+  while (remainingWord.length > 0) {
+    if (remainingWord.startsWith(hint)) {
+      segments.push({ text: hint, isHint: true });
+      remainingWord = remainingWord.slice(hint.length);
+    } else {
+      const nextNonHintSegment = remainingWord.split(hint, 1)[0];
+      segments.push({ text: nextNonHintSegment, isHint: false });
+      remainingWord = remainingWord.slice(nextNonHintSegment.length);
+    }
+  }
+
+  return segments;
+};
 </script>
