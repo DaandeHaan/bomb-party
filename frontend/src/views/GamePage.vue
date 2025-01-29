@@ -112,7 +112,6 @@ const checkMessageType = async (message) =>{
 
   if(message.type === "GAME_STARTED")
   {
-    await playSound("countdown");
     playSound("beep");
 
     // Remove all scale classes
