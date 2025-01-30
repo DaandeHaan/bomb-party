@@ -36,11 +36,11 @@ class Game {
     if (this.players.length >= this.maxPlayers)
       return false;
 
-    const player = new Player(sessionID, username, this.lives);
-
     // Check if player is already in the game
-    if (this.players.find(p => p.sessionID === player.sessionID))
+    if (this.players.find(p => p.sessionID === sessionID))
       return false;
+
+    const player = new Player(sessionID, username, this.lives);
 
     this.players.push(player);
     
