@@ -6,10 +6,15 @@
     <div class="flex flex-col gap-8 items-center justify-center mt-20">
 
       <!-- Username -->
-      <input id="username" v-model="username" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Username"></input>
-
+      <div class="flex flex-col">
+        <label class="text-text m-0">Username <span :class="username.length == 20 && 'text-red-400'">({{ username.length }}/20)</span></label>
+        <input id="username" v-model="username" maxlength="20" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Username"></input>
+      </div>
       <!-- Lobby Code -->
-      <input v-model="code" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Lobby Code"></input>
+      <div class="flex flex-col">
+        <label class="text-text m-0">Lobby Code</label>
+        <input v-model="code" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Lobby Code"></input>
+      </div>
 
       <!-- Join Lobby -->
       <button @click="joinLobby" class="bg-primary-accent rounded w-80 h-12 p-2 outline-none text-text hover:bg-primary-highlight">Join Game</button>

@@ -36,11 +36,11 @@ class Game {
     if (this.players.length >= this.maxPlayers)
       return false;
 
-    const player = new Player(sessionID, username, this.lives);
-
     // Check if player is already in the game
-    if (this.players.find(p => p.sessionID === player.sessionID))
+    if (this.players.find(p => p.sessionID === sessionID))
       return false;
+
+    const player = new Player(sessionID, username, this.lives);
 
     this.players.push(player);
     
@@ -118,6 +118,9 @@ class Game {
 
   checkWinner() {
 
+    if (this.gameState !== 'playing')
+      return false;
+
     // Check how many players are still in the game
     const playersLeft = this.players.filter(p => p.isReady && p.lives > 0).length;
     if (playersLeft > 1)
@@ -134,6 +137,8 @@ class Game {
 
     this.resetValues();
     winner.lastWinner = true;
+
+    winner.wins++;
 
     clearTimeout(this.timerInterval);
 

@@ -1,16 +1,18 @@
 TODO:
 
-- Enchanced typing
-  - Input without inputfield
-  - Clear input on turn
-  - Input not focussed
-
-- Effects and sounds
-- Redirect user to / when there is no soccect connection
 - Fix the message query in the lobby
-- Screen Effects
 - Responsive
 - Other player's typing is not cleared when word is wrong
+- Input not being cleared correctly?
+- Make timer reduce by %, with more % the longer the word
+- Add explenatie about the game somewhere
+- Change settings while in the game
+- Add name limit
+- Add sound mute
+- Bigger timer text
+- Start game if 2 players are ready, after 15 seconds
+- Add auto ready
+- Add more words, like brands etc
 
 # Effects
 PLAYER_JOINED       - playerJoined.mp3
