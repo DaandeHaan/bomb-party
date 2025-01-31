@@ -3,6 +3,14 @@ TODO:
 - Fix the message query in the lobby
 - Responsive
 - Other player's typing is not cleared when word is wrong
+- Input not being cleared correctly?
+- Make timer reduce by %, with more % the longer the word
+- Add explenatie about the game somewhere
+- Save amount of wins
+- Change settings while in the game
+- Add name limit
+- Add sound mute
+- Bigger timer text
 
 # Effects
 PLAYER_JOINED       - playerJoined.mp3
