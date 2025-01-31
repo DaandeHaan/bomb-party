@@ -11,6 +11,9 @@ TODO:
 - Add name limit
 - Add sound mute
 - Bigger timer text
+- Start game if 2 players are ready, after 15 seconds
+- Add auto ready
+- Add more words, like brands etc
 
 # Effects
 PLAYER_JOINED       - playerJoined.mp3
