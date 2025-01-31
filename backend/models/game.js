@@ -28,6 +28,7 @@ class Game {
     this.timerInterval = null;
     this.lastHint = "";
     this.failedTimes = 0;
+    this.startGameInTimer = null;
   }
 
   addPlayerToGame(sessionID, username) {
@@ -69,6 +70,13 @@ class Game {
     if (this.players.length === 0)
       return;
 
+    // Check the amount of players that are ready, if 1 or less, cancel the game
+    if (this.players.filter(p => p.isReady).length <= 1) {
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'CANCEL_STARTING_GAME_TIMER'});
+      clearTimeout(this.startGameInTimer);
+    }
+
+
     this.checkWinner();
 
     this.players[0].isOwner = true;
@@ -94,6 +102,18 @@ class Game {
     else
       foundPlayer.isReady = true;
 
+    // Check if 2 players or more are ready
+    if (this.players.filter(p => p.isReady).length >= 2) {
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'STARTING_GAME_TIMER'});
+      this.startGameInTimer = setTimeout(() => {
+        this.startGame();
+      }, 15000);
+    } else  {
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'CANCEL_STARTING_GAME_TIMER'});
+      clearTimeout(this.startGameInTimer);
+    }
+
+
     return true;
   }
 
@@ -114,6 +134,7 @@ class Game {
     this.startTimer();
 
     this.sendMessage(this.players.map(player => player.sessionID), {type: 'GAME_STARTED'});
+    this.sendGameObject();
   }
 
   checkWinner() {

@@ -172,6 +172,16 @@ const checkMessageType = async (message) =>{
     playSound("liveLost");
     shakeScreen(message.id); // ! THIS DOES NOT WORK...
   }
+
+  if(message.type === "STARTING_GAME_TIMER") {
+    console.log("Starting game timer");
+    gameStateTimer.value.startTimer(15);
+  }
+
+  if(message.type === "CANCEL_STARTING_GAME_TIMER") {
+    console.log("Cancelling game timer");
+    gameStateTimer.value.startTimer(0);
+  }
 };
 
 const shakeScreen = (elementID) => {
