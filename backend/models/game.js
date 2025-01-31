@@ -118,6 +118,9 @@ class Game {
 
   checkWinner() {
 
+    if (this.gameState !== 'playing')
+      return false;
+
     // Check how many players are still in the game
     const playersLeft = this.players.filter(p => p.isReady && p.lives > 0).length;
     if (playersLeft > 1)
