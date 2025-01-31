@@ -4,7 +4,7 @@ class Player {
   constructor(sessionID, username, lives) {
     this.id = uuidv4();
     this.sessionID = sessionID;
-    this.username = username;
+    this.username = username.length > 20 ? username.substring(0, 16) : username;
     this.isReady = false;
     this.currentPlayer = false;
     this.isOwner = false;
