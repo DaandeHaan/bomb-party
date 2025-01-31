@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentTimer > 0" class="absolute top-5 text-center text-lg text-[#7DCFFF]">
+  <div v-if="currentTimer > 0" class="absolute top-5 text-center text-3xl text-[#7DCFFF]">
     {{ currentTimer.toFixed(1) }} seconds left.
   </div>
 </template> 

@@ -1,36 +1,29 @@
 <template>
-  <div class="w-full flex flex-col items-center gap-12">
-    <h1 class="text-text text-5xl font-bold pt-28 text-center">Available games</h1>
+  <div class="w-full max-w-lg mx-auto px-4">
+    <h1 class="text-text text-4xl font-bold pt-12 text-center md:text-5xl">Available Games</h1>
 
-    <!-- Games -->
-    <div class="w-full flex flex-col gap-8 px-24">
-      <GameCard v-for="game in games" :key="game.id" :game="game" />
+    <div class="flex flex-col gap-6 mt-6">
+      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
     </div>
   </div>
 </template>
 
 <script setup>
-import GameCard from './GameCard.vue';
-import { onMounted, ref } from 'vue';
-import { useToast } from 'vue-toastification';
-import axios from 'axios';
+import { onMounted, ref } from "vue";
+import GameCard from "./GameCard.vue";
+import axios from "axios";
 
 const games = ref([]);
-const toast = useToast();
 
-onMounted(() => {
-  fetchGames();
-});
-
-const fetchGames = async () => {
+onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/game");
-    games.value = response.data.games; // Assume the API returns an array of games in `response.data.games`
+    games.value = response.data.games;
   } catch (error) {
     console.error("Error fetching games:", error);
-    toast.error("Failed to fetch available games.");
   }
-};
+});
 
-
+const emit = defineEmits(["join"]);
+const joinLobby = (gameId) => emit("join", gameId);
 </script>

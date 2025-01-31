@@ -1,34 +1,37 @@
 <template>
-  <div class="w-full">
+  <div class="w-full max-w-md mx-auto px-4">
     <img src="/logo.png" alt="Bomb Party" class="w-1/2 mx-auto" />
 
-    <!-- Form -->
-    <div class="flex flex-col gap-8 items-center justify-center mt-20">
-
-      <!-- Username -->
-      <div class="flex flex-col">
-        <label class="text-text m-0">Username <span :class="username.length == 20 && 'text-red-400'">({{ username.length }}/20)</span></label>
-        <input id="username" v-model="username" maxlength="20" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Username"></input>
-      </div>
-      <!-- Lobby Code -->
-      <div class="flex flex-col">
-        <label class="text-text m-0">Lobby Code</label>
-        <input v-model="code" class="border border-primary-accent bg-transparent rounded w-80 h-12 p-2 outline-none text-text" placeholder="Lobby Code"></input>
+    <div class="flex flex-col gap-6 items-center justify-center mt-10">
+      <div class="flex flex-col w-full">
+        <label class="text-text">Username <span :class="username.length == 20 && 'text-red-400'">({{ username.length }}/20)</span></label>
+        <input id="username" v-model="username" maxlength="20"
+          class="border border-primary-accent bg-transparent rounded w-full h-12 p-2 outline-none text-text"
+          placeholder="Username">
       </div>
 
-      <!-- Join Lobby -->
-      <button @click="joinLobby" class="bg-primary-accent rounded w-80 h-12 p-2 outline-none text-text hover:bg-primary-highlight">Join Game</button>
+      <div class="flex flex-col w-full">
+        <label class="text-text">Lobby Code</label>
+        <input v-model="code"
+          class="border border-primary-accent bg-transparent rounded w-full h-12 p-2 outline-none text-text"
+          placeholder="Lobby Code">
+      </div>
 
-      <!-- Divider -->
-      <div class="flex items-center justify-center w-80">
+      <button @click="joinLobby"
+        class="bg-primary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-primary-highlight">
+        Join Game
+      </button>
+
+      <div class="flex items-center justify-center w-full">
         <div class="flex-grow border-t border-text"></div>
         <span class="mx-3 text-text">or</span>
         <div class="flex-grow border-t border-text"></div>
       </div>
 
-      <!-- Create Game -->
-      <button @click="createLobby" class="bg-secondary-accent rounded w-80 h-12 p-2 outline-none text-text hover:bg-secondary-highlight">Create Game</button>
-
+      <button @click="createLobby"
+        class="bg-secondary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-secondary-highlight">
+        Create Game
+      </button>
     </div>
   </div>
 </template>
@@ -40,15 +43,8 @@ import { useToast } from "vue-toastification";
 import axios from "axios";
 
 const emit = defineEmits(["create-lobby"]);
-
-const props = defineProps({
-  config: Object,
-});
-
-
-const toast = useToast();
 const router = useRouter();
-
+const toast = useToast();
 const username = ref("");
 const code = ref("");
 
@@ -67,33 +63,21 @@ onMounted(() => {
 });
 
 const joinLobby = () => {
-  if (!code.value.trim())
-    return toast.error("Please enter a valid lobby code.");
-
+  if (!code.value.trim()) return toast.error("Please enter a valid lobby code.");
   router.push(`/game/${code.value}`);
 };
 
-
 const createLobby = async () => {
-  const response = await axios.post(
-    `http://localhost:3000/api/game/create`,
-    {
-      settings: {
-        difficulty: props.config.difficulty,
-        language: props.config.language,
-        privateGame: props.config.privateGame,
-        maxPlayers: props.config.maxPlayers,
-        defaultTimer: props.config.defaultTimer,
-        lives: props.config.lives,
-      },
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
+  const response = await axios.post("http://localhost:3000/api/game/create", {
+    settings: {
+      difficulty: "easy",
+      language: "dutch",
+      privateGame: false,
+      maxPlayers: 8,
+      defaultTimer: 10,
+      lives: 2,
     }
-  );
+  }, { withCredentials: true });
 
   router.push(`/game/${response.data.gameID}`);
 };
