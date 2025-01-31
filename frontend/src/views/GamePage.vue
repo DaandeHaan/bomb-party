@@ -218,7 +218,9 @@ const checkNextTurn = (game) => {
 
   const localCurrentPlayer = players.value.find(player => player.currentPlayer);
 
+  // So it is next players turn
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
+    inputWord.value = "";
     gameStateTimer.value.startTimer(game.timer);
   }
 };
