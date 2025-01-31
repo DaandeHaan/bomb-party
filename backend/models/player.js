@@ -11,6 +11,7 @@ class Player {
     this.currentText = "";
     this.lives = lives;
     this.lastWinner = false;
+    this.wins = 0;
   }
 }
 

@@ -135,6 +135,8 @@ class Game {
     this.resetValues();
     winner.lastWinner = true;
 
+    winner.wins++;
+
     clearTimeout(this.timerInterval);
 
     this.sendGameObject();

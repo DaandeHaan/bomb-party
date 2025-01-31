@@ -6,7 +6,6 @@ TODO:
 - Input not being cleared correctly?
 - Make timer reduce by %, with more % the longer the word
 - Add explenatie about the game somewhere
-- Save amount of wins
 - Change settings while in the game
 - Add name limit
 - Add sound mute
