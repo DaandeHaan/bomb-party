@@ -15,8 +15,8 @@ TODO:
 - Lose sound being played when winning
 - Add used words list
 - Point system? (not to determine winner, but based on word length)
-- Possible words list
-- Back to lobby
+- Possible words list, for diffucult hints?
+- Back to lobby button
 - make '(wins)' darker color 
 - sound too loud (win sound)
 - green outline if its your turn (whole screen neo green)
