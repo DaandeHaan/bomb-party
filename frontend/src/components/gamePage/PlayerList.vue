@@ -2,7 +2,7 @@
 
   <div class="absolute top-4 left-4 p-4 bg-background border-2 border-border rounded-lg shadow-lg hidden md:block">
 
-    <h1 class="text-center border-b font-bold text-xl pb-1 mb-1">Players (wins)</h1>
+    <h1 class="text-center border-b font-bold text-xl pb-1 mb-1">Players <span class="text-gray-400">(wins)</span></h1>
 
     <div v-for="(player, index) in props.players">
       <div class="flex items-center justify-between max-w-96 overflow-hidden" :class="{ 'opacity-50' : !player.isReady }">

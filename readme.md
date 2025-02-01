@@ -3,7 +3,6 @@ TODO:
 - Responsive [REVIEW_NEEDED]
 
 - Fix the message query in the lobby (url)
-- Fix the side-panels (settings and availableGames) not being centerd
 - Add explenation about the game somewhere
 - Change settings while in the game (during lobby gameState)
 - Add sound mute
@@ -17,12 +16,11 @@ TODO:
 - Add used words list
 - Point system? (not to determine winner, but based on word length)
 - Possible words list, for diffucult hints?
-- make '(wins)' darker color 
 - sound too loud (win sound)
 - green outline if its your turn (whole screen neo green)
-- center-text overflow when typing in the circle
+- global-typing-text can overflow when typing in the circle
 - Google advert?
-- Fix live overflow
+- Fix lives/hearts overflow
 - Remove welcome message? Annoying on mobile...
 
 # Events
