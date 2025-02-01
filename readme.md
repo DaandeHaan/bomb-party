@@ -1,14 +1,11 @@
 TODO:
 
 - Fix the message query in the lobby
-- Responsive
-- Other player's typing is not cleared when word is wrong
-- Input not being cleared correctly?
+- Responsive [IN_PROGRESS]
 - Make timer reduce by %, with more % the longer the word
 - Add explenatie about the game somewhere
 - Change settings while in the game
 - Add sound mute
-- Bigger timer text
 - Add auto ready
 - Add more words, like brands etc
 
