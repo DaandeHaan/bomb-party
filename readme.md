@@ -8,7 +8,7 @@ TODO:
 - Add sound mute
 - Add auto ready
 - Add more words, like brands etc
-- Add logging
+- Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
 
 # Events
