@@ -1,6 +1,6 @@
 TODO:
 
-- Fix the message query in the lobby
+- Fix the message query in the lobby (url)
 - Responsive [IN_PROGRESS]
 - Fix the side-panels (settings and availableGames) not being centerd
 - Add explenation about the game somewhere
@@ -11,6 +11,16 @@ TODO:
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
 - Add cron to delete empty games every x minutes
+- Add chat
+- Lose sound being played when winning
+- Add used words list
+- Point system?
+- Possible words list
+- Back to lobby
+- make '(wins)' darker color 
+- sound too loud (win sound)
+- green outline if its your turn (whole screen neo green)
+- center-text overflow when typing in the circle
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
