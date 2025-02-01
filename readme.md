@@ -14,7 +14,7 @@ TODO:
 - Add chat
 - Lose sound being played when winning
 - Add used words list
-- Point system?
+- Point system? (not to determine winner, but based on word length)
 - Possible words list
 - Back to lobby
 - make '(wins)' darker color 
