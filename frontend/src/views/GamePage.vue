@@ -2,7 +2,7 @@
   <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
     <!-- Player Circle -->
 
-    <PlayerList :players="players" class="hidden md:block"/>
+    <PlayerList :players="players" @toLobby="toLobby"/>
 
     <PlayerCircle
       ref="playerCircle"
@@ -40,7 +40,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick  } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import PlayerCircle from '../components/gamePage/PlayerCircle.vue';
 import InputField from '../components/gamePage/InputField.vue';
 import GameStateTimer from '../components/gamePage/GameStateTimer.vue';
@@ -63,6 +63,7 @@ const inputFieldRef = ref(null);
 const currentText = ref("")
 // Route Parameters
 const route = useRoute();
+const router = useRouter();
 const webSocketUrl = route.params.webSocketUrl;
 const toast = useToast();
 
@@ -85,7 +86,7 @@ const connectWebSocket = () => {
   ws.value.onopen = () => console.log("WebSocket connected");
   ws.value.onmessage = event => checkMessageType(JSON.parse(event.data));
   ws.value.onerror = error => console.error("WebSocket error:", error);
-  ws.value.onclose = () => route.push('/lobby');
+  ws.value.onclose = () => router.push({ name: 'lobby' });
 };
 
 const checkMessageType = async (message) =>{
@@ -267,6 +268,11 @@ const focusInputField = () => {
       inputElement.focus();
     }
   }
+};
+
+const toLobby = () => {
+  ws.value?.close();
+  router.push({ name: 'lobby' });
 };
 
 onMounted(() => {

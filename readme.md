@@ -1,7 +1,8 @@
 TODO:
 
-- Fix the message query in the lobby (url)
 - Responsive [REVIEW_NEEDED]
+
+- Fix the message query in the lobby (url)
 - Fix the side-panels (settings and availableGames) not being centerd
 - Add explenation about the game somewhere
 - Change settings while in the game (during lobby gameState)
@@ -16,13 +17,13 @@ TODO:
 - Add used words list
 - Point system? (not to determine winner, but based on word length)
 - Possible words list, for diffucult hints?
-- Back to lobby button
 - make '(wins)' darker color 
 - sound too loud (win sound)
 - green outline if its your turn (whole screen neo green)
 - center-text overflow when typing in the circle
 - Google advert?
 - Fix live overflow
+- Remove welcome message? Annoying on mobile...
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

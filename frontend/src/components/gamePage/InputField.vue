@@ -20,6 +20,7 @@
       >
         Start Game
       </button>
+      
     </div>
     <!-- Input Field and Action Buttons -->
     <div class="flex flex-col md:flex-row items-center justify-center gap-4">
