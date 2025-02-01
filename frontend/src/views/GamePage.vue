@@ -133,6 +133,8 @@ const checkMessageType = async (message) =>{
     if (element) {
       element.classList.add('scale-115');
     }
+
+    gameStateTimer.value.startTimer(0);
   }
 
   if(message.type === "GAME_FINISHED_LOST")
@@ -144,6 +146,8 @@ const checkMessageType = async (message) =>{
         element.classList.add('scale-85');
       }
     });
+
+    gameStateTimer.value.startTimer(0);
   }
 
 
@@ -174,14 +178,10 @@ const checkMessageType = async (message) =>{
   }
 
   if(message.type === "STARTING_GAME_TIMER") {
-    console.log("Starting game timer");
-
-    // Timer set to 14 seconds, because if its set to 15 it starts with 1 second left.
-    gameStateTimer.value.startTimer(14);
+    gameStateTimer.value.startTimer(15);
   }
 
   if(message.type === "CANCEL_STARTING_GAME_TIMER") {
-    console.log("Cancelling game timer");
     gameStateTimer.value.startTimer(0);
   }
 };

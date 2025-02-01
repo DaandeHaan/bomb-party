@@ -149,7 +149,6 @@ const getHighlightedSegments = (word, player) => {
 };
 
 const getWordHighlights = (word) => {
-  console.log(word)
   if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
   const hint = props.currentHint.trim();

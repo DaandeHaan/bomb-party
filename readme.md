@@ -2,9 +2,9 @@ TODO:
 
 - Fix the message query in the lobby
 - Responsive [IN_PROGRESS]
-- Make timer reduce by %, with more % the longer the word
-- Add explenatie about the game somewhere
-- Change settings while in the game
+- Fix the side-panels (settings and availableGames) not being centerd
+- Add explenation about the game somewhere
+- Change settings while in the game (during lobby gameState)
 - Add sound mute
 - Add auto ready
 - Add more words, like brands etc

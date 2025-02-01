@@ -88,7 +88,6 @@ class SocketService {
   }
 
   sendMessage(user, message) {
-    console.log(user, message)
     const ws = this.clients.get(user);
     this.send(ws, message);
   }

@@ -13,3 +13,8 @@
     @apply bg-gradient-to-b from-background-gradient-start to-background-gradient-end;
   }
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

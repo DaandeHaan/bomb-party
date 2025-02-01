@@ -222,7 +222,10 @@ class Game {
       return 
     }
 
+    let randomPercentage = (Math.random() * 4 + 1) / 100; // Between 1 and 5%
+
     if (word.length >= 10) {
+      randomPercentage = (Math.random() * 0.1 + 0.1); // Between 10 and 20%
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'EXCELENT_WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
     } else {
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
@@ -231,8 +234,11 @@ class Game {
     // Add word to guessed words
     this.guessedWords.push(word);
 
-    // Decrease timer (This should go based on the length of the word)
-    this.timer -= 0.5;
+    // Decrease timer
+    this.timer -= this.timer * randomPercentage;
+
+    // Ensure timer doesn't go below 1
+    this.timer = Math.max(1, this.timer);
 
     this.nextTurn();
   }
@@ -350,8 +356,6 @@ class Game {
       const { sessionID, ...rest } = player;
       return rest;
     });
-
-    console.log("Text:", this.currentText)
 
     return {
       gameID: this.gameID,
