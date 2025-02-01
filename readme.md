@@ -8,6 +8,8 @@ TODO:
 - Add sound mute
 - Add auto ready
 - Add more words, like brands etc
+- Add logging
+- Add privacy agreement
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
