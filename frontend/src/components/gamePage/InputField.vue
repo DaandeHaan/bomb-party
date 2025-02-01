@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute bottom-10 w-full px-6 gap-4 flex justify-center flex-col">
+  <div class="absolute bottom-10 w-full pb-4 px-6 gap-4 flex justify-center flex-col">
     <!-- Game Actions -->
     <div class="mt-6 flex justify-center gap-4">
        <!-- Ready Up Button -->
@@ -20,7 +20,7 @@
       >
         Start Game
       </button>
-      
+
     </div>
     <!-- Input Field and Action Buttons -->
     <div class="flex flex-col md:flex-row items-center justify-center gap-4">

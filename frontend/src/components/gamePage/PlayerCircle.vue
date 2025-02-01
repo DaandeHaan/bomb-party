@@ -5,8 +5,8 @@
     'md:w-[600px]', 
     'md:h-[600px]', 
     'md:pb-0',
-    'w-[350px]',
-    'h-[350px]', // Maintain aspect ratio
+    'w-[300px]',
+    'h-[300px]', // Maintain aspect ratio
     'max-w-[600px]', 
     'max-h-[600px]', // Set max dimensions
     'flex', 
@@ -121,7 +121,7 @@ const readyPlayers = computed(() =>
 
 const getPlayerPosition = (index, totalPlayers) => {
   const angle = (index / totalPlayers) * 360;
-  const radius = window.innerWidth < 768 ? 175 : 300;
+  const radius = window.innerWidth < 768 ? 150 : 300;
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
@@ -137,7 +137,7 @@ const setPlayerPositions = () => {
 
   children.forEach((child, index) => {
     const angle = (index / totalPlayers) * 360;
-    const radius = window.innerWidth < 768 ? 175 : 300;
+    const radius = window.innerWidth < 768 ? 150 : 300;
     const x = Math.cos((angle * Math.PI) / 180) * radius;
     const y = Math.sin((angle * Math.PI) / 180) * radius;
 

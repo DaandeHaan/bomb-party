@@ -39,7 +39,7 @@ router.post('/:gameID/connect/', (req, res) => {
     username = sessionService.getRandomUsername();
     
 
-  res.json({success: true, game: game, webSocket: 'ws://localhost:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + username});
+  res.json({success: true, game: game, webSocket: 'ws://dishmanagement.com:8080/connect?sessionID=' + req.user.sessionID + '&gameID=' + gameID + "&username=" + username});
 });
 
 router.get('/:gameID?', (req, res) => {
