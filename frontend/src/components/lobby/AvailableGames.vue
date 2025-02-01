@@ -4,24 +4,6 @@
 
     <div class="flex flex-col gap-6 mt-6 h-[34rem] overflow-scroll no-scrollbar">
       <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
-      <GameCard v-for="game in games" :key="game.id" :game="game" @click="joinLobby(game.id)" />
     </div>
   </div>
 </template>
