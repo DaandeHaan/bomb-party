@@ -23,7 +23,10 @@ TODO:
 - Fix lives/hearts overflow
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
-- Overflow with timer and back-button
+- Overflow with timer and back-button on mobile
+
+- MOBILE LAYOUT IS NOT ENJOYABLE RIGHT NOW. When the keyboard opens you can't read the hint anymore, its very glitchy overall, maybe add the sendButton on mobile devies?
+    And prevent screen jumps!
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

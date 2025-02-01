@@ -68,7 +68,7 @@ const joinLobby = () => {
 };
 
 const createLobby = async () => {
-  const response = await axios.post("http://dishmanagement.com:3000/api/game/create", {
+  const response = await axios.post("http://localhost:3000/api/game/create", {
     settings: {
       difficulty: props.config.difficulty,
       language: props.config.language,

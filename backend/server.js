@@ -19,7 +19,7 @@ const wss = new WebSocket.Server({ server });
 socketService.init(wss);
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://dishmanagement.com:5173');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -32,10 +32,10 @@ app.use('/api/game', require("./controllers/gameController.js"))
 
 // Start the WebSocket server
 server.listen(8080, () => {
-  console.log(`WS-Server running at http://dishmanagement.com:8080/`);
+  console.log(`WS-Server running at http://localhost:8080/`);
 });
 
 // Start the server
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running at http://dishmanagement.com:${port}/`);
+    console.log(`Server running at http://localhost:${port}/`);
 });

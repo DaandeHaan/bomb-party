@@ -19,7 +19,7 @@ const routes = [
         const username = localStorage.getItem('username');
 
         const response = await axios.post(
-          `http://dishmanagement.com:3000/api/game/${to.params.gameID}/connect`, 
+          `http://localhost:3000/api/game/${to.params.gameID}/connect`, 
           { username },
           { withCredentials: true }
         );

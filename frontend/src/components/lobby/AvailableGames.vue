@@ -17,7 +17,7 @@ const games = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://dishmanagement.com:3000/api/game");
+    const response = await axios.get("http://localhost:3000/api/game");
     games.value = response.data.games;
   } catch (error) {
     console.error("Error fetching games:", error);
