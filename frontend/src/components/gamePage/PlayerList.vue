@@ -18,9 +18,9 @@
   <button
     id="backToLobby"
     @click="$emit('toLobby')"
-    class="absolute top-4 right-4 md:w-32 py-3 px-6 rounded-lg bg-primary-accent text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+    class="absolute top-2 right-2 md:top-4 md:right-4 md:w-32 py-1 md:py-3 px-2 md:px-6 rounded-lg bg-primary-accent text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
   >
-    To Lobby
+    Lobby
   </button>
 
 </template>

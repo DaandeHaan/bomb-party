@@ -28,27 +28,27 @@
       id="playerCard"	
     >
       <div :id="player.id" :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" 
-            class="max-w-24 min-w-12 md:max-w-96 md:min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
+            class="max-w-24 min-w-12 md:max-w-96 md:min-w-32 relative flex flex-col items-center text-sm font-semibold py-1 md:py-2 px-2 md:px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
 
         <!-- Player Lives -->
-        <div class="absolute -top-6 text-xs font-medium mb-1 flex gap-1 w-full items-center justify-center">
+        <div class="absolute -top-5 md:-top-6 text-xs font-medium flex gap-1 w-full items-center justify-center">
           <span v-for="i in defaultLives" :key="i" 
                 :class="{
                   'text-error': i <= player.lives, 
                   'text-gray-400 opacity-70': i > player.lives
                 }">
-            <font-awesome-icon icon="heart" class="text-lg" />
+            <font-awesome-icon icon="heart" class="text-sm md:text-lg" />
           </span>
         </div>
 
         <!-- Player Name -->
-        <div class="text-md font-bold"
+        <div class="text-xs md:text-md font-bold"
             :class="player.isYou ? 'text-red-500' : ''">
           {{ player.username }}
         </div>
 
         <!-- Word Segments -->
-        <div class="flex max-w-96 overflow-hidden flex-nowrap">
+        <div class="flex max-w-20 md:max-w-96 overflow-hidden flex-nowrap text-ellipsis">
           <span
             v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
             :key="idx"
@@ -84,7 +84,7 @@
       v-if="gameHasStarted"
       class="absolute top-1/2 left-1/2 translate-y-2/4 -translate-x-1/2 flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
     >
-        <div class="flex max-w-96 overflow-hidden flex-nowrap">
+        <div class="flex max-w-44 md:max-w-96 overflow-hidden flex-nowrap">
           <span
             v-for="(segment, idx) in getWordHighlights(currentText)"
             :key="idx"

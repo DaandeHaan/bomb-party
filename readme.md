@@ -22,6 +22,8 @@ TODO:
 - Google advert?
 - Fix lives/hearts overflow
 - Remove welcome message? Annoying on mobile...
+- Troll Menu?
+- Overflow with timer and back-button
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
