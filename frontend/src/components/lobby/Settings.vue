@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-md mx-auto px-4">
-    <h1 class="text-text text-4xl font-bold pt-12 text-center md:text-5xl">Settings</h1>
+    <h1 class="text-text text-4xl font-bold text-center md:text-5xl">Settings</h1>
 
     <div class="bg-background w-full border-2 border-border drop-shadow-xl p-6 flex flex-col gap-6 rounded mt-6">
       <div>
@@ -58,15 +58,40 @@
   </div>
 </template>
 
-<script setup>
-import { reactive } from "vue";
-
-const props = defineProps({ config: Object });
-
-const difficultyOptions = ["baby", "beginner", "easy", "medium", "hard", "expert", "hardcore"];
-const languageOptions = ["dutch", "english"];
-
-const settings = reactive({ ...props.config });
-
-defineEmits(["update"]);
+<script>
+export default {
+  props: {
+    config: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    const difficultyOptions = ['baby', 'beginner', 'easy', 'medium', 'hard', 'expert', 'hardcore'];
+    const languageOptions = ['dutch', 'english'];
+    let difficulty = this.config.difficulty || 'easy';
+    let language = this.config.language || 'dutch';
+    return {
+      difficultyOptions,
+      languageOptions,
+      settings: {
+        difficulty,
+        language,
+        privateGame: this.config.privateGame || false,
+        maxPlayers: this.config.maxPlayers || 8,
+        defaultTimer: this.config.timer || 10,
+        defaultTimer: this.config.defaultTimer || 10,
+        lives: this.config.lives || 2,
+      },
+    };
+  },
+  watch: {
+    settings: {
+      handler(newSettings) {
+        this.$emit('update', newSettings); // Emit the updated settings to the parent
+      },
+      deep: true, // Watch deeply for nested changes
+    },
+  },
+};
 </script>

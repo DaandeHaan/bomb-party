@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full max-w-md mx-auto px-4">
-    <img src="/logo.png" alt="Bomb Party" class="w-1/2 mx-auto" />
+  <div class="w-full max-w-md mx-auto p-4">
+    <img src="/logo.png" alt="Bomb Party" class="w-1/2 md:w-3/4 mx-auto" />
 
     <div class="flex flex-col gap-6 items-center justify-center mt-10">
       <div class="flex flex-col w-full">
@@ -70,15 +70,19 @@ const joinLobby = () => {
 const createLobby = async () => {
   const response = await axios.post("http://localhost:3000/api/game/create", {
     settings: {
-      difficulty: "easy",
-      language: "dutch",
-      privateGame: false,
-      maxPlayers: 8,
-      defaultTimer: 10,
-      lives: 2,
+      difficulty: props.config.difficulty,
+      language: props.config.language,
+      privateGame: props.config.privateGame,
+      maxPlayers: props.config.maxPlayers,
+      defaultTimer: props.config.defaultTimer,
+      lives: props.config.lives,
     }
   }, { withCredentials: true });
 
   router.push(`/game/${response.data.gameID}`);
 };
+
+const props = defineProps({
+  config: Object,
+});
 </script>

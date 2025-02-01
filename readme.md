@@ -10,6 +10,7 @@ TODO:
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
+- Add cron to delete empty games every x minutes
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

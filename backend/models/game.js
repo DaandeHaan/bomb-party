@@ -321,6 +321,7 @@ class Game {
     this.currentHint = "";
     this.timer = this.defaultTimer;
     this.endTime = null;
+    this.currentText = "";
 
     this.players.forEach(p => {
       p.isReady = false;
