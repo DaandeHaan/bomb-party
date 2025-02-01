@@ -21,7 +21,7 @@ TODO:
 - sound too loud (win sound)
 - green outline if its your turn (whole screen neo green)
 - center-text overflow when typing in the circle
-
+- Google advert?
 # Events
 PLAYER_JOINED               - playerJoined.mp3
 PLAYER_LEFT                 - playerLeft.mp3
