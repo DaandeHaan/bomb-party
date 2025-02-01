@@ -22,6 +22,8 @@ TODO:
 - green outline if its your turn (whole screen neo green)
 - center-text overflow when typing in the circle
 - Google advert?
+- Fix live overflow
+
 # Events
 PLAYER_JOINED               - playerJoined.mp3
 PLAYER_LEFT                 - playerLeft.mp3

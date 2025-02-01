@@ -1,8 +1,14 @@
 <template>
-  <div :class="[
+  <div id="circle"
+    :class="[
     'relative', 
-    'w-[600px]', 
-    'h-[600px]', 
+    'md:w-[600px]', 
+    'md:h-[600px]', 
+    'md:pb-0',
+    'w-[350px]',
+    'h-[350px]', // Maintain aspect ratio
+    'max-w-[600px]', 
+    'max-h-[600px]', // Set max dimensions
     'flex', 
     'items-center', 
     'justify-center', 
@@ -17,10 +23,12 @@
     <div
       v-for="(player, index) in readyPlayers"
       :key="index"
-      :style="getPlayerPosition(index, players.length)"
+      :style="getPlayerPosition(index, readyPlayers.length)"
       class="absolute"
+      id="playerCard"	
     >
-      <div :id="player.id" :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" class="max-w-96 min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
+      <div :id="player.id" :class="[player.currentPlayer ? 'ring-2 ring-error scale-120' : '', player.lives === 0 ? 'bg-background text-gray-400 opacity-50' : '']" 
+            class="max-w-24 min-w-12 md:max-w-96 md:min-w-32 relative flex flex-col items-center text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
 
         <!-- Player Lives -->
         <div class="absolute -top-6 text-xs font-medium mb-1 flex gap-1 w-full items-center justify-center">
@@ -57,16 +65,16 @@
     <!-- Last Winner -->
     <div
       v-if="!gameHasStarted && lastWinner"
-      class="absolute flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xl font-bold py-4 px-6 rounded-full shadow-lg"
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xs md:text-xl font-bold py-4 px-6 rounded-full shadow-lg"
     >
       🏆 Last Winner 🏆
-      <div class="text-lg font-medium">{{ lastWinner.username }}</div>
+      <div class="text-sm font-medium">{{ lastWinner.username }}</div>
     </div>
 
     <!-- Current Hint -->
     <div
       v-else
-      class="absolute flex items-center justify-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
     >
       {{ currentHint }}
     </div>
@@ -74,13 +82,13 @@
     <!-- Current Text -->
     <div
       v-if="gameHasStarted"
-      class="absolute translate-y-full flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
+      class="absolute top-1/2 left-1/2 translate-y-2/4 -translate-x-1/2 flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
     >
         <div class="flex max-w-96 overflow-hidden flex-nowrap">
           <span
             v-for="(segment, idx) in getWordHighlights(currentText)"
             :key="idx"
-            class="text-5xl leading-tight"
+            class="md:text-5xl text-xl leading-tight"
             :class="segment.isHint ? 'text-warning font-semibold' : 'text-[#C8D1E0]'"
           >
             {{ segment.text }}
@@ -91,7 +99,7 @@
 </template>
 
 <script setup>
-import { computed, reactive } from "vue";
+import { computed, reactive} from "vue";
 
 const props = defineProps({
   players: Array,
@@ -103,6 +111,7 @@ const props = defineProps({
   currentText: String,
 });
 
+
 const playerSegments = reactive({});
 
 // Filter players who are ready
@@ -112,13 +121,29 @@ const readyPlayers = computed(() =>
 
 const getPlayerPosition = (index, totalPlayers) => {
   const angle = (index / totalPlayers) * 360;
-  const radius = 300;
+  const radius = window.innerWidth < 768 ? 175 : 300;
   const x = Math.cos((angle * Math.PI) / 180) * radius;
   const y = Math.sin((angle * Math.PI) / 180) * radius;
 
   return {
     transform: `translate(${x}px, ${y}px)`,
   };
+};
+
+const setPlayerPositions = () => {
+  const parent = document.getElementById('circle'); // Parent circle container
+  const children = parent.querySelectorAll('#playerCard'); // All child divs (players)
+  const totalPlayers = children.length;
+
+  children.forEach((child, index) => {
+    const angle = (index / totalPlayers) * 360;
+    const radius = window.innerWidth < 768 ? 175 : 300;
+    const x = Math.cos((angle * Math.PI) / 180) * radius;
+    const y = Math.sin((angle * Math.PI) / 180) * radius;
+
+    // Apply the calculated position to each child div
+    child.style.transform = `translate(${x}px, ${y}px)`;
+  });
 };
 
 const getHighlightedSegments = (word, player) => {
@@ -169,4 +194,7 @@ const getWordHighlights = (word) => {
 
   return segments;
 };
+
+window.addEventListener('resize', setPlayerPositions);
+
 </script>

@@ -2,7 +2,7 @@
   <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
     <!-- Player Circle -->
 
-    <PlayerList :players="players" />
+    <PlayerList :players="players" class="hidden md:block"/>
 
     <PlayerCircle
       ref="playerCircle"
@@ -85,7 +85,7 @@ const connectWebSocket = () => {
   ws.value.onopen = () => console.log("WebSocket connected");
   ws.value.onmessage = event => checkMessageType(JSON.parse(event.data));
   ws.value.onerror = error => console.error("WebSocket error:", error);
-  ws.value.onclose = () => route.push('lobby');
+  ws.value.onclose = () => route.push('/lobby');
 };
 
 const checkMessageType = async (message) =>{

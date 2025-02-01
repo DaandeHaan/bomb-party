@@ -1,12 +1,12 @@
 <template>
   <div class="absolute bottom-10 w-full px-6 gap-4 flex justify-center flex-col">
-      <!-- Game Actions -->
-      <div class="mt-6 flex justify-center gap-4">
+    <!-- Game Actions -->
+    <div class="mt-6 flex justify-center gap-4">
        <!-- Ready Up Button -->
       <button
         v-if="!gameHasStarted"
         @click="$emit('toggleReadyUp')"
-        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+        class="w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
       >
       {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
       </button>
@@ -16,7 +16,7 @@
         id="startGameButton"
         v-if="isYouAndOwner && !gameHasStarted"
         @click="$emit('gameStart')"
-        class="py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+        class="w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
       >
         Start Game
       </button>
@@ -32,7 +32,7 @@
         :disabled="!isCurrentPlayer || !gameHasStarted"
         type="text"
         placeholder="Type your word here..."
-        class="max-w-lg flex-1 py-3 px-4 rounded-lg bg-[#2A2A40] text-[#D9E0EE] placeholder-[#7AA2F7] border border-[#7AA2F7] focus:outline-none focus:ring-2 focus:ring-[#A28DEB] focus:border-transparent transition-all duration-300"
+        class="w-full md:max-w-lg flex-1 py-3 px-4 rounded-lg bg-[#2A2A40] text-[#D9E0EE] placeholder-[#7AA2F7] border border-[#7AA2F7] focus:outline-none focus:ring-2 focus:ring-[#A28DEB] focus:border-transparent transition-all duration-300"
       />
 
       <!-- Send Word Button -->
