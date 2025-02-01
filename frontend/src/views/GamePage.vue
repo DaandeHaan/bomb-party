@@ -31,7 +31,7 @@
 
     <!-- Game State Timer -->
     <GameStateTimer
-      :class="[!gameHasStarted ? 'hidden' : '']"
+      :gameState="gameState"
       ref="gameStateTimer"
     />
   </div>
@@ -175,7 +175,9 @@ const checkMessageType = async (message) =>{
 
   if(message.type === "STARTING_GAME_TIMER") {
     console.log("Starting game timer");
-    gameStateTimer.value.startTimer(15);
+
+    // Timer set to 14 seconds, because if its set to 15 it starts with 1 second left.
+    gameStateTimer.value.startTimer(14);
   }
 
   if(message.type === "CANCEL_STARTING_GAME_TIMER") {

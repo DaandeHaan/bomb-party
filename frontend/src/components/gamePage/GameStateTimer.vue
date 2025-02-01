@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentTimer > 0" class="absolute top-5 text-center text-3xl text-[#7DCFFF]">
-    {{ currentTimer.toFixed(1) }} seconds left.
+    <span v-if="gameState == 'lobby'">Game starting in </span>{{ currentTimer.toFixed(1) }} seconds <span v-if="gameState == 'playing'">left</span>
   </div>
 </template> 
 
@@ -35,6 +35,10 @@ onUnmounted(() => {
   if (intervalId) {
     clearInterval(intervalId);
   }
+});
+
+defineProps({
+  gameState: String,
 });
 
 defineExpose({

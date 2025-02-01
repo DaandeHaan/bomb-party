@@ -22,7 +22,7 @@
     <!-- Mobile Modal -->
     <div v-if="modalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div class="bg-transparent p-6 rounded-lg w-3/4 max-w-md relative">
-        <button @click="closeModal" class="absolute top-2 right-2 text-white">&times;</button>
+        <button @click="closeModal" class="absolute top-8 right-12 text-white text-xl">&times;</button>
         <template v-if="modalType === 'settings'">
           <Settings :config="config" @update="updateSettings" class="w-full max-w-sm bg-background p-4 rounded-lg" />
         </template>
