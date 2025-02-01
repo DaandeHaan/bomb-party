@@ -1,7 +1,7 @@
 TODO:
 
 - Fix the message query in the lobby (url)
-- Responsive [IN_PROGRESS]
+- Responsive [REVIEW_NEEDED]
 - Fix the side-panels (settings and availableGames) not being centerd
 - Add explenation about the game somewhere
 - Change settings while in the game (during lobby gameState)
