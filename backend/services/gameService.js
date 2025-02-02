@@ -59,6 +59,15 @@ class GameManager {
   deleteGame(gameID) {
     this.games = this.games.filter(game => game.gameID !== gameID);
   }
+
+  cleanUp() {
+    const gamesToDelete = this.games.filter(game => game.players.length === 0);
+    for (const game of gamesToDelete) {
+      this.deleteGame(game.gameID);
+    }
+  }
+
+  
 }
 
-module.exports = new GameManager()
+module.exports = new GameManager();

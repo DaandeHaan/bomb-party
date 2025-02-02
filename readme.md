@@ -10,12 +10,12 @@ TODO:
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- Add cron to delete empty games every x minutes
 - Add chat
 - Lose sound being played when winning
 - Add used words list
 - sound too loud (win sound)
 
+- Game mode (langueges) with only names, brands etc?
 - Point system? (not to determine winner, but based on word length, just for fun)
 - Possible words list, for diffucult hints?
 - Google advert?

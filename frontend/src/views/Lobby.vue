@@ -23,14 +23,14 @@
     <div v-if="modalOpen" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
       <div v-on:click="closeModal" class="bg-transparent w-full h-dvh absolute"></div>
       <div class="bg-transparent rounded-lg mt-16">
-        <button @click="closeModal" class="bg-background rounded-full size-8 text-center flex items-center justify-center absolute top-2 right-2 text-white text-3xl">
+        <button @click="closeModal" class="z-50 border-2 border-border bg-background rounded-full size-8 text-center flex items-center justify-center absolute top-2 right-2 text-white text-3xl">
           <font-awesome-icon icon="close" class="text-sm text-text" />
         </button>
         <template v-if="modalType === 'settings'">
-          <Settings :config="config" @update="updateSettings" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-full bg-background p-4 rounded-lg border-2 border-border" />
+          <Settings :config="config" @update="updateSettings" class="max-w-[90%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-full bg-background p-4 rounded-lg border-2 border-border" />
         </template>
         <template v-if="modalType === 'lobbies'">
-          <AvailableGames :games="games" @join="joinLobby" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-background p-4 rounded-lg border-2 border-border" />
+          <AvailableGames :games="games" @join="joinLobby" class="max-w-[90%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-background p-4 rounded-lg border-2 border-border" />
         </template>
       </div>
     </div>

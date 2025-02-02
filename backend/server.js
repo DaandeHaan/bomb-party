@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const socketService = require('./services/socketService.js');
 const cookieParser = require('cookie-parser');
 
+require('./processes/cleanup.js')
+
 const app = express();
 const port = 3000;
 
