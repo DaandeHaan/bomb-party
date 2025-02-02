@@ -3,7 +3,7 @@
   <!-- <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]"> -->
     <!-- Player Circle -->
 
-    <PlayerList :players="players" @toLobby="toLobby"/>
+    <PlayerList :players="players" :lobbyCode="lobbyCode" @toLobby="toLobby"/>
 
     <PlayerCircle
       ref="playerCircle"
@@ -50,7 +50,6 @@ import { useToast } from "vue-toastification";
 import PlayerList from "../components/gamePage/PlayerList.vue";
 
 // State Variables
-const game = ref({});
 const playerCircle = ref(null);
 const gameStateTimer = ref(null);
 const players = ref([]);
@@ -63,6 +62,7 @@ const ws = ref(null);
 const defaultLives = ref(2);
 const inputFieldRef = ref(null);
 const currentText = ref("")
+const lobbyCode = ref("")
 // Route Parameters
 const route = useRoute();
 const router = useRouter();
@@ -211,7 +211,6 @@ const playSound = async (sound, volume = 0.5) => {
 
 const renderGameObject = game => {
   checkNextTurn(game);
-  game.value = game || {};
   players.value = game.players || players.value;
   currentLetters.value = game.letters || currentLetters.value;
   gameState.value = game.gameState || gameState.value;
@@ -219,6 +218,7 @@ const renderGameObject = game => {
   currentHint.value = game.currentHint || currentHint.value;
   currentText.value = game.currentText || ""; // ! <-- -Error
   defaultLives.value = game.defaultLives || defaultLives.value;
+  lobbyCode.value = game.gameID || lobbyCode.value;
   
   if (isCurrentPlayer.value) {
     // Input field still has to enable, so focus after that tick

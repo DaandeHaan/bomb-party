@@ -18,6 +18,12 @@
 
     </div>
 
+    <!-- LobbyCode -->
+    <div class="absolute top-4 left-1/2 -translate-x-1/2 text-center hover:scale-105 transition-all duration-300 flex-1" v-on:click="copyUrl">
+      <p class="text-xs">Lobby code</p>
+      <h1 class="w-full text-center text-primary-accent font-extrabold text-3xl">{{ lobbyCode }}</h1>
+    </div>
+
     <!-- Back To Lobby -->
     <button
       id="backToLobby"
@@ -27,15 +33,32 @@
       Lobby
     </button>
 
+
   </div>
 
 
 </template>
 
 <script setup>
+import { useToast } from 'vue-toastification';
+
 const emit = defineEmits(['toLobby']);
+
+const toast = useToast();
+
+const copyUrl = () => {
+  const currentUrl = window.location.href;  // Get the current URL
+  navigator.clipboard.writeText(currentUrl)  // Copy the URL to clipboard
+    .then(() => {
+      toast.success("URL copied to clipboard!", { timeout: 1000 });  // Success message
+    })
+    .catch(err => {
+      console.error("Failed to copy the URL: ", err);  // Error handling
+    });
+};
 
 const props = defineProps({
   players: Array,
+  lobbyCode: String,
 });
 </script>
