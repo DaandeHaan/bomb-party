@@ -4,17 +4,17 @@
 - Responsive [REVIEW_NEEDED]
 
 # Features
+- Add more words, like brands etc
+- Add logging (Games created, players etc) cool insight info!
+- Add privacy agreement
+- Give beter feedback on currentPlayer and who are you
+
 - Add sidebar (on mobile) with: (desktop is just buttons)
   - Change settings while in the game (during lobby gameState)
   - Add sound mute
   - Add auto ready
   - Add chat
   - Add used words list
-
-- Add more words, like brands etc
-- Add logging (Games created, players etc) cool insight info!
-- Add privacy agreement
-- Give beter feedback on currentPlayer and who are you
 
 - Add stats:
   - Ongoing time
