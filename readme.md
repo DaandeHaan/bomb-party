@@ -22,6 +22,7 @@
   - Longest word
 
 # Bugs
+- On iphone the `interactive-widget=resizes-content` to stop the keyboard from tripping
 - Sometimes hints do occure twice in a row
 - Disable keyboard suggestions (Current solution autocapitalize, autocomplete, autocorrect, spellcheck do not work) 
 - CopyURL is not allowed, because its a insecure context, this can be fixed once we fully deploy 
