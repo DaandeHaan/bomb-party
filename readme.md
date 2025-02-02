@@ -24,9 +24,9 @@ TODO:
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
 - Overflow with timer and back-button on mobile
-
-- MOBILE LAYOUT IS NOT ENJOYABLE RIGHT NOW. When the keyboard opens you can't read the hint anymore, its very glitchy overall, maybe add the sendButton on mobile devies?
-    And prevent screen jumps!
+- Disable mobile keyboard suggesstions
+- Make text-highlight ignore case-sensitive
+- Remove spaces from words, when they get send
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

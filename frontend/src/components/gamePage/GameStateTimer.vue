@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentTimer > 0" class="absolute top-5 text-center text-3xl text-[#7DCFFF]">
+  <div v-if="currentTimer > 0" class="md:absolute md:top-5 text-center text-lg md:text-3xl text-[#7DCFFF]">
     <span v-if="gameState == 'lobby'">Game starting in </span>{{ currentTimer.toFixed(1) }} seconds <span v-if="gameState == 'playing'">left</span>
   </div>
 </template> 

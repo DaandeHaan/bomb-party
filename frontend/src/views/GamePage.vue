@@ -1,5 +1,5 @@
 <template>
-  <div class="font-sans h-dvh flex flex-col items-center justify-between bg-gradient-to-b from-background-gradient-start to-background-gradient-end p-4">
+  <div class="font-sans min-h-dvh flex flex-col items-center justify-between bg-gradient-to-b from-background-gradient-start to-background-gradient-end p-4">
   <!-- <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]"> -->
     <!-- Player Circle -->
 
@@ -16,6 +16,12 @@
       :currentText="currentText"
     />
 
+    <!-- Game State Timer -->
+    <GameStateTimer
+      :gameState="gameState"
+      ref="gameStateTimer"
+    />
+
     <!-- Input Field -->
     <InputField
       ref="inputFieldRef"
@@ -30,11 +36,6 @@
       @toggleReadyUp="toggleReadyUp"
     />
 
-    <!-- Game State Timer -->
-    <GameStateTimer
-      :gameState="gameState"
-      ref="gameStateTimer"
-    />
   </div>
 </template>
 
@@ -236,6 +237,8 @@ const checkNextTurn = (game) => {
   if (incomingCurrentPlayer?.id !== localCurrentPlayer?.id) {
     inputWord.value = "";
     gameStateTimer.value.startTimer(game.timer);
+    // Scrol to the top of the page
+    window.scrollTo(0, 0);
   }
 };
 

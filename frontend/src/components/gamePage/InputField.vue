@@ -1,7 +1,7 @@
 <template>
   <div class="w-full bottom-12 px-6 gap-4 flex justify-center flex-col">
     <!-- Game Actions -->
-    <div class="mt-6 flex justify-center gap-4">
+    <div class="flex justify-center gap-4">
        <!-- Ready Up Button -->
       <button
         v-if="!gameHasStarted"
