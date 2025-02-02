@@ -2,12 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Lobby from '../views/Lobby.vue';
 import GamePage from '../views/GamePage.vue';
 import axios from 'axios';
+import { useToast } from 'vue-toastification';
 
 const routes = [
   { path: '/', name: 'lobby', component: Lobby, beforeEnter: (to, from, next) => {
-    // This code only runs when the user navigates or reload's the page, if does not get triggerd when the params change
-    console.log('Message:', to.query.message);
-
     next();
   }},
   { 
@@ -36,10 +34,9 @@ const routes = [
 
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          next({ name: 'lobby', query: { message: 'Lobby does not exist' } });
+          useToast().error('Lobby does not exist');
         } else {
-          console.error('Error checking lobby existence:', error);
-          next({ name: 'lobby', query: { message: 'An error occurred. Please try again.' } });
+          useToast().error('An error occurred');
         }
       }
     }, 

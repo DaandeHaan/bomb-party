@@ -9,8 +9,11 @@ TODO:
   - Add chat
   - Add used words list
 
-- Fix the message query in the lobby (url)
-- Add explenation about the game somewhere
+- Add explenation about the game somewhere:
+  - Meervoud werkt niet
+  - Worden boven de 10+ karakters is tijd sneller omlaag
+  - Hint moet in het woord voorkomen, positie maakt niet uit
+
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
@@ -23,6 +26,9 @@ TODO:
 - Google advert?
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
+- New game modes:
+  - competative :: Everyone has their own timer, the longer the word, the more the timer decreases of other players
+  - verus :: Everyone can type at the same time, who is the fastest (How to win?)
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
