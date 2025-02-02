@@ -14,7 +14,7 @@
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- Disable keyboard suggestions
+- Disable keyboard suggestions (Current solution autocapitalize, autocomplete, autocorrect, spellcheck do not work) 
 - When user is 'not in time' do a last check, to see if the word they currently have typed is a valid word.
 - Give beter feedback on currentPlayer and who are you
 

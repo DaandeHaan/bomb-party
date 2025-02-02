@@ -36,6 +36,7 @@
         autocapitalize="off"
         autocomplete="off"
         autocorrect="off"
+        aria-autocomplete="none"
         spellcheck="false"
         class="w-full md:max-w-lg flex-1 py-3 px-4 rounded-lg bg-[#2A2A40] text-[#D9E0EE] placeholder-[#7AA2F7] border border-[#7AA2F7] focus:outline-none focus:ring-2 focus:ring-[#A28DEB] focus:border-transparent transition-all duration-300"
       />
