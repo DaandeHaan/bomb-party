@@ -16,7 +16,7 @@ TODO:
 - Add used words list
 - sound too loud (win sound)
 
-- Point system? (not to determine winner, but based on word length)
+- Point system? (not to determine winner, but based on word length, just for fun)
 - Possible words list, for diffucult hints?
 - Google advert?
 - Remove welcome message? Annoying on mobile...
