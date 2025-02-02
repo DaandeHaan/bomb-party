@@ -11,11 +11,6 @@
   - Add chat
   - Add used words list
 
-- Add explenation about the game somewhere:
-  - Meervoud werkt niet
-  - Worden boven de 10+ karakters is tijd sneller omlaag
-  - Hint moet in het woord voorkomen, positie maakt niet uit
-
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
