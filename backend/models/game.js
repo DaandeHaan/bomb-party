@@ -252,6 +252,8 @@ class Game {
     this.timer = Math.max(1, this.timer);
 
     this.nextTurn();
+
+    return true;
   }
 
   nextTurn(failed = false) {
@@ -287,6 +289,10 @@ class Game {
   }
 
   NotInTime() {
+
+    // Check if the current user's text is still a valid word
+    if (this.guessWord(this.players.find(p => p.currentPlayer === true).currentText))
+      return this.sendGameObject();
 
     // Reset Timer
     this.timer = this.defaultTimer;
