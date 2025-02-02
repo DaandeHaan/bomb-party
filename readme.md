@@ -20,10 +20,9 @@ TODO:
 - green outline if its your turn (whole screen neo green)
 - global-typing-text can overflow when typing in the circle
 - Google advert?
-- Fix lives/hearts overflow
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
-- Overflow with timer and back-button on mobile
+- Close modal by clicking outside
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

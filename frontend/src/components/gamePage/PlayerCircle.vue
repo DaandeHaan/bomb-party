@@ -12,15 +12,26 @@
             class="max-w-24 min-w-12 md:max-w-96 md:min-w-32 relative flex flex-col items-center text-sm font-semibold py-1 md:py-2 px-2 md:px-4 rounded-lg shadow-md transition-all duration-300 bg-background border-2 border-border text-text">
 
         <!-- Player Lives -->
-        <div class="absolute -top-5 md:-top-6 text-xs font-medium flex gap-1 w-full items-center justify-center">
-          <span v-for="i in defaultLives" :key="i" 
-                :class="{
-                  'text-error': i <= player.lives, 
-                  'text-gray-400 opacity-70': i > player.lives
-                }">
-            <font-awesome-icon icon="heart" class="text-sm md:text-lg" />
-          </span>
+        <div class="absolute -top-6 md:-top-7 text-xs font-medium flex gap-1 w-full items-center justify-center overflow-x-hidden">
+          <template v-if="player.lives > 3">
+            <!-- Display a single heart with the number of lives if there are more than 5 -->
+            <span class="flex items-center gap-1">
+              <font-awesome-icon icon="heart" class="text-sm md:text-lg text-error" />
+              <span class="text-sm md:text-lg">{{ player.lives }}</span>
+            </span>
+          </template>
+          <template v-else>
+            <!-- Display individual hearts for each life -->
+            <span v-for="i in defaultLives" :key="i" 
+                  :class="{
+                    'text-error': i <= player.lives, 
+                    'text-gray-400 opacity-70': i > player.lives
+                  }">
+              <font-awesome-icon icon="heart" class="text-sm md:text-lg" />
+            </span>
+          </template>
         </div>
+
 
         <!-- Player Name -->
         <div class="text-xs md:text-md font-bold"
