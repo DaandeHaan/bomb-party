@@ -18,11 +18,9 @@ TODO:
 - Possible words list, for diffucult hints?
 - sound too loud (win sound)
 - green outline if its your turn (whole screen neo green)
-- global-typing-text can overflow when typing in the circle
 - Google advert?
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
-- Close modal by clicking outside
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3

@@ -34,13 +34,13 @@
 
 
         <!-- Player Name -->
-        <div class="text-xs md:text-md font-bold"
+        <div class="text-xs md:text-md font-bold select-none"
             :class="player.isYou ? 'text-red-500' : ''">
           {{ player.username }}
         </div>
 
         <!-- Word Segments -->
-        <div class="flex max-w-20 md:max-w-96 overflow-hidden flex-nowrap text-ellipsis">
+        <div class="select-none flex max-w-20 md:max-w-96 overflow-hidden flex-nowrap text-ellipsis">
           <span
             v-for="(segment, idx) in getHighlightedSegments(player.currentText, player)"
             :key="idx"
@@ -57,7 +57,7 @@
     <!-- Last Winner -->
     <div
       v-if="!gameHasStarted && lastWinner"
-      class="flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xs md:text-xl font-bold py-4 px-6 rounded-full shadow-lg"
+      class="select-none flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xs md:text-xl font-bold py-4 px-6 rounded-full shadow-lg"
     >
       🏆 Last Winner 🏆
       <div class="text-sm font-medium">{{ lastWinner.username }}</div>
@@ -66,7 +66,7 @@
     <!-- Current Hint -->
     <div
       v-else
-      class="flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
+      class="select-none flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
     >
       {{ currentHint }}
     </div>
@@ -74,7 +74,7 @@
     <!-- Current Text -->
     <div
       v-if="gameHasStarted"
-      class="absolute top-[60%] flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
+      class="select-none absolute top-[60%] flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
     >
         <div class="flex max-w-44 md:max-w-96 overflow-hidden flex-nowrap">
           <span

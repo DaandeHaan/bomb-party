@@ -6,7 +6,7 @@
       <button
         v-if="!gameHasStarted"
         @click="$emit('toggleReadyUp')"
-        class="w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+        class="select-none w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A6E3A1] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
       >
       {{ currentPlayer?.isReady ? 'Unready' : 'Ready Up' }}
       </button>
@@ -16,7 +16,7 @@
         id="startGameButton"
         v-if="isYouAndOwner && !gameHasStarted"
         @click="$emit('gameStart')"
-        class="w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
+        class="select-none w-full md:w-32 py-3 px-6 rounded-lg bg-gradient-to-r from-[#A28DEB] to-[#BB9AF7] text-[#1E1E2E] font-semibold shadow-md hover:scale-105 transition-all duration-300"
       >
         Start Game
       </button>

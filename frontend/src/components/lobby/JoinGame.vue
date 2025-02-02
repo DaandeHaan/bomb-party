@@ -4,32 +4,32 @@
 
     <div class="flex flex-col gap-6 items-center justify-center mt-10">
       <div class="flex flex-col w-full">
-        <label class="text-text">Username <span :class="username.length == 20 && 'text-red-400'">({{ username.length }}/20)</span></label>
+        <label class="text-text select-none">Username <span :class="username.length == 20 && 'text-red-400'">({{ username.length }}/20)</span></label>
         <input id="username" v-model="username" maxlength="20"
           class="border border-primary-accent bg-transparent rounded w-full h-12 p-2 outline-none text-text"
           placeholder="Username">
       </div>
 
       <div class="flex flex-col w-full">
-        <label class="text-text">Lobby Code</label>
+        <label class="text-text select-none">Lobby Code</label>
         <input v-model="code"
           class="border border-primary-accent bg-transparent rounded w-full h-12 p-2 outline-none text-text"
           placeholder="Lobby Code">
       </div>
 
       <button @click="joinLobby"
-        class="bg-primary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-primary-highlight">
+        class="bg-primary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-primary-highlight select-none">
         Join Game
       </button>
 
       <div class="flex items-center justify-center w-full">
         <div class="flex-grow border-t border-text"></div>
-        <span class="mx-3 text-text">or</span>
+        <span class="mx-3 text-text select-none">or</span>
         <div class="flex-grow border-t border-text"></div>
       </div>
 
       <button @click="createLobby"
-        class="bg-secondary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-secondary-highlight">
+        class="bg-secondary-accent rounded w-full h-12 p-2 outline-none text-text hover:bg-secondary-highlight select-none">
         Create Game
       </button>
     </div>
