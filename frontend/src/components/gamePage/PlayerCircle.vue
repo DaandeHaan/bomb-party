@@ -1,5 +1,5 @@
 <template>
-  <div id="circle"
+  <!-- <div id="circle"
     :class="[
     'relative', 
     'md:w-[600px]', 
@@ -18,7 +18,8 @@
     'bg-[#1E1E2E]', 
     'shadow-xl', 
     { 'border-success': isCurrentPlayer }
-  ]">
+  ]"> -->
+  <div :class="isCurrentPlayer && 'border-success'" class="relative size-[300px] min-w-[300px] min-h-[300px] max-w-[300px] max-h-[300px] md:size-[600px] md:min-w-[600px] md:min-h-[600px] md:max-w-[600px] md:max-h-[600px] border-4 border-border rounded-full flex flex-col items-center justify-center">
   <!-- Players -->
     <div
       v-for="(player, index) in readyPlayers"
@@ -65,7 +66,7 @@
     <!-- Last Winner -->
     <div
       v-if="!gameHasStarted && lastWinner"
-      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xs md:text-xl font-bold py-4 px-6 rounded-full shadow-lg"
+      class="flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#A28DEB] text-[#1E1E2E] text-xs md:text-xl font-bold py-4 px-6 rounded-full shadow-lg"
     >
       🏆 Last Winner 🏆
       <div class="text-sm font-medium">{{ lastWinner.username }}</div>
@@ -74,7 +75,7 @@
     <!-- Current Hint -->
     <div
       v-else
-      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
+      class="flex flex-col items-center bg-gradient-to-r from-[#7AA2F7] to-[#BB9AF7] text-[#1E1E2E] text-4xl font-bold py-6 px-12 rounded-full shadow-lg"
     >
       {{ currentHint }}
     </div>
@@ -82,7 +83,7 @@
     <!-- Current Text -->
     <div
       v-if="gameHasStarted"
-      class="absolute top-1/2 left-1/2 translate-y-2/4 -translate-x-1/2 flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
+      class="absolute top-[60%] flex items-center justify-center text-[#1E1E2E] text-4xl font-bold py-6 px-12"
     >
         <div class="flex max-w-44 md:max-w-96 overflow-hidden flex-nowrap">
           <span

@@ -1,5 +1,6 @@
 <template>
-  <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]">
+  <div class="font-sans h-dvh flex flex-col items-center justify-between bg-gradient-to-b from-background-gradient-start to-background-gradient-end p-4">
+  <!-- <div class="overflow-hidden relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E2E] to-[#121221] text-[#D9E0EE]"> -->
     <!-- Player Circle -->
 
     <PlayerList :players="players" @toLobby="toLobby"/>
