@@ -17,7 +17,6 @@
 - Disable keyboard suggestions
 - When user is 'not in time' do a last check, to see if the word they currently have typed is a valid word.
 - Disable translations (Maybe add our own?)
-- Update Icon
 - Give beter feedback on currentPlayer and who are you
 
 - Add stats:
