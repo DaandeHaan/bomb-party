@@ -48,6 +48,9 @@ module.exports = {
           '100%': { transform: 'translateX(0)' },
         },
       },
+      boxShadow: {
+        neonInner: 'inset 0 0 10px #a6e3a1, inset 0 0 20px #a6e3a1', // Smaller inner neon glow effect
+      },
     },
   },
   plugins: [],

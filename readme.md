@@ -14,10 +14,10 @@ TODO:
 - Add chat
 - Lose sound being played when winning
 - Add used words list
+- sound too loud (win sound)
+
 - Point system? (not to determine winner, but based on word length)
 - Possible words list, for diffucult hints?
-- sound too loud (win sound)
-- green outline if its your turn (whole screen neo green)
 - Google advert?
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
