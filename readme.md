@@ -1,7 +1,9 @@
-TODO:
+# TODO:
 
+# Reviews:
 - Responsive [REVIEW_NEEDED]
 
+# Features
 - Add sidebar (on mobile) with: (desktop is just buttons)
   - Change settings while in the game (during lobby gameState)
   - Add sound mute
@@ -17,8 +19,36 @@ TODO:
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- Lose sound being played when winning (sometimes?)
+- send button mobile
+- lobby code top of screen
 
+- Disable keyboard suggestions
+
+- Add stats:
+  - Ongoing time
+  - Total words
+  - Longest word
+
+# Bugs
+- Crash when dead player gets turn (looks like that is what happend)
+TypeError: Converting circular structure to JSON
+   --> starting at object with constructor 'Timeout'
+   |     property '_idlePrev' -> object with constructor 'TimersList'
+   --- property '_idleNext' closes the circle
+   at JSON.stringify (<anonymous>)
+   at stringify (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/response.js:1160:12)
+   at ServerResponse.json (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/response.
+   at /home/kwaliteit/other_projects/bomb-party/backend/controllers/gameController.js:59:9
+   at Layer.handle [as handle_request] (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/
+   at next (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/route.js:149:13)
+   at Route.dispatch (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/route.
+   at Layer.handle [as handle_request] (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/
+   at /home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/index.js:284:15
+   at param (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/index.js:365:14)
+
+- Lives are not displayed correctly, they switch at somepoint from number to icons (think whne its less then 3 lives remaining)
+
+# Suggestions
 - Do we want to fetch public games only on refresh, or also every x seconds?
 - Game mode (langueges) with only names, brands etc?
 - Point system? (not to determine winner, but based on word length, just for fun)
