@@ -30,9 +30,12 @@
       <p class="mb-1">- After a correct guess or a time-out, the turn passes to the next player.</p>
       <p class="mb-1">- After a correct guess, the timer speeds up for all players.</p>
       <p class="mb-1">- If a player fails to answer, the timer resets to its default speed.</p>
+      <p class="mb-1">- If a player fails to answer, the hint will not change until all players failed, or guessed correctly.</p>
       <p class="mb-1">- Guessing a word with 10 or more characters causes the timer to decrease even faster.</p>
       <p class="mb-1">- Words cannot be guessed more than once.</p>
       <p class="mb-1">- The game uses a public word list, which may exclude certain words, such as plurals.</p>
+      <p class="mb-1">- The game is case-insensitive.</p>
+      
     </div>
 
 
