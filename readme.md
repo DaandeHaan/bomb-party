@@ -21,8 +21,10 @@
 - Add privacy agreement
 - send button mobile
 - lobby code top of screen
-
 - Disable keyboard suggestions
+- When user is 'not in time' do a last check, to see if the word they currently have typed is a valid word.
+- Disable translations (Maybe add our own?)
+- Update Icon
 
 - Add stats:
   - Ongoing time
