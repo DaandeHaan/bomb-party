@@ -35,8 +35,13 @@ const routes = [
       } catch (error) {
         if (error.response && error.response.status === 404) {
           useToast().error('Lobby does not exist');
+          next({ name: 'lobby' });
+        } else if (error.response && error.response.status === 400) {
+          useToast().error('The game is full');
+          next({ name: 'lobby' });
         } else {
           useToast().error('An error occurred');
+          next({ name: 'lobby' });
         }
       }
     }, 

@@ -125,7 +125,18 @@ class Game {
       return this.sendMessage(this.players.find(p => p.isOwner).sessionID, {type: 'NOT_ENOUGH_PLAYERS'});
 
     this.gameState = 'playing';
-    this.players[Math.floor(Math.random() * this.players.length)].currentPlayer = true;
+
+    // Assuming this.players is an array of player objects
+    const readyPlayers = this.players.filter(player => player.isReady === true);
+
+    // Select a random player from the readyPlayers array
+    const randomPlayer = readyPlayers[Math.floor(Math.random() * readyPlayers.length)];
+
+    // Set the currentPlayer to true for the selected random player
+    if (randomPlayer) {
+      randomPlayer.currentPlayer = true;
+    }
+
     this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty).toLowerCase().trim();
     this.lastHint = this.currentHint;
     this.guessedWords = [];
@@ -259,13 +270,15 @@ class Game {
   }
 
   getNewPlayer() {
-    const currentPlayer = this.players.findIndex(p => p.currentPlayer === true);
+    let currentPlayer = this.players.findIndex(p => p.currentPlayer === true);
     this.players[currentPlayer].currentPlayer = false;
 
     // Get the next player (that is ready and has lives)
     let nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
 
     while (!nextPlayer.isReady || nextPlayer.lives === 0) {
+
+      currentPlayer = this.players.findIndex(p => p.sessionID === nextPlayer.sessionID);
       nextPlayer = this.players[(currentPlayer + 1) % this.players.length];
     }
 

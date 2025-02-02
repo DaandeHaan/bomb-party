@@ -26,7 +26,7 @@
   - Longest word
 
 # Bugs
-None
+- Sometimes hints do occure twice in a row
 
 # Suggestions
 - Do we want to fetch public games only on refresh, or also every x seconds?
