@@ -13,7 +13,7 @@
 
         <!-- Player Lives -->
         <div class="absolute -top-6 md:-top-7 text-xs font-medium flex gap-1 w-full items-center justify-center overflow-x-hidden">
-          <template v-if="player.lives > 3">
+          <template v-if="defaultLives > 3">
             <!-- Display a single heart with the number of lives if there are more than 5 -->
             <span class="flex items-center gap-1">
               <font-awesome-icon icon="heart" class="text-sm md:text-lg text-error" />

@@ -14,7 +14,6 @@
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- lobby code top of screen
 - Disable keyboard suggestions
 - When user is 'not in time' do a last check, to see if the word they currently have typed is a valid word.
 - Disable translations (Maybe add our own?)
@@ -42,8 +41,6 @@ TypeError: Converting circular structure to JSON
    at Layer.handle [as handle_request] (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/
    at /home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/index.js:284:15
    at param (/home/kwaliteit/other_projects/bomb-party/backend/node_modules/express/lib/router/index.js:365:14)
-
-- Lives are not displayed correctly, they switch at somepoint from number to icons (think whne its less then 3 lives remaining)
 
 # Suggestions
 - Do we want to fetch public games only on refresh, or also every x seconds?
