@@ -1,25 +1,5 @@
 <template>
-  <!-- <div id="circle"
-    :class="[
-    'relative', 
-    'md:w-[600px]', 
-    'md:h-[600px]', 
-    'md:pb-0',
-    'w-[300px]',
-    'h-[300px]', // Maintain aspect ratio
-    'max-w-[600px]', 
-    'max-h-[600px]', // Set max dimensions
-    'flex', 
-    'items-center', 
-    'justify-center', 
-    'rounded-full', 
-    'border-4', 
-    'border-[#2A2A40]', 
-    'bg-[#1E1E2E]', 
-    'shadow-xl', 
-    { 'border-success': isCurrentPlayer }
-  ]"> -->
-  <div :class="isCurrentPlayer && 'border-success'" class="relative size-[300px] min-w-[300px] min-h-[300px] max-w-[300px] max-h-[300px] md:size-[600px] md:min-w-[600px] md:min-h-[600px] md:max-w-[600px] md:max-h-[600px] border-4 border-border rounded-full flex flex-col items-center justify-center">
+  <div id="circle" :class="isCurrentPlayer && 'border-success'" class="relative size-[300px] min-w-[300px] min-h-[300px] max-w-[300px] max-h-[300px] md:size-[600px] md:min-w-[600px] md:min-h-[600px] md:max-w-[600px] md:max-h-[600px] border-4 border-border rounded-full flex flex-col items-center justify-center">
   <!-- Players -->
     <div
       v-for="(player, index) in readyPlayers"
@@ -89,7 +69,7 @@
           <span
             v-for="(segment, idx) in getWordHighlights(currentText)"
             :key="idx"
-            class="md:text-5xl text-xl leading-tight"
+            class="text-[clamp(1rem,4vw,3rem)] leading-tight"
             :class="segment.isHint ? 'text-warning font-semibold' : 'text-[#C8D1E0]'"
           >
             {{ segment.text }}
@@ -154,10 +134,10 @@ const getHighlightedSegments = (word, player) => {
     return playerSegments[player.id] || [{ text: word, isHint: false }];
   }
 
-  const hint = props.currentHint.trim();
+  const hint = props.currentHint.trim().toLowerCase();
 
   const segments = [];
-  let remainingWord = word;
+  let remainingWord = word.toLowerCase();
 
   while (remainingWord.length > 0) {
     if (remainingWord.startsWith(hint)) {
@@ -177,10 +157,10 @@ const getHighlightedSegments = (word, player) => {
 const getWordHighlights = (word) => {
   if (!word || !props.currentHint) return [{ text: word, isHint: false }];
 
-  const hint = props.currentHint.trim();
+  const hint = props.currentHint.trim().toLowerCase();
 
   const segments = [];
-  let remainingWord = word;
+  let remainingWord = word.toLowerCase();
 
   while (remainingWord.length > 0) {
     if (remainingWord.startsWith(hint)) {

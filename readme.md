@@ -25,8 +25,6 @@ TODO:
 - Troll Menu?
 - Overflow with timer and back-button on mobile
 - Disable mobile keyboard suggesstions
-- Make text-highlight ignore case-sensitive
-- Remove spaces from words, when they get send
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
