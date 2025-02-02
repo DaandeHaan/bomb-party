@@ -24,7 +24,6 @@ TODO:
 - Remove welcome message? Annoying on mobile...
 - Troll Menu?
 - Overflow with timer and back-button on mobile
-- Disable mobile keyboard suggesstions
 
 # Events
 PLAYER_JOINED               - playerJoined.mp3
