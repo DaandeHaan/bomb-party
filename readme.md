@@ -14,7 +14,6 @@
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- Disable keyboard suggestions (Current solution autocapitalize, autocomplete, autocorrect, spellcheck do not work) 
 - Give beter feedback on currentPlayer and who are you
 
 - Add stats:
@@ -24,6 +23,7 @@
 
 # Bugs
 - Sometimes hints do occure twice in a row
+- Disable keyboard suggestions (Current solution autocapitalize, autocomplete, autocorrect, spellcheck do not work) 
 
 # Suggestions
 - Do we want to fetch public games only on refresh, or also every x seconds?

@@ -1,5 +1,5 @@
 <template>
-  <div class="max-h-[calc(100%-8rem)] overflow-scroll">
+  <div class="max-h-[calc(100%-8rem)] overflow-scroll no-scrollbar">
 
     <!-- Header -->
     <header class="text-center border-b-2 border-border pb-4 mb-4">
@@ -7,7 +7,7 @@
     </header>
 
     <!-- Content -->
-    <div class="max-h-[90%] overflow-scroll">
+    <div class="max-h-[90%] overflow-scroll no-scrollbar">
       <p class="font-extrabold text-lg">💣 Welcome to Bomb Party! 💥</p>
       <p>Bomb Party is an exciting and fast-paced word game created by
         <a href="https://github.com/TamiELB" target="_blank" class="underline text-primary-accent">Tami</a>
