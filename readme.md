@@ -2,19 +2,21 @@ TODO:
 
 - Responsive [REVIEW_NEEDED]
 
+- Add sidebar (on mobile) with: (desktop is just buttons)
+  - Change settings while in the game (during lobby gameState)
+  - Add sound mute
+  - Add auto ready
+  - Add chat
+  - Add used words list
+
 - Fix the message query in the lobby (url)
 - Add explenation about the game somewhere
-- Change settings while in the game (during lobby gameState)
-- Add sound mute
-- Add auto ready
 - Add more words, like brands etc
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
-- Add chat
-- Lose sound being played when winning
-- Add used words list
-- sound too loud (win sound)
+- Lose sound being played when winning (sometimes?)
 
+- Do we want to fetch public games only on refresh, or also every x seconds?
 - Game mode (langueges) with only names, brands etc?
 - Point system? (not to determine winner, but based on word length, just for fun)
 - Possible words list, for diffucult hints?

@@ -131,7 +131,7 @@ const checkMessageType = async (message) =>{
 
   if(message.type === "GAME_FINISHED_WON")
   {
-    playSound("gameWon");
+    playSound("gameWon", 0.25);
     const element = document.getElementById(message.id);
     if (element) {
       element.classList.add('scale-115');
