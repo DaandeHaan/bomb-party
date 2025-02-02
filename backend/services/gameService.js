@@ -51,7 +51,7 @@ class GameManager {
     let games = [];
     for (const game of this.games) {
       if (!game.privateGame)
-        games.push(game);
+        games.push(game.getGame());
     }
     return games;
   }
