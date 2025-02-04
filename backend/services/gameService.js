@@ -1,3 +1,4 @@
+const Logger = require('../logs/logger.js');
 const Game = require('../models/game.js');
 
 class GameManager {
@@ -40,6 +41,9 @@ class GameManager {
 
     const game = new Game(settings);
     this.games.push(game);
+
+    Logger.log(`[${game.gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] Game created with settings: ${JSON.stringify(settings)}`);
+
     return game;
   }
 
@@ -57,12 +61,14 @@ class GameManager {
   }
 
   deleteGame(gameID) {
+    Logger.log(`[${gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] Game deleted`);
     this.games = this.games.filter(game => game.gameID !== gameID);
   }
 
   cleanUp() {
     const gamesToDelete = this.games.filter(game => game.players.length === 0);
     for (const game of gamesToDelete) {
+      Logger.log(`[${game.gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] Game deleted due to inactivity`);
       this.deleteGame(game.gameID);
     }
   }

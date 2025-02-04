@@ -1,3 +1,4 @@
+const Logger = require("../logs/logger");
 const wordService = require("../services/wordService");
 const Player = require("./player");
 
@@ -52,6 +53,8 @@ class Game {
 
     this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_JOINED', id: player.id, username: player.username});
 
+    Logger.log(`[${this.gameID}] [${player.id}] Joined the game (${this.players.length}/${this.maxPlayers})`);
+
     return true;
 
   }
@@ -83,6 +86,8 @@ class Game {
 
     this.sendGameObject();
 
+    Logger.log(`[${this.gameID}] [${player.id}] Left the game (${this.players.length}/${this.maxPlayers})`);
+
     this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_LEFT', id: player.id, username: player.username});
   }
 
@@ -97,10 +102,13 @@ class Game {
     if (!foundPlayer)
       return false;
 
-    if (foundPlayer.isReady)
+    if (foundPlayer.isReady) {
       foundPlayer.isReady = false;
-    else
+      Logger.log(`[${this.gameID}] [${foundPlayer.id}] Set their status to unready! (${this.players.filter(p => p.isReady).length}/${this.players.length})`);
+    } else {
       foundPlayer.isReady = true;
+      Logger.log(`[${this.gameID}] [${foundPlayer.id}] Set their status to ready! (${this.players.filter(p => p.isReady).length}/${this.players.length})`);
+    }
 
     // Check if 2 players or more are ready
     if (this.players.filter(p => p.isReady).length >= 2) {
@@ -137,7 +145,7 @@ class Game {
       randomPlayer.currentPlayer = true;
     }
 
-    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty).toLowerCase().trim();
+    this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty, this.gameID).toLowerCase().trim();
     this.lastHint = this.currentHint;
     this.guessedWords = [];
     this.timer = this.defaultTimer;
@@ -145,6 +153,9 @@ class Game {
     this.startTimer();
 
     this.sendMessage(this.players.map(player => player.sessionID), {type: 'GAME_STARTED'});
+
+    Logger.log(`[${this.gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] Game started with ${this.players.filter(p => p.isReady).length} players!`);
+
     this.sendGameObject();
   }
 
@@ -180,6 +191,8 @@ class Game {
 
     const losers = this.players.map(player => player.sessionID).filter(sessionID => sessionID !== winner.id);
 
+    Logger.log(`[${this.gameID}] [${winner.id}] Has won!`);
+
     this.sendMessage(losers, { type: 'GAME_FINISHED_LOST', losers: losers }
     );
 
@@ -214,6 +227,7 @@ class Game {
       this.setText(currentPlayer, "")
       this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Guessed '${word}' but this word has already been guessed (HINT: ${this.currentHint})`);
       return 
     }
     
@@ -222,6 +236,7 @@ class Game {
       this.setText(currentPlayer, "")
       this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Guessed '${word}' but it does not contain the hint '${this.currentHint}'`);
       return 
     }
     
@@ -230,6 +245,7 @@ class Game {
       this.setText(currentPlayer, "")
       this.currentText = "";
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_NOT_FOUND', id: this.players.find(p => p.currentPlayer === true).id});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Guessed '${word}' but its not a valid word (HINT: ${this.currentHint})`);
       return 
     }
 
@@ -238,8 +254,10 @@ class Game {
     if (word.length >= 10) {
       randomPercentage = (Math.random() * 0.1 + 0.1); // Between 10 and 20%
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'EXCELENT_WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Guessed '${word}', which is an excellent word!`);
     } else {
       this.sendMessage(this.players.map(player => player.sessionID), {type: 'WORD_FOUND', id: this.players.find(p => p.currentPlayer === true).id, word: word});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Guessed '${word}', which is correct!`);
     }
 
     // Add word to guessed words
@@ -253,6 +271,8 @@ class Game {
 
     this.nextTurn();
 
+    Logger.log(`[${this.gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] The timer is now at ${this.timer.toFixed(2)} seconds`);
+
     return true;
   }
 
@@ -261,7 +281,7 @@ class Game {
 
     if (!failed || this.failedTimes >= this.players.filter(p => p.isReady && p.lives > 0).length) {
       this.failedTimes = 0;
-      this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty);
+      this.currentHint = wordService.getHint(this.lastHint, this.language, this.diffuculty, this.gameID);
       this.lastHint = this.currentHint;
     }
 
@@ -291,8 +311,9 @@ class Game {
   NotInTime() {
 
     // Check if the current user's text is still a valid word
-    if (this.guessWord(this.players.find(p => p.currentPlayer === true).currentText))
+    if (this.guessWord(this.players.find(p => p.currentPlayer === true).currentText)) 
       return this.sendGameObject();
+
 
     // Reset Timer
     this.timer = this.defaultTimer;
@@ -300,18 +321,24 @@ class Game {
     // Update failed times
     this.failedTimes++;
 
-    // Remove Live
-    this.players.find(p => p.currentPlayer === true).lives--;
+    const currentPlayer = this.players.find(p => p.currentPlayer === true);
 
-    if (this.players.find(p => p.currentPlayer === true).lives === 0)
-      this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_DIED', id: this.players.find(p => p.currentPlayer === true).id});
-    else
-      this.sendMessage(this.players.map(player => player.sessionID), {type: 'LIVE_LOST', id: this.players.find(p => p.currentPlayer === true).id});
+    // Remove Live
+    currentPlayer.lives--;
+
+    if (currentPlayer.lives === 0) {
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'PLAYER_DIED', id: currentPlayer.id});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Died because they did not guess the word in time.`);
+    } else {
+      this.sendMessage(this.players.map(player => player.sessionID), {type: 'LIVE_LOST', id: currentPlayer.id});
+      Logger.log(`[${this.gameID}] [${currentPlayer.id}] Did not guess the word in time. (${currentPlayer.lives} lives remaining)`);
+    }
 
     if (this.checkWinner())
       return;
 
     this.nextTurn(true);
+    Logger.log(`[${this.gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] Timer is now at ${this.timer.toFixed(2)} seconds`);
 
     this.sendGameObject();
   }

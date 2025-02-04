@@ -8,7 +8,6 @@
 - Add logging (Games created, players etc) cool insight info!
 - Add privacy agreement
 - Give beter feedback on currentPlayer and who are you
-- Add confirm popup when player is leaving
 
 - Add sidebar (on mobile) with: (desktop is just buttons)
   - Change settings while in the game (during lobby gameState)

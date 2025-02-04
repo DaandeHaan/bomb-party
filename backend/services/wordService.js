@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const Logger = require('../logs/logger');
 
 class wordService {
 
-  getHint(lastHint, language, difficulty) {
+  getHint(lastHint, language, difficulty, gameID) {
     
     if (difficulty === "baby") {
       const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -24,6 +25,8 @@ class wordService {
       hint = hints[Math.floor(Math.random() * hints.length)];
     }
   
+    Logger.log(`[${gameID}] [xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx] New hint: ${hint} | Previous hint: ${lastHint}`);
+
     return hint.toLowerCase().trim();
   }
 

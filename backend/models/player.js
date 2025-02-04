@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const { log } = require('../logs/logger');
 
 class Player {
   constructor(sessionID, username, lives) {
