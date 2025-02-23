@@ -9,20 +9,18 @@ const difficultyThresholds = {
   Hardcore: 100
 };
 
-const language = 'english'
+const language = 'dutch';
 
 function generateHints() {
   console.log('Generating all 2-letter and 3-letter combinations...');
   const hints = [];
-  
-  // 2-letter combinations (aa to zz)
-  for (let i = 97; i <= 122; i++) {  // 'a' to 'z'
+
+  for (let i = 97; i <= 122; i++) { 
     for (let j = 97; j <= 122; j++) {
       hints.push(String.fromCharCode(i) + String.fromCharCode(j));
     }
   }
-  
-  // 3-letter combinations (aaa to zzz)
+
   for (let i = 97; i <= 122; i++) {
     for (let j = 97; j <= 122; j++) {
       for (let k = 97; k <= 122; k++) {
@@ -35,23 +33,18 @@ function generateHints() {
 }
 
 function getWords() {
-  // Read file and split into array of words
   return fs.readFileSync(`../languages/${language}/words.txt`, 'utf-8').toLowerCase().split(/\s+/);
 }
 
 function saveToFile(file, hint) {
-  // Define the output folder
   const outputFolder = path.join(__dirname, 'output');
 
-  // Ensure the output folder exists
   if (!fs.existsSync(outputFolder)) {
     fs.mkdirSync(outputFolder, { recursive: true });
   }
 
-  // Define the full path to the file
   const filePath = path.join(outputFolder, file);
 
-  // Append the hint to the file synchronously
   try {
     fs.appendFileSync(filePath, hint + '\n');
     console.log('Data appended successfully to', filePath);
@@ -65,9 +58,9 @@ function getOccurances() {
   const words = getWords();
 
   for (const hint of hints) {
-    console.log(`Checking hint: ${hint}`);
 
-    // Check how many times the hint occurs in the words
+    console.log('Checking hint:', hint);
+
     let count = 0;
     for (const word of words) {
       if (word.includes(hint)) {
@@ -75,33 +68,17 @@ function getOccurances() {
       }
     }
 
-    if (count > difficultyThresholds.Beginner) {
-      console.log('Beginner hint:', hint);
+    if (count <= difficultyThresholds.Beginner && count > difficultyThresholds.Easy) {
       saveToFile('beginner.txt', hint);
-    }
-
-    if (count > difficultyThresholds.Easy) {
-      console.log('Easy hint:', hint);
+    } else if (count <= difficultyThresholds.Easy && count > difficultyThresholds.Medium) {
       saveToFile('easy.txt', hint);
-    }
-
-    if (count > difficultyThresholds.Medium) {
-      console.log('Medium hint:', hint);
+    } else if (count <= difficultyThresholds.Medium && count > difficultyThresholds.Hard) {
       saveToFile('medium.txt', hint);
-    }
-
-    if (count > difficultyThresholds.Hard) {
-      console.log('Hard hint:', hint);
+    } else if (count <= difficultyThresholds.Hard && count > difficultyThresholds.Expert) {
       saveToFile('hard.txt', hint);
-    }
-
-    if (count > difficultyThresholds.Expert) {
-      console.log('Expert hint:', hint);
+    } else if (count <= difficultyThresholds.Expert && count > difficultyThresholds.Hardcore) {
       saveToFile('expert.txt', hint);
-    }
-
-    if (count > difficultyThresholds.Hardcore) {
-      console.log('Hardcore hint:', hint);
+    } else if (count <= difficultyThresholds.Hardcore) {
       saveToFile('hardcore.txt', hint);
     }
   }

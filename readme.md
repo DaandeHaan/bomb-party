@@ -26,7 +26,7 @@
 - Sometimes hints do occure twice in a row
 - Disable keyboard suggestions (Current solution autocapitalize, autocomplete, autocorrect, spellcheck do not work) 
 - CopyURL is not allowed, because its a insecure context, this can be fixed once we fully deploy 
-
+- You can still type a second after guessing, causes the letters to appear in the middle.
 # Suggestions
 - Do we want to fetch public games only on refresh, or also every x seconds?
 - Game mode (langueges) with only names, brands etc?
